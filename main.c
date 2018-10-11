@@ -53,6 +53,16 @@ int main () {
     mpz_out_str(stdout,10,e);
     printf("\n");
 
+    printf("\n\n*******************************************\n\n");
+
+    set32_mod_P(&a, 0 , P32);
+    set32_mod_P(&b, 1 , P32);
+    sub32_mod_P(&res32,a,b,P32);
+    printf("Value in Z/P32.Z : a = %d\n",a);
+    printf("Value in Z/P32.Z : b = %d\n",b);
+
+    printf("Result in Z/P32.Z :\ta - b = %d\n" , res32);
+
 
 
     mpz_clears(e,f,PM,resM,0);
