@@ -5,15 +5,16 @@
 #include "arithmetic.h"
 
 void set32_mod_P(__uint32_t *number, __uint32_t newvalue, __uint32_t P) {
-
+    *number = newvalue%P;
 }
 
 void set64_mod_P(__uint64_t *number, __uint64_t newvalue, __uint64_t P) {
-
+    *number = newvalue%P;
 }
 
 void set_bigint_mod_P(mpz_t number, mpz_t newvalue, mpz_t P) {
-
+    mpz_mod(newvalue,newvalue,P);
+    mpz_set(number , newvalue);
 }
 
 /**
