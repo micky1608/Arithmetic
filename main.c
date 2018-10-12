@@ -58,11 +58,26 @@ int main () {
     set32_mod_P(&a, 0 , P32);
     set32_mod_P(&b, 1 , P32);
     sub32_mod_P(&res32,a,b,P32);
-    printf("Value in Z/P32.Z : a = %d\n",a);
-    printf("Value in Z/P32.Z : b = %d\n",b);
+    printf("Value in Z/P32.Z : a = %u\n",a);
+    printf("Value in Z/P32.Z : b = %u\n",b);
+    printf("Result in Z/P32.Z :\ta - b = %u " , res32);
+    if(res32 == P32-1)
+        printf("= P32 - 1\n");
+    else
+        printf("!= P32 - 1\n");
 
-    printf("Result in Z/P32.Z :\ta - b = %d\n" , res32);
+    printf("\n\n*******************************************\n\n");
 
+    set64_mod_P(&c, 0 , P64);
+    set64_mod_P(&d, 1 , P64);
+    sub64_mod_P(&res64,c,d,P64);
+    printf("Value in Z/P64.Z : c = %u\n",c);
+    printf("Value in Z/P64.Z : d = %u\n",d);
+    printf("Result in Z/P64.Z :\tc - d = %u " , res64);
+    if(res64 == P64-1)
+        printf("= P64 - 1\n");
+    else
+        printf("!= P64 - 1\n");
 
 
     mpz_clears(e,f,PM,resM,0);

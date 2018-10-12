@@ -5,11 +5,15 @@
 #include <stdio.h>
 #include "arithmetic.h"
 
-void set32_mod_P(__uint32_t *number, __uint32_t newvalue, __uint32_t P) {
+
+
+
+
+void set32_mod_P(u32 *number, u32 newvalue, u32 P) {
     *number = newvalue%P;
 }
 
-void set64_mod_P(__uint64_t *number, __uint64_t newvalue, __uint64_t P) {
+void set64_mod_P(u64 *number, u64 newvalue, u64 P) {
     *number = newvalue%P;
 }
 
@@ -24,7 +28,7 @@ void set_bigint_mod_P(mpz_t number, mpz_t newvalue, mpz_t P) {
  * @param a
  * @param b
  */
-void add32_mod_P(__uint32_t *res , __uint32_t a , __uint32_t b , __uint32_t P) {
+void add32_mod_P(u32 *res , u32 a , u32 b , u32 P) {
     *res = (a%P + b%P) % P;
 }
 
@@ -34,7 +38,7 @@ void add32_mod_P(__uint32_t *res , __uint32_t a , __uint32_t b , __uint32_t P) {
  * @param a
  * @param b
  */
-void add64_mod_P(__uint64_t *res , __uint64_t a , __uint64_t b , __uint64_t P) {
+void add64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
     *res = (a%P + b%P) % P;
 }
 
@@ -50,18 +54,48 @@ void add_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
 }
 
 
-void sub32_mod_P(__uint32_t *res , __uint32_t a , __uint32_t b , __uint32_t P) {
-    *res = ((a%P)-(b%P));
-    if(*res < 0) (*res) += P;
+void sub32_mod_P(u32 *res , u32 a , u32 b , u32 P) {
+        if(b>a) *res = P - (b%P-a%P);
+        else    *res = (a%P - b%P);
 }
 
-void sub64_mod_P(__uint64_t *res , __uint64_t a , __uint64_t b , __uint64_t P) {
-    *res = (a%P-b%P)%P;
+void sub64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
+    if(b>a) *res = P - (b%P-a%P);
+    else    *res = (a%P - b%P);
 }
 void sub_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
     mpz_sub(res,a,b);
     mpz_mod(res,res,P);
 }
+
+void mult32_mod_P(u32 *res , u32 a , u32 b , u32 P) {
+    u64 temp =  ((u64)a%P)*((u64)b%P) % (u64)P;
+    *res = (u32)temp;
+}
+
+void mult64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
+    *res = ((a%P)*(b%P))%P;
+}
+
+void mult_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
+    mpz_mul(res,a,b);
+    mpz_mod(res,res,P);
+}
+
+void div32_mod_P(u32 *res , u32 a , u32 b , u32 P) {
+    *res = (a%P)/(b%P);
+}
+
+void div64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
+    *res = (a%P)/(b%P);
+}
+
+void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
+    mpz_div(res,a,b);
+    mpz_mod(res,res,P);
+}
+
+
 
 
 
