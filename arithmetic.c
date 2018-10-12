@@ -5,10 +5,6 @@
 #include <stdio.h>
 #include "arithmetic.h"
 
-
-
-
-
 void set32_mod_P(u32 *number, u32 newvalue, u32 P) {
     *number = newvalue%P;
 }

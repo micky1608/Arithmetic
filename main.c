@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "arithmetic.h"
+#include "polynomial_arithmetic.h"
 
 int main () {
 
@@ -81,6 +82,18 @@ int main () {
 
 
     mpz_clears(e,f,PM,resM,0);
+
+
+
+    /************************************************************************************************************************************** */
+
+    printf("\n\n*******************************************\n\n");
+
+    Pol_M my_polynomial;
+    init_Pol_M(&my_polynomial , 5);
+    set_all_coeffs_random_Pol_M(my_polynomial , 100);
+    print_Pol_m(my_polynomial);
+
 
 
     return 0;

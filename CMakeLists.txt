@@ -3,5 +3,5 @@ project(Arithmetic C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Arithmetic main.c arithmetic.c)
+add_executable(Arithmetic main.c arithmetic.c polynomial_arithmetic.c polynomial_arithmetic.h)
 target_link_libraries(Arithmetic gmp)
