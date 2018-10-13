@@ -5,10 +5,14 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <time.h>
 #include "arithmetic.h"
 #include "polynomial_arithmetic.h"
 
 int main () {
+
+    srand(time(NULL));
 
     mpz_t e,f,PM,resM;
     mpz_init(resM);
@@ -128,10 +132,61 @@ int main () {
     printf("A + B : ");
     print_Pol_m(res_polynomial);
 
+    printf("\n");
+
+    change_degre_Pol_M(&my_polynomial , 2);
+    change_degre_Pol_M(&other_polynomial , 3);
+
+    set_all_coeffs_random_Pol_M(my_polynomial , 5);
+    set_all_coeffs_random_Pol_M(other_polynomial , 5);
+
+    mult_Pol_M(&res_polynomial , other_polynomial , my_polynomial);
+
+    printf("A : \t");
+    print_Pol_m(my_polynomial);
+
+    printf("B : \t");
+    print_Pol_m(other_polynomial);
+
+    printf("A*B : \t");
+    print_Pol_m(res_polynomial);
+
+
+    printf("\n\n*******************************************\n\n");
+
+    Pol_M remainder_pol;
+    init_Pol_M(&remainder_pol , 0);
+
+    change_degre_Pol_M(&my_polynomial , 5);
+    change_degre_Pol_M(&other_polynomial , 2);
+
+    set_all_coeffs_random_Pol_M(my_polynomial , 10);
+    set_all_coeffs_random_Pol_M(other_polynomial , 10);
+
+    printf("\tEuclidean division\n");
+    printf("A : \t");
+    print_Pol_m(my_polynomial);
+
+    printf("B : \t");
+    print_Pol_m(other_polynomial);
+
+
+    euclide_div_Pol_M(&res_polynomial , &remainder_pol , my_polynomial , other_polynomial);
+
+
+
+    printf("\n\tResult\n");
+    printf("Q : \t");
+    print_Pol_m(res_polynomial);
+
+    printf("R : \t");
+    print_Pol_m(remainder_pol);
+
 
     destroy_Pol_M(my_polynomial);
     destroy_Pol_M(other_polynomial);
     destroy_Pol_M(res_polynomial);
+    destroy_Pol_M(remainder_pol);
 
     return 0;
 }
