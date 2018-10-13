@@ -30,12 +30,17 @@ void destroy_Pol_M(Pol_M polynomial) {
 }
 
 /**
- * Change all the coefficients of a polynomial from an array containing [ f0, f1 .... ]
+ * Change the coefficients of a polynomial from an array containing [ f0, f1 .... ]
  * @param polynomial
  * @param coeffs
  */
-void set_all_coeffs_Pol_M(Pol_M polynomial , mpz_t *coeffs) {
-    //TODO
+void set_all_coeffs_Pol_M(Pol_M polynomial , mpz_t *coeffs , size_t size_coeffs_array) {
+    for(int i=0 ; i<size_coeffs_array ; i++) {
+        if (i <= polynomial.degree)
+            mpz_set(polynomial.coeffs[i], coeffs[i]);
+        else
+            break;
+    }
 }
 /**
  * Define all the coefficients of a polynomial between -max and max
@@ -120,6 +125,30 @@ void print_Pol_m(Pol_M polynomial) {
     printf("\n");
     mpz_clear(temp);
 
+}
+
+
+/**
+ * Add two polynomials
+ * @param res
+ * @param A
+ * @param B
+ */
+void add_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
+    change_degre_Pol_M(res , max(A.degree,B.degree));
+
+    for(int i=0 ; i<=res->degree ; i++) {
+        if(i <= A.degree) {
+            if(i <= B.degree) {
+               mpz_add(res->coeffs[i] , A.coeffs[i] , B.coeffs[i]);
+            }
+            else
+                set_coeff_Pol_M(*res , i , A.coeffs[i]);
+
+        }
+        else
+            set_coeff_Pol_M(*res , i , B.coeffs[i]);
+    }
 }
 
 

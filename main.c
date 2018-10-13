@@ -87,7 +87,6 @@ int main () {
     printf("\n\n*******************************************\n\n");
 
 
-
     Pol_M my_polynomial;
     init_Pol_M(&my_polynomial , 5);
     set_all_coeffs_random_Pol_M(my_polynomial , 100);
@@ -109,6 +108,30 @@ int main () {
     print_Pol_m(my_polynomial);
 
 
+    printf("\n\n*******************************************\n\n");
+
+    Pol_M other_polynomial , res_polynomial;
+    init_Pol_M(&other_polynomial , 5);
+    init_Pol_M(&res_polynomial , 2);
+
+    set_all_coeffs_random_Pol_M(my_polynomial , 100);
+    set_all_coeffs_random_Pol_M(other_polynomial , 100);
+
+    add_Pol_M(&res_polynomial , other_polynomial , my_polynomial);
+
+    printf("A : \t");
+    print_Pol_m(my_polynomial);
+
+    printf("B : \t");
+    print_Pol_m(other_polynomial);
+
+    printf("A + B : ");
+    print_Pol_m(res_polynomial);
+
+
     destroy_Pol_M(my_polynomial);
+    destroy_Pol_M(other_polynomial);
+    destroy_Pol_M(res_polynomial);
+
     return 0;
 }
