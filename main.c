@@ -84,17 +84,31 @@ int main () {
     mpz_clears(e,f,PM,resM,0);
 
 
-
-    /************************************************************************************************************************************** */
-
     printf("\n\n*******************************************\n\n");
+
+
 
     Pol_M my_polynomial;
     init_Pol_M(&my_polynomial , 5);
     set_all_coeffs_random_Pol_M(my_polynomial , 100);
+
+    printf("Random Polynomial of degree 5 with coefficients between -100 and 100 : \t");
+    print_Pol_m(my_polynomial);
+
+    mpz_set_d(e,-20);
+    set_coeff_Pol_M(my_polynomial,3,e);
+    printf("Same polynomial with the coefficient od degree 3 = -20 : \t\t\t\t");
+    print_Pol_m(my_polynomial);
+
+    change_degre_Pol_M(&my_polynomial , 6);
+    printf("Same polynomial extended to the degree 6 : \t\t\t\t\t\t\t\t");
+    print_Pol_m(my_polynomial);
+
+    change_degre_Pol_M(&my_polynomial , 4);
+    printf("Same polynomial shrank to the degree 4 : \t\t\t\t\t\t\t\t");
     print_Pol_m(my_polynomial);
 
 
-
+    destroy_Pol_M(my_polynomial);
     return 0;
 }
