@@ -217,18 +217,18 @@ void mult_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
 }
 
 /**
- * Euclidean division of A by B
- *
+ * Euclidean division of A by B with A and B two polynomials in mpz/P.mpz
  * @param Q
  * @param R
  * @param A
  * @param B
  */
-void euclide_div_Pol_M(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B) {
+void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P) {
     if(A.degree <= B.degree) {
         perror("Euclidean division : A.degree <= B.degree !!");
         return;
     }
+
     mpz_t a,b,zero, a_on_b, a_on_b_neg;
     mpz_inits(a, b,zero, a_on_b , a_on_b_neg,0);
     mpz_set(b, B.coeffs[B.degree]);

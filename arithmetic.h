@@ -28,6 +28,8 @@
     void div64_mod_P(u64 *res , u64 a , u64 b , u64 P);
     void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P);
 
+    void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD ,  mpz_t A , mpz_t B);
+
 
 
 #endif //MODEL_TME1_ARITHMETIC_H

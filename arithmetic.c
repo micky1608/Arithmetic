@@ -87,9 +87,77 @@ void div64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
 }
 
 void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
-    mpz_div(res,a,b);
-    mpz_mod(res,res,P);
+    mpz_t U,V,GCD,ONE, A_MOD_P, INV_B_MOD_P;
+    mpz_inits(U,V,GCD,ONE,A_MOD_P,INV_B_MOD_P,0);
+    mpz_set_d(ONE,1);
+    mpz_mod(A_MOD_P , a , P);
+
+    EEA_bigint_mod_P(&U , &V , &GCD , ONE , b);
+
+    if(!mpz_cmp_d(GCD,1)) {
+
+        mpz_set(INV_B_MOD_P , U);
+        mpz_mod(INV_B_MOD_P , INV_B_MOD_P , P);
+        mpz_add(INV_B_MOD_P , INV_B_MOD_P , P);
+        mpz_mod(INV_B_MOD_P , INV_B_MOD_P , P);
+
+        mpz_mul(res , A_MOD_P, INV_B_MOD_P);
+    }
+
+    mpz_clears(U,V,GCD,ONE,A_MOD_P,INV_B_MOD_P,0);
+
 }
+
+
+void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD , mpz_t A , mpz_t B) {
+
+    mpz_t RI , RI_1; // GCD is R(i-1)
+    mpz_t UI , UI_1; // U is U(i-1)
+    mpz_t VI , VI_1; // V is V(i-1)
+    mpz_t Q;
+    int i=1;
+    mpz_inits(RI,RI_1,UI,UI_1,VI,VI_1,Q,0);
+
+    mpz_set(*GCD , A);
+    mpz_set(RI , B);
+    mpz_set_d(*U , 1);
+    mpz_set_d(UI , 0);
+    mpz_set_d(*V , 0);
+    mpz_set_d(VI , 1);
+
+    while(mpz_cmp_d(RI , 0)) {
+        mpz_div(Q , *GCD , RI);
+        mpz_mod(RI_1 , *GCD , RI);
+
+        mpz_set(UI_1 , Q);
+        mpz_neg(UI_1 , UI_1);
+        mpz_mul(UI_1 , UI_1 , UI);
+        mpz_add(UI_1 , UI_1 , *U);
+
+        mpz_set(VI_1 , Q);
+        mpz_neg(VI_1 , VI_1);
+        mpz_mul(VI_1 , VI_1 , VI);
+        mpz_add(VI_1 , VI_1 , *V);
+
+        i++;
+        mpz_set(*GCD , RI);
+        mpz_set(RI , RI_1);
+
+        mpz_set(*GCD , RI);
+        mpz_set(RI , RI_1);
+
+        mpz_set(*U , UI);
+        mpz_set(UI , UI_1);
+
+        mpz_set(*V , VI);
+        mpz_set(VI , VI_1);
+
+    }
+
+    mpz_clears(RI,RI_1,UI,UI_1,VI,VI_1,Q,0);
+
+}
+
 
 
 

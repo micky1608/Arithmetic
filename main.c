@@ -87,6 +87,9 @@ int main () {
 
     mpz_clears(e,f,PM,resM,0);
 
+    printf("\n\n*******************************************\n\n");
+
+
 
     printf("\n\n*******************************************\n\n");
 
@@ -171,16 +174,16 @@ int main () {
     print_Pol_m(other_polynomial);
 
 
-    euclide_div_Pol_M(&res_polynomial , &remainder_pol , my_polynomial , other_polynomial);
-
-
-
-    printf("\n\tResult\n");
-    printf("Q : \t");
-    print_Pol_m(res_polynomial);
-
-    printf("R : \t");
-    print_Pol_m(remainder_pol);
+//    euclide_div_Pol_M(&res_polynomial , &remainder_pol , my_polynomial , other_polynomial);
+//
+//
+//
+//    printf("\n\tResult\n");
+//    printf("Q : \t");
+//    print_Pol_m(res_polynomial);
+//
+//    printf("R : \t");
+//    print_Pol_m(remainder_pol);
 
 
     destroy_Pol_M(my_polynomial);
