@@ -24,11 +24,14 @@
     void sub64_mod_P(u64 *res , u64 a , u64 b , u64 P);
     void sub_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P);
 
-    void div64_mod_P(u64 *res , u64 a , u64 b , u64 P);
+    void div64_mod_P(int *res , int a , int b , int P);
     void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P);
 
-    void EEA64_mod_P(u64 *U , u64 *V , u64 *GCD , u64 A , u64 B);
-    void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD ,  mpz_t A , mpz_t B);
+    void EEA64(int *U , int *V , int A , int B);
+    void EEA_bigint(mpz_t U , mpz_t V , mpz_t A , mpz_t B);
+
+    void inv64_mod_P(int *inv , int A , int P);
+    void inv_bigint_mod_P(mpz_t inv , mpz_t A , mpz_t P);
 
 
 

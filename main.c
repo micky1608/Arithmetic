@@ -21,6 +21,7 @@ int main () {
     uint64_t P64 = 2305843009213693951ULL;
     mpz_init_set_str(PM, "618970019642690137449562111",10);
 
+    int res;
 
     uint32_t a = P32 - 1;
     uint32_t b = 10;
@@ -89,28 +90,29 @@ int main () {
 
     printf("\n\n*******************************************\n\n");
 
-    div64_mod_P(&res64 , 2 , 4 , 5);
-    printf("2/4 mod 5 = %lu\n" , res64);
+    div64_mod_P(&res , 2 , 4 , 5);
+    printf("2/4 mod 5 = %d\n" , res);
 
-//    mpz_set_d(e,2);
-//    mpz_set_d(f,4);
-//    mpz_set_d(P,5);
-//
-//    printf("e : ");
-//    mpz_out_str(stdout,10,e);
-//    printf("\n");
-//    printf("f : ");
-//    mpz_out_str(stdout,10,f);
-//    printf("\n");
-//    printf("P : ");
-//    mpz_out_str(stdout,10,P);
-//    printf("\n");
-//
-//    div_bigint_mod_P(resM , e , f , P);
-//
-//    printf("Division of 2 by 4 in Z/pZ with p=5 : ");
-//    mpz_out_str(stdout,10,resM);
-//    printf("\n");
+    div64_mod_P(&res , 4 , 2 , 5);
+    printf("4/2 mod 5 = %d\n" , res);
+
+    div64_mod_P(&res , 1 , 3 , 5);
+    printf("2/4 mod 5 = %d\n" , res);
+
+
+    mpz_set_d(e,2);
+    mpz_set_d(f,4);
+    mpz_set_d(P,5);
+
+    inv_bigint_mod_P(resM , e , P);
+    printf("Inv of 2 mod 5 : ");
+    mpz_out_str(stdout,10,resM);
+    printf("\n");
+
+    inv_bigint_mod_P(resM , f , P);
+    printf("Inv of 4 mod 5 : ");
+    mpz_out_str(stdout,10,resM);
+    printf("\n");
 
 
 
