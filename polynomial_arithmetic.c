@@ -7,7 +7,7 @@
 #include <time.h>
 #include <memory.h>
 #include "polynomial_arithmetic.h"
-
+#include "arithmetic.h"
 
 
 /**
@@ -244,7 +244,7 @@ void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P) 
 
     while(R->degree > B.degree) {
         mpz_set(a,R->coeffs[R->degree]);
-        mpz_fdiv_q(a_on_b , a , b);
+        //div_bigint_mod_P(a_on_b , a , b);
         mpz_neg(a_on_b_neg , a_on_b);
 
         set_all_coeffs_to_Pol_M(temp , zero);

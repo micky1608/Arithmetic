@@ -14,8 +14,8 @@ int main () {
 
     srand(time(NULL));
 
-    mpz_t e,f,PM,resM;
-    mpz_init(resM);
+    mpz_t e,f,PM,resM,P;
+    mpz_inits(resM,P,NULL);
 
     uint32_t P32 = 2147483647;
     uint64_t P64 = 2305843009213693951ULL;
@@ -35,7 +35,7 @@ int main () {
 
 
     add32_mod_P(&res32 , a , b , P32);
-    printf("Result in Z/P32.Z :\ta + b = %d\n" , res32);
+    printf("Result in Z/P32.Z :\ta + b = %u\n" , res32);
 
     add64_mod_P(&res64 , c ,d , P64);
     printf("Result in Z/P64.Z :\tc + d = %lu\n" , res64);
@@ -48,10 +48,10 @@ int main () {
     printf("\n\n*******************************************\n\n");
 
     set32_mod_P(&a , (P32+15) , P32);
-    printf("Value in Z/P32.Z of P32+15 : %d\n",a);
+    printf("Value in Z/P32.Z of P32+15 : %u\n",a);
 
     set64_mod_P(&c , (P64+3) , P64);
-    printf("Value in Z/P64.Z of P64+3 : %d\n",c);
+    printf("Value in Z/P64.Z of P64+3 : %lu\n",c);
 
     set_bigint_mod_P(e,PM,PM);
     printf("Value in Z/PM.Z of PM : ");
@@ -76,9 +76,9 @@ int main () {
     set64_mod_P(&c, 0 , P64);
     set64_mod_P(&d, 1 , P64);
     sub64_mod_P(&res64,c,d,P64);
-    printf("Value in Z/P64.Z : c = %u\n",c);
-    printf("Value in Z/P64.Z : d = %u\n",d);
-    printf("Result in Z/P64.Z :\tc - d = %u " , res64);
+    printf("Value in Z/P64.Z : c = %lu\n",c);
+    printf("Value in Z/P64.Z : d = %lu\n",d);
+    printf("Result in Z/P64.Z :\tc - d = %lu " , res64);
     if(res64 == P64-1)
         printf("= P64 - 1\n");
     else
@@ -88,6 +88,29 @@ int main () {
     mpz_clears(e,f,PM,resM,0);
 
     printf("\n\n*******************************************\n\n");
+
+    div64_mod_P(&res64 , 2 , 4 , 5);
+    printf("2/4 mod 5 = %lu\n" , res64);
+
+//    mpz_set_d(e,2);
+//    mpz_set_d(f,4);
+//    mpz_set_d(P,5);
+//
+//    printf("e : ");
+//    mpz_out_str(stdout,10,e);
+//    printf("\n");
+//    printf("f : ");
+//    mpz_out_str(stdout,10,f);
+//    printf("\n");
+//    printf("P : ");
+//    mpz_out_str(stdout,10,P);
+//    printf("\n");
+//
+//    div_bigint_mod_P(resM , e , f , P);
+//
+//    printf("Division of 2 by 4 in Z/pZ with p=5 : ");
+//    mpz_out_str(stdout,10,resM);
+//    printf("\n");
 
 
 
@@ -190,6 +213,8 @@ int main () {
     destroy_Pol_M(other_polynomial);
     destroy_Pol_M(res_polynomial);
     destroy_Pol_M(remainder_pol);
+
+    mpz_clears(e,f,PM,resM,P,NULL);
 
     return 0;
 }

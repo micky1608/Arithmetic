@@ -78,19 +78,27 @@ void mult_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
     mpz_mod(res,res,P);
 }
 
-void div32_mod_P(u32 *res , u32 a , u32 b , u32 P) {
-    *res = (a%P)/(b%P);
-}
+
 
 void div64_mod_P(u64 *res , u64 a , u64 b , u64 P) {
-    *res = (a%P)/(b%P);
+    u64 U,V,GCD,INV_B_MOD_P;
+
+    EEA64_mod_P(&U , &V , &GCD , b , P);
+    printf("U : %lu\n" , U);
+    printf("V : %lu\n" , V);
+
+    if(GCD == 1) {
+        INV_B_MOD_P = (U%P + P) % P;
+        printf("INV B MOD P : %lu\n" , INV_B_MOD_P);
+        *res = (a%P) * INV_B_MOD_P;
+    }
 }
 
 void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
-    mpz_t U,V,GCD,ONE, A_MOD_P, INV_B_MOD_P;
-    mpz_inits(U,V,GCD,ONE,A_MOD_P,INV_B_MOD_P,0);
+    mpz_t U,V,GCD,ONE, INV_B_MOD_P;
+    mpz_inits(U,V,GCD,ONE,INV_B_MOD_P,NULL);
+
     mpz_set_d(ONE,1);
-    mpz_mod(A_MOD_P , a , P);
 
     EEA_bigint_mod_P(&U , &V , &GCD , ONE , b);
 
@@ -101,13 +109,45 @@ void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
         mpz_add(INV_B_MOD_P , INV_B_MOD_P , P);
         mpz_mod(INV_B_MOD_P , INV_B_MOD_P , P);
 
-        mpz_mul(res , A_MOD_P, INV_B_MOD_P);
+        mpz_mod(res , a , P);
+        mpz_mul(res , res , INV_B_MOD_P);
     }
 
-    mpz_clears(U,V,GCD,ONE,A_MOD_P,INV_B_MOD_P,0);
+    mpz_clears(U,V,GCD,ONE,INV_B_MOD_P,NULL);
 
 }
 
+void EEA64_mod_P(u64 *U , u64 *V , u64 *GCD , u64 A , u64 B) {
+    u64 RI , RI_1; // GCD is R(i-1)
+    u64 UI , UI_1; // U is U(i-1)
+    u64 VI , VI_1; // V is V(i-1)
+    u64 Q;
+
+    *GCD = A;
+    RI = B;
+    *U = 1;
+    UI = 0;
+    *V = 0;
+    VI = 1;
+
+    while(RI != 0) {
+        Q = *GCD / RI;
+        RI_1 = *GCD % RI;
+
+        UI_1 = *U - Q*UI;
+        VI_1 = *V - Q*VI;
+        
+        *GCD = RI;
+        RI = RI_1;
+
+        *U = UI;
+        UI = UI_1;
+
+        *V = VI;
+        VI = VI_1;
+
+    }
+}
 
 void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD , mpz_t A , mpz_t B) {
 
@@ -116,7 +156,7 @@ void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD , mpz_t A , mpz_t B) {
     mpz_t VI , VI_1; // V is V(i-1)
     mpz_t Q;
     int i=1;
-    mpz_inits(RI,RI_1,UI,UI_1,VI,VI_1,Q,0);
+    mpz_inits(RI,RI_1,UI,UI_1,VI,VI_1,Q,NULL);
 
     mpz_set(*GCD , A);
     mpz_set(RI , B);
@@ -143,9 +183,6 @@ void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD , mpz_t A , mpz_t B) {
         mpz_set(*GCD , RI);
         mpz_set(RI , RI_1);
 
-        mpz_set(*GCD , RI);
-        mpz_set(RI , RI_1);
-
         mpz_set(*U , UI);
         mpz_set(UI , UI_1);
 
@@ -154,7 +191,7 @@ void EEA_bigint_mod_P(mpz_t *U , mpz_t *V , mpz_t *GCD , mpz_t A , mpz_t B) {
 
     }
 
-    mpz_clears(RI,RI_1,UI,UI_1,VI,VI_1,Q,0);
+    mpz_clears(RI,RI_1,UI,UI_1,VI,VI_1,Q,NULL);
 
 }
 
