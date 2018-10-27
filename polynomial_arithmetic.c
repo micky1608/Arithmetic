@@ -223,14 +223,20 @@ void mult_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
  * @param A
  * @param B
  */
-void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P) {
+void euclide_div_Pol_M(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B) {
+
+    //TODO
+    /**
+     * DOESN'T WORK !!!!!!!!!!!!!!!!!!
+     */
+
     if(A.degree <= B.degree) {
         perror("Euclidean division : A.degree <= B.degree !!");
         return;
     }
 
     mpz_t a,b,zero, a_on_b, a_on_b_neg;
-    mpz_inits(a, b,zero, a_on_b , a_on_b_neg,0);
+    mpz_inits(a, b,zero, a_on_b , a_on_b_neg,(mpz_t *)NULL);
     mpz_set(b, B.coeffs[B.degree]);
     mpz_set_d(zero , 0);
 
@@ -272,7 +278,7 @@ void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P) 
         add_Pol_M(R , *R , temp2);
     }
 
-    mpz_clears(a,b,zero,a_on_b,a_on_b_neg,0);
+    mpz_clears(a,b,zero,a_on_b,a_on_b_neg,(mpz_t *)NULL);
 
 }
 
@@ -284,69 +290,58 @@ void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P) 
  */
 void karatsuba_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
 
-//
-//    if(A.degree != B.degree) {
-//        perror("Karatsuba with different degrees");
-//        return;
-//    }
-//
-//    if(log_base_2(A.degree + 1) - floor(log_base_2(A.degree + 1) != 0)) {
-//        perror("Karatsuba degree != 2^p - 1");
-//        return;
-//    }
-//
-//
-//    if(A.degree == 1) {
-//        mpz_mul(res->coeffs[0] , A.coeffs[0] , B.coeffs[0]);
-//        mpz_mul(res->coeffs[2] , A.coeffs[1] , B.coeffs[1]);
-//
-//        mpz_t sum_coeffs_0 , sum_coeffs_1;
-//
-//        mpz_inits(sum_coeffs_0 , sum_coeffs_1,NULL);
-//
-//        mpz_add(sum_coeffs_0 , A.coeffs[0] , B.coeffs[0]);
-//        mpz_add(sum_coeffs_1 , A.coeffs[1] , B.coeffs[1]);
-//
-//        mpz_mul(res->coeffs[1] , sum_coeffs_0 , sum_coeffs_1);
-//        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[0]);
-//        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[1]);
-//
-//        mpz_clears(sum_coeffs_0 , sum_coeffs_1 , NULL);
-//
-//        return;
-//    }
-//
-//    size_t p = (size_t)(log_base_2(A.degree + 1));
-//    int N = A.degree;
-//
-//    Pol_M A_under, A_upper , B_under , B_upper , sum_under , sum_upper;
-//
-//    A_under.degree = (unsigned int)(pow((double)2,(double)(p-1))) - 1; // 2^(p-1) - 1
-//    A_upper.degree = A_under.degree;
-//    B_under.degree = A_under.degree;
-//    B_upper.degree = A_under.degree;
-//    sum_under.degree = A_under.degree;
-//    sum_upper.degree = A_under.degree;
-//
-//    A_under.coeffs = A.coeffs;
-//    A_upper.coeffs = &A.coeffs[A_under.degree + 1];
-//
-//    B_under.coeffs = B.coeffs;
-//    B_upper.coeffs = &B.coeffs[B_under.degree + 1];
-//
-//    add_Pol_M(&sum_under , A_under , B_under);
-//    add_Pol_M(&sum_upper , A_upper , B_upper);
+
+    if(A.degree != B.degree) {
+        perror("Karatsuba with different degrees");
+        return;
+    }
+
+    if(log_base_2(A.degree + 1) - floor(log_base_2(A.degree + 1) != 0)) {
+        perror("Karatsuba degree != 2^p - 1");
+        return;
+    }
 
 
+    if(A.degree == 1) {
+        mpz_mul(res->coeffs[0] , A.coeffs[0] , B.coeffs[0]);
+        mpz_mul(res->coeffs[2] , A.coeffs[1] , B.coeffs[1]);
 
+        mpz_t sum_coeffs_0 , sum_coeffs_1;
 
+        mpz_inits(sum_coeffs_0 , sum_coeffs_1,(mpz_t *)NULL);
 
+        mpz_add(sum_coeffs_0 , A.coeffs[0] , B.coeffs[0]);
+        mpz_add(sum_coeffs_1 , A.coeffs[1] , B.coeffs[1]);
 
+        mpz_mul(res->coeffs[1] , sum_coeffs_0 , sum_coeffs_1);
+        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[0]);
+        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[1]);
 
+        mpz_clears(sum_coeffs_0 , sum_coeffs_1 , (mpz_t *)NULL);
 
+        return;
+    }
 
+    size_t p = (size_t)(log_base_2(A.degree + 1));
+    int N = A.degree;
 
+    Pol_M A_under, A_upper , B_under , B_upper , sum_under , sum_upper;
 
+    A_under.degree = (unsigned int)(pow((double)2,(double)(p-1))) - 1; // 2^(p-1) - 1
+    A_upper.degree = A_under.degree;
+    B_under.degree = A_under.degree;
+    B_upper.degree = A_under.degree;
+    sum_under.degree = A_under.degree;
+    sum_upper.degree = A_under.degree;
+
+    A_under.coeffs = A.coeffs;
+    A_upper.coeffs = &A.coeffs[A_under.degree + 1];
+
+    B_under.coeffs = B.coeffs;
+    B_upper.coeffs = &B.coeffs[B_under.degree + 1];
+
+    add_Pol_M(&sum_under , A_under , B_under);
+    add_Pol_M(&sum_upper , A_upper , B_upper);
 
 
 

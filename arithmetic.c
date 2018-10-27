@@ -202,7 +202,7 @@ void inv64_mod_P(int *inv , int A , int P) {
 
 void inv_bigint_mod_P(mpz_t inv , mpz_t A , mpz_t P) {
     mpz_t U,V;
-    mpz_inits(U,V,NULL);
+    mpz_inits(U,V,(mpz_t *)NULL);
 
     EEA_bigint(U,V,A,P);
 
@@ -210,7 +210,7 @@ void inv_bigint_mod_P(mpz_t inv , mpz_t A , mpz_t P) {
     mpz_add(inv , inv , P);
     mpz_mod(inv , inv , P);
 
-    mpz_clears(U,V,NULL);
+    mpz_clears(U,V,(mpz_t *)NULL);
 }
 
 

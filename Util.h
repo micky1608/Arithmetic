@@ -9,6 +9,6 @@
 
 int max(int a , int b);
 
-//double log_base_2(double x);
+double log_base_2(double x);
 
 #endif //ARITHMETIC_UTIL_H

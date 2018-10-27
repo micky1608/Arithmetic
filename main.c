@@ -15,7 +15,7 @@ int main () {
     srand(time(NULL));
 
     mpz_t e,f,PM,resM,P;
-    mpz_inits(resM,P,NULL);
+    mpz_inits(resM,P,(mpz_t *)NULL);
 
     uint32_t P32 = 2147483647;
     uint64_t P64 = 2305843009213693951ULL;
@@ -86,7 +86,7 @@ int main () {
         printf("!= P64 - 1\n");
 
 
-    mpz_clears(e,f,PM,resM,0);
+
 
     printf("\n\n*******************************************\n\n");
 
@@ -104,15 +104,15 @@ int main () {
     mpz_set_d(f,4);
     mpz_set_d(P,5);
 
-//    inv_bigint_mod_P(resM , e , P);
-//    printf("Inv of 2 mod 5 : ");
-//    mpz_out_str(stdout,10,resM);
-//    printf("\n");
-//
-//    inv_bigint_mod_P(resM , f , P);
-//    printf("Inv of 4 mod 5 : ");
-//    mpz_out_str(stdout,10,resM);
-//    printf("\n");
+    inv_bigint_mod_P(resM , e , P);
+    printf("Inv of 2 mod 5 : ");
+    mpz_out_str(stdout,10,resM);
+    printf("\n");
+
+    inv_bigint_mod_P(resM , f , P);
+    printf("Inv of 4 mod 5 : ");
+    mpz_out_str(stdout,10,resM);
+    printf("\n");
 
 
     printf("\n\n*******************************************\n\n");
@@ -184,20 +184,19 @@ int main () {
     Pol_M remainder_pol;
     init_Pol_M(&remainder_pol , 0);
 
-    change_degre_Pol_M(&my_polynomial , 5);
-    change_degre_Pol_M(&other_polynomial , 2);
-
-    set_all_coeffs_random_Pol_M(my_polynomial , 10);
-    set_all_coeffs_random_Pol_M(other_polynomial , 10);
-
-    printf("\tEuclidean division\n");
-    printf("A : \t");
-    print_Pol_m(my_polynomial);
-
-    printf("B : \t");
-    print_Pol_m(other_polynomial);
-
-
+//    change_degre_Pol_M(&my_polynomial , 5);
+//    change_degre_Pol_M(&other_polynomial , 2);
+//
+//    set_all_coeffs_random_Pol_M(my_polynomial , 10);
+//    set_all_coeffs_random_Pol_M(other_polynomial , 10);
+//
+//    printf("\tEuclidean division\n");
+//    printf("A : \t");
+//    print_Pol_m(my_polynomial);
+//
+//    printf("B : \t");
+//    print_Pol_m(other_polynomial);
+//
 //    euclide_div_Pol_M(&res_polynomial , &remainder_pol , my_polynomial , other_polynomial);
 //
 //
@@ -215,7 +214,7 @@ int main () {
     destroy_Pol_M(res_polynomial);
     destroy_Pol_M(remainder_pol);
 
-    mpz_clears(e,f,PM,resM,P,NULL);
+    mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 
     return 0;
 }
