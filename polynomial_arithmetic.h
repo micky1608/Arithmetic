@@ -7,6 +7,11 @@
 
 #include <gmp.h>
 #include "Util.h"
+#include <math.h>
+#include <malloc.h>
+#include <stdlib.h>
+#include <time.h>
+#include <memory.h>
 
 typedef struct Pol_M {
     unsigned int degree;
@@ -37,6 +42,8 @@ void add_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
 void mult_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
 
 void euclide_div_Pol_M_Mod_P(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B , mpz_t P);
+
+void karatsuba_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
 
 
 

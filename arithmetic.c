@@ -101,7 +101,7 @@ void div_bigint_mod_P(mpz_t res , mpz_t a , mpz_t b , mpz_t P) {
     mpz_mod(res , a , P);
     mpz_mul(res , res , inv_B_mod_P);
     mpz_mod(res , res , P);
-    
+
     mpz_clear(inv_B_mod_P);
 }
 
@@ -137,11 +137,21 @@ void EEA64(int *U , int *V , int A , int B) {
 void EEA_bigint(mpz_t U , mpz_t V , mpz_t A , mpz_t B) {
 
     mpz_t RI_previous , RI , RI_next;
-    mpz_t UI , UI_next; // U is U(i-1)
-    mpz_t VI , VI_next; // V is V(i-1)
+    mpz_t UI, UI_next; // U is U(i-1)
+    mpz_t VI, VI_next; // V is V(i-1)
     mpz_t Q;
 
-    mpz_inits(RI_previous , RI , RI_next , UI , UI_next , VI , VI_next , Q , NULL);
+    //mpz_inits(RI_previous , RI , RI_next , UI , UI_next , VI , VI_next , Q , NULL);
+
+    mpz_init(RI_previous);
+    mpz_init(RI);
+    mpz_init(RI_next);
+    mpz_init(UI);
+    mpz_init(UI_next);
+    mpz_init(VI);
+    mpz_init(VI_next);
+    mpz_init(Q);
+
 
     mpz_set(RI_previous , A);
     mpz_set(RI , B);

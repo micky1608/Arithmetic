@@ -104,16 +104,15 @@ int main () {
     mpz_set_d(f,4);
     mpz_set_d(P,5);
 
-    inv_bigint_mod_P(resM , e , P);
-    printf("Inv of 2 mod 5 : ");
-    mpz_out_str(stdout,10,resM);
-    printf("\n");
-
-    inv_bigint_mod_P(resM , f , P);
-    printf("Inv of 4 mod 5 : ");
-    mpz_out_str(stdout,10,resM);
-    printf("\n");
-
+//    inv_bigint_mod_P(resM , e , P);
+//    printf("Inv of 2 mod 5 : ");
+//    mpz_out_str(stdout,10,resM);
+//    printf("\n");
+//
+//    inv_bigint_mod_P(resM , f , P);
+//    printf("Inv of 4 mod 5 : ");
+//    mpz_out_str(stdout,10,resM);
+//    printf("\n");
 
 
     printf("\n\n*******************************************\n\n");

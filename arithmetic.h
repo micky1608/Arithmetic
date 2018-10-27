@@ -5,8 +5,8 @@
 #ifndef MODEL_TME1_ARITHMETIC_H
 #define MODEL_TME1_ARITHMETIC_H
 
-    #include <sys/types.h>
-    #include <gmp.h>
+#include <sys/types.h>
+#include <gmp.h>
 
     typedef __uint32_t u32;
     typedef __uint64_t u64;
