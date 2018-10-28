@@ -407,6 +407,10 @@ void karatsuba_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
     for(int i=0 , index_begin = (int)pow(2 , (p-1)) ; i<= H1.degree ; i++)
         mpz_add(res->coeffs[index_begin + i] , res->coeffs[index_begin + i] , H1.coeffs[i]);
 
+    destroy_Pol_M(H1);
+    destroy_Pol_M(sum_A_under_upper);
+    destroy_Pol_M(sum_B_under_upper);
+
 }
 
 
