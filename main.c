@@ -159,6 +159,10 @@ int main () {
     printf("A + B : ");
     print_Pol_m(res_polynomial);
 
+    sub_Pol_M(&res_polynomial , my_polynomial , other_polynomial);
+    printf("A - B : ");
+    print_Pol_m(res_polynomial);
+
     printf("\n");
 
     change_degre_Pol_M(&my_polynomial , 2);
@@ -207,6 +211,60 @@ int main () {
 //
 //    printf("R : \t");
 //    print_Pol_m(remainder_pol);
+
+    printf("\n\n*******************************************\n\n");
+
+
+    Pol_M F , G;
+    init_Pol_M(&F , 3);
+    init_Pol_M(&G , 3);
+
+    mpz_set_d(e , 1);
+    mpz_set_d(f , 2);
+    set_all_coeffs_to_Pol_M(F , e);
+    set_all_coeffs_to_Pol_M(G , f);
+
+    destroy_Pol_M(res_polynomial);
+    init_Pol_M(&res_polynomial , 6);
+    karatsuba_Pol_M(&res_polynomial , F , G);
+
+    printf("F : ");
+    print_Pol_m(F);
+    printf("G : ");
+    print_Pol_m(G);
+
+    printf("F * G (karatsuba): \t");
+    print_Pol_m(res_polynomial);
+
+    mult_Pol_M(&res_polynomial , F , G);
+    printf("F * G (naive)\t: \t");
+    print_Pol_m(res_polynomial);
+
+    printf("\n");
+
+    change_degre_Pol_M(&F , 7);
+    change_degre_Pol_M(&G , 7);
+    set_all_coeffs_to_Pol_M(F , e);
+    set_all_coeffs_to_Pol_M(G , f);
+
+    destroy_Pol_M(res_polynomial);
+    init_Pol_M(&res_polynomial , 14);
+    karatsuba_Pol_M(&res_polynomial , F , G);
+
+    printf("F : ");
+    print_Pol_m(F);
+    printf("G : ");
+    print_Pol_m(G);
+
+    printf("F * G (karatsuba): \t");
+    print_Pol_m(res_polynomial);
+
+    mult_Pol_M(&res_polynomial , F , G);
+    printf("F * G (naive)\t: \t");
+    print_Pol_m(res_polynomial);
+
+
+
 
 
     destroy_Pol_M(my_polynomial);

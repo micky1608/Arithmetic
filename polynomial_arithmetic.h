@@ -39,6 +39,8 @@ void print_Pol_m(Pol_M polynomial);
 
 void add_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
 
+void sub_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
+
 void mult_Pol_M(Pol_M *res , Pol_M A , Pol_M B);
 
 void euclide_div_Pol_M(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B);

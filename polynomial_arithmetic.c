@@ -7,6 +7,8 @@
 #include "arithmetic.h"
 
 
+/* ********************************************************************************************************************** */
+
 /**
  * Allocate the memory for the coefficients
  * @param degre
@@ -21,8 +23,9 @@ void init_Pol_M(Pol_M *polynomial , unsigned int degree_p) {
         perror("Try to create a polynomial with negative degree !!");
         exit(-1);
     }
-
 }
+
+/* ********************************************************************************************************************** */
 
 /**
  * Free the memery allocated for a polynomial
@@ -33,6 +36,8 @@ void destroy_Pol_M(Pol_M polynomial) {
         mpz_clear(polynomial.coeffs[i]);
     free(polynomial.coeffs);
 }
+
+/* ********************************************************************************************************************** */
 
 /**
  * Change the coefficients of a polynomial from an array containing [ f0, f1 .... ]
@@ -47,6 +52,9 @@ void set_all_coeffs_Pol_M(Pol_M polynomial , mpz_t *coeffs , size_t size_coeffs_
             break;
     }
 }
+
+/* ********************************************************************************************************************** */
+
 /**
  * Define all the coefficients of a polynomial between -max and max
  * @param polynomial
@@ -61,9 +69,9 @@ void set_all_coeffs_random_Pol_M(Pol_M polynomial , unsigned int max) {
         }
         mpz_set_d(polynomial.coeffs[i],fi_i);
     }
-
-
 }
+
+/* ********************************************************************************************************************** */
 
 /**
  * Set all the coefficients to the same value
@@ -76,6 +84,8 @@ void set_all_coeffs_to_Pol_M(Pol_M polynomial , mpz_t value) {
 
 }
 
+/* ********************************************************************************************************************** */
+
 /**
  * Change one coefficient in a polynomial
  * @param polynome
@@ -86,6 +96,8 @@ void set_coeff_Pol_M(Pol_M polynomial , unsigned int degree_coeff , mpz_t newVal
     if(degree_coeff <= polynomial.degree)
         mpz_set(polynomial.coeffs[degree_coeff] , newValue);
 }
+
+/* ********************************************************************************************************************** */
 
 
 /**
@@ -123,6 +135,8 @@ void change_degre_Pol_M(Pol_M *polynomial, unsigned int new_degree) {
     polynomial->degree = new_degree;
 }
 
+/* ********************************************************************************************************************** */
+
 /**
  * Copy the polynomial src in res
  * @param res
@@ -133,6 +147,8 @@ void copy_Pol_M(Pol_M *res , Pol_M polynomial) {
     for(int i=0 ; i<=res->degree ; i++)
         mpz_set(res->coeffs[i] , polynomial.coeffs[i]);
 }
+
+/* ********************************************************************************************************************** */
 
 void print_Pol_m(Pol_M polynomial) {
     mpz_t temp;
@@ -158,6 +174,7 @@ void print_Pol_m(Pol_M polynomial) {
 
 }
 
+/* ********************************************************************************************************************** */
 
 /**
  * Add two polynomials
@@ -166,7 +183,6 @@ void print_Pol_m(Pol_M polynomial) {
  * @param B
  */
 void add_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
-
 
     if(res->degree != max(A.degree , B.degree))
         change_degre_Pol_M(res , max(A.degree , B.degree));
@@ -178,12 +194,40 @@ void add_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
             }
             else
                 set_coeff_Pol_M(*res , i , A.coeffs[i]);
-
         }
         else
             set_coeff_Pol_M(*res , i , B.coeffs[i]);
     }
 }
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Subtract two polynomials
+ * @param res
+ * @param A
+ * @param B
+ */
+void sub_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
+
+    if(res->degree != max(A.degree , B.degree))
+        change_degre_Pol_M(res , max(A.degree , B.degree));
+
+    for(int i=0 ; i<=res->degree ; i++) {
+        if(i <= A.degree) {
+            if(i <= B.degree) {
+                mpz_sub(res->coeffs[i] , A.coeffs[i] , B.coeffs[i]);
+            }
+            else
+                set_coeff_Pol_M(*res , i , A.coeffs[i]);
+        }
+        else
+            mpz_neg(*(res->coeffs+i) , B.coeffs[i]);
+    }
+
+}
+
+/* ********************************************************************************************************************** */
 
 /**
  * Naive multiplication of two polynomials
@@ -215,6 +259,8 @@ void mult_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
 
     mpz_clear(temp);
 }
+
+/* ********************************************************************************************************************** */
 
 /**
  * Euclidean division of A by B with A and B two polynomials in mpz/P.mpz
@@ -282,6 +328,8 @@ void euclide_div_Pol_M(Pol_M *Q , Pol_M *R , Pol_M A , Pol_M B) {
 
 }
 
+/* ********************************************************************************************************************** */
+
 /**
  * Degree A = Degree B = 2^p -1
  * @param res is a polynomial of degree 2*degree(A) ! THE MEMORY MUST BE ALLOCATED BEFORE CALLING THIS FUNCTION
@@ -296,7 +344,7 @@ void karatsuba_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
         return;
     }
 
-    if(log_base_2(A.degree + 1) - floor(log_base_2(A.degree + 1) != 0)) {
+    if(log_base_2(A.degree + 1) - floor(log_base_2(A.degree + 1)) != 0) {
         perror("Karatsuba degree != 2^p - 1");
         return;
     }
@@ -306,44 +354,58 @@ void karatsuba_Pol_M(Pol_M *res , Pol_M A , Pol_M B) {
         mpz_mul(res->coeffs[0] , A.coeffs[0] , B.coeffs[0]);
         mpz_mul(res->coeffs[2] , A.coeffs[1] , B.coeffs[1]);
 
-        mpz_t sum_coeffs_0 , sum_coeffs_1;
+        mpz_t sum_coeffs_A , sum_coeffs_B;
 
-        mpz_inits(sum_coeffs_0 , sum_coeffs_1,(mpz_t *)NULL);
+        mpz_inits(sum_coeffs_A , sum_coeffs_B,(mpz_t *)NULL);
 
-        mpz_add(sum_coeffs_0 , A.coeffs[0] , B.coeffs[0]);
-        mpz_add(sum_coeffs_1 , A.coeffs[1] , B.coeffs[1]);
+        mpz_add(sum_coeffs_A , A.coeffs[0] , A.coeffs[1]);
+        mpz_add(sum_coeffs_B , B.coeffs[0] , B.coeffs[1]);
 
-        mpz_mul(res->coeffs[1] , sum_coeffs_0 , sum_coeffs_1);
+        mpz_mul(res->coeffs[1] , sum_coeffs_A , sum_coeffs_B);
         mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[0]);
-        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[1]);
+        mpz_sub(res->coeffs[1] , res->coeffs[1] , res->coeffs[2]);
 
-        mpz_clears(sum_coeffs_0 , sum_coeffs_1 , (mpz_t *)NULL);
+        mpz_clears(sum_coeffs_A , sum_coeffs_B , (mpz_t *)NULL);
 
         return;
     }
 
     size_t p = (size_t)(log_base_2(A.degree + 1));
-    int N = A.degree;
 
-    Pol_M A_under, A_upper , B_under , B_upper , sum_under , sum_upper;
+    Pol_M A_under, A_upper , B_under , B_upper , sum_A_under_upper , sum_B_under_upper , H0 , H1 , H2;
 
     A_under.degree = (unsigned int)(pow((double)2,(double)(p-1))) - 1; // 2^(p-1) - 1
     A_upper.degree = A_under.degree;
     B_under.degree = A_under.degree;
     B_upper.degree = A_under.degree;
-    sum_under.degree = A_under.degree;
-    sum_upper.degree = A_under.degree;
+    H0.degree = 2*A_under.degree;
+    H2.degree = H0.degree;
 
     A_under.coeffs = A.coeffs;
     A_upper.coeffs = &A.coeffs[A_under.degree + 1];
-
     B_under.coeffs = B.coeffs;
     B_upper.coeffs = &B.coeffs[B_under.degree + 1];
 
-    add_Pol_M(&sum_under , A_under , B_under);
-    add_Pol_M(&sum_upper , A_upper , B_upper);
+    H0.coeffs = res->coeffs;
+    H2.coeffs = &res->coeffs[res->degree - H2.degree];
+
+    init_Pol_M(&H1 , H0.degree);
+    init_Pol_M(&sum_A_under_upper , A_under.degree);
+    init_Pol_M(&sum_B_under_upper , B_under.degree);
+
+    add_Pol_M(&sum_A_under_upper , A_under , A_upper);
+    add_Pol_M(&sum_B_under_upper , B_under , B_upper);
+
+    karatsuba_Pol_M(&H0 , A_under , B_under);
+    karatsuba_Pol_M(&H2 , A_upper , B_upper);
+    karatsuba_Pol_M(&H1 , sum_A_under_upper , sum_B_under_upper);
+
+    sub_Pol_M(&H1 , H1 , H0);
+    sub_Pol_M(&H1 , H1 , H2);
 
 
+    for(int i=0 , index_begin = (int)pow(2 , (p-1)) ; i<= H1.degree ; i++)
+        mpz_add(res->coeffs[index_begin + i] , res->coeffs[index_begin + i] , H1.coeffs[i]);
 
 }
 
