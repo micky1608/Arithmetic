@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include "arithmetic.h"
-#include "polynomial_arithmetic.h"
+#include "pol_bigint_arithmetic.h"
+#include "pol_bigfloat_arithmetic.h"
+#include "Euclidean.h"
 
 int main () {
 
@@ -118,159 +120,158 @@ int main () {
     printf("\n\n*******************************************\n\n");
 
 
-    Pol_M my_polynomial;
-    init_Pol_M(&my_polynomial , 5);
-    set_all_coeffs_random_Pol_M(my_polynomial , 100);
+    pol_bigint my_polynomial;
+    init_pol_bigint(&my_polynomial, 5);
+    set_all_coeffs_random_pol_bigint(my_polynomial, 100);
 
     printf("Random Polynomial of degree 5 with coefficients between -100 and 100 : \t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
     mpz_set_d(e,-20);
-    set_coeff_Pol_M(my_polynomial,3,e);
+    set_coeff_pol_bigint(my_polynomial, 3, e);
     printf("Same polynomial with the coefficient od degree 3 = -20 : \t\t\t\t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
-    change_degre_Pol_M(&my_polynomial , 6);
+    change_degre_pol_bigint(&my_polynomial, 6);
     printf("Same polynomial extended to the degree 6 : \t\t\t\t\t\t\t\t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
-    change_degre_Pol_M(&my_polynomial , 4);
+    change_degre_pol_bigint(&my_polynomial, 4);
     printf("Same polynomial shrank to the degree 4 : \t\t\t\t\t\t\t\t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
 
     printf("\n\n*******************************************\n\n");
 
-    Pol_M other_polynomial , res_polynomial;
-    init_Pol_M(&other_polynomial , 5);
-    init_Pol_M(&res_polynomial , 2);
+    pol_bigint other_polynomial , res_polynomial;
+    init_pol_bigint(&other_polynomial, 5);
+    init_pol_bigint(&res_polynomial, 2);
 
-    set_all_coeffs_random_Pol_M(my_polynomial , 100);
-    set_all_coeffs_random_Pol_M(other_polynomial , 100);
+    set_all_coeffs_random_pol_bigint(my_polynomial, 100);
+    set_all_coeffs_random_pol_bigint(other_polynomial, 100);
 
-    add_Pol_M(&res_polynomial , other_polynomial , my_polynomial);
+    add_pol_bigint(&res_polynomial, other_polynomial, my_polynomial);
 
     printf("A : \t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
     printf("B : \t");
-    print_Pol_m(other_polynomial);
+    print_pol_bigint(other_polynomial);
 
     printf("A + B : ");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
-    sub_Pol_M(&res_polynomial , my_polynomial , other_polynomial);
+    sub_pol_bigint(&res_polynomial, my_polynomial, other_polynomial);
     printf("A - B : ");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
     printf("\n");
 
-    change_degre_Pol_M(&my_polynomial , 2);
-    change_degre_Pol_M(&other_polynomial , 3);
+    change_degre_pol_bigint(&my_polynomial, 2);
+    change_degre_pol_bigint(&other_polynomial, 3);
 
-    set_all_coeffs_random_Pol_M(my_polynomial , 5);
-    set_all_coeffs_random_Pol_M(other_polynomial , 5);
+    set_all_coeffs_random_pol_bigint(my_polynomial, 5);
+    set_all_coeffs_random_pol_bigint(other_polynomial, 5);
 
-    mult_Pol_M(&res_polynomial , other_polynomial , my_polynomial);
+    mult_pol_bigint(&res_polynomial, other_polynomial, my_polynomial);
 
     printf("A : \t");
-    print_Pol_m(my_polynomial);
+    print_pol_bigint(my_polynomial);
 
     printf("B : \t");
-    print_Pol_m(other_polynomial);
+    print_pol_bigint(other_polynomial);
 
     printf("A*B : \t");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
 
     printf("\n\n*******************************************\n\n");
 
-    Pol_M remainder_pol;
-    init_Pol_M(&remainder_pol , 0);
+    pol_bigfloat quotient_pol_bigfloat, remainder_pol_bigfloat;
 
-//    change_degre_Pol_M(&my_polynomial , 5);
-//    change_degre_Pol_M(&other_polynomial , 2);
-//
-//    set_all_coeffs_random_Pol_M(my_polynomial , 10);
-//    set_all_coeffs_random_Pol_M(other_polynomial , 10);
-//
-//    printf("\tEuclidean division\n");
-//    printf("A : \t");
-//    print_Pol_m(my_polynomial);
-//
-//    printf("B : \t");
-//    print_Pol_m(other_polynomial);
-//
-//    euclide_div_Pol_M(&res_polynomial , &remainder_pol , my_polynomial , other_polynomial);
-//
-//
-//
-//    printf("\n\tResult\n");
-//    printf("Q : \t");
-//    print_Pol_m(res_polynomial);
-//
-//    printf("R : \t");
-//    print_Pol_m(remainder_pol);
+    init_pol_bigfloat(&quotient_pol_bigfloat, 0);
+    init_pol_bigfloat(&remainder_pol_bigfloat, 0);
+
+    change_degre_pol_bigint(&my_polynomial , 5);
+    change_degre_pol_bigint(&other_polynomial , 2);
+
+    set_all_coeffs_random_pol_bigint(my_polynomial , 10);
+    set_all_coeffs_random_pol_bigint(other_polynomial , 10);
+
+    printf("\tEuclidean division\n");
+    printf("A : \t");
+    print_pol_bigint(my_polynomial);
+
+    printf("B : \t");
+    print_pol_bigint(other_polynomial);
+
+    euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
+
+
+
+    printf("\n\tResult\n");
+    printf("Q : \t");
+    print_pol_bigfloat(quotient_pol_bigfloat);
+
+    printf("R : \t");
+    print_pol_bigfloat(remainder_pol_bigfloat);
 
     printf("\n\n*******************************************\n\n");
 
 
-    Pol_M F , G;
-    init_Pol_M(&F , 3);
-    init_Pol_M(&G , 3);
+    pol_bigint F , G;
+    init_pol_bigint(&F, 3);
+    init_pol_bigint(&G, 3);
 
     mpz_set_d(e , 1);
     mpz_set_d(f , 2);
-    set_all_coeffs_to_Pol_M(F , e);
-    set_all_coeffs_to_Pol_M(G , f);
+    set_all_coeffs_to_pol_bigint(F, e);
+    set_all_coeffs_to_pol_bigint(G, f);
 
-    destroy_Pol_M(res_polynomial);
-    init_Pol_M(&res_polynomial , 6);
-    karatsuba_Pol_M(&res_polynomial , F , G);
+    destroy_pol_bigint(res_polynomial);
+    init_pol_bigint(&res_polynomial, 6);
+    karatsuba_pol_bigint(&res_polynomial, F, G);
 
     printf("F : ");
-    print_Pol_m(F);
+    print_pol_bigint(F);
     printf("G : ");
-    print_Pol_m(G);
+    print_pol_bigint(G);
 
     printf("F * G (karatsuba): \t");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
-    mult_Pol_M(&res_polynomial , F , G);
+    mult_pol_bigint(&res_polynomial, F, G);
     printf("F * G (naive)\t: \t");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
     printf("\n");
 
-    change_degre_Pol_M(&F , 7);
-    change_degre_Pol_M(&G , 7);
-    set_all_coeffs_to_Pol_M(F , e);
-    set_all_coeffs_to_Pol_M(G , f);
+    change_degre_pol_bigint(&F, 7);
+    change_degre_pol_bigint(&G, 7);
+    set_all_coeffs_to_pol_bigint(F, e);
+    set_all_coeffs_to_pol_bigint(G, f);
 
-    destroy_Pol_M(res_polynomial);
-    init_Pol_M(&res_polynomial , 14);
-    karatsuba_Pol_M(&res_polynomial , F , G);
+    destroy_pol_bigint(res_polynomial);
+    init_pol_bigint(&res_polynomial, 14);
+    karatsuba_pol_bigint(&res_polynomial, F, G);
 
     printf("F : ");
-    print_Pol_m(F);
+    print_pol_bigint(F);
     printf("G : ");
-    print_Pol_m(G);
+    print_pol_bigint(G);
 
     printf("F * G (karatsuba): \t");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
-    mult_Pol_M(&res_polynomial , F , G);
+    mult_pol_bigint(&res_polynomial, F, G);
     printf("F * G (naive)\t: \t");
-    print_Pol_m(res_polynomial);
+    print_pol_bigint(res_polynomial);
 
 
-
-
-
-    destroy_Pol_M(my_polynomial);
-    destroy_Pol_M(other_polynomial);
-    destroy_Pol_M(res_polynomial);
-    destroy_Pol_M(remainder_pol);
+    destroy_pol_bigint(my_polynomial);
+    destroy_pol_bigint(other_polynomial);
+    destroy_pol_bigint(res_polynomial);
+    destroy_pol_bigfloat(remainder_pol_bigfloat);
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 
