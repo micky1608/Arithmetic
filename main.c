@@ -11,6 +11,7 @@
 #include "pol_bigint_arithmetic.h"
 #include "pol_bigfloat_arithmetic.h"
 #include "Euclidean.h"
+#include "matrix_bigint_arithmetic.h"
 
 int main () {
 
@@ -237,7 +238,6 @@ int main () {
     init_pol_bigfloat(&quotient_pol_bigfloat , 0);
     init_pol_bigfloat(&remainder_pol_bigfloat , 0);
 
-
     printf("\n");
     printf("A : \t");
     print_pol_bigint(my_polynomial);
@@ -311,6 +311,38 @@ int main () {
     destroy_pol_bigint(other_polynomial);
     destroy_pol_bigint(res_polynomial);
     destroy_pol_bigfloat(remainder_pol_bigfloat);
+
+
+    printf("\n\n*******************************************\n\n");
+
+    matrix_bigint matrix;
+
+    init_matrix_bigint(&matrix , 3 , 4);
+    set_coeff_matrix_bigint_d(matrix , 1 , 3 , 2);
+    print_matrix_bigint(matrix);
+
+    set_all_coeffs_random_matrix_bigint(matrix , 100);
+    print_matrix_bigint(matrix);
+
+    change_nb_line_matrix_bigint(&matrix , 6);
+    print_matrix_bigint(matrix);
+
+    change_nb_line_matrix_bigint(&matrix , 2);
+    print_matrix_bigint(matrix);
+
+    change_nb_col_matrix_bigint(&matrix , 6);
+    print_matrix_bigint(matrix);
+
+    change_nb_col_matrix_bigint(&matrix , 2);
+    print_matrix_bigint(matrix);
+
+    change_dim_matrix_bigint(&matrix , 3 , 3);
+    print_matrix_bigint(matrix);
+
+    change_dim_matrix_bigint(&matrix , 4 , 2);
+    print_matrix_bigint(matrix);
+
+    destroy_matrix_bigint(matrix);
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 

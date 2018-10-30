@@ -3,5 +3,5 @@ project(Arithmetic C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Arithmetic main.c arithmetic.c pol_bigint_arithmetic.c pol_bigint_arithmetic.h Util.c Util.h pol_bigfloat_arithmetic.c pol_bigfloat_arithmetic.h Euclidean.c Euclidean.h pol_bignumber.c pol_bignumber.h)
+add_executable(Arithmetic main.c arithmetic.c pol_bigint_arithmetic.c pol_bigint_arithmetic.h Util.c Util.h pol_bigfloat_arithmetic.c pol_bigfloat_arithmetic.h Euclidean.c Euclidean.h pol_bignumber.c pol_bignumber.h matrix_bigint_arithmetic.c matrix_bigint_arithmetic.h)
 target_link_libraries(Arithmetic gmp m)
