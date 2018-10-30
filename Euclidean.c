@@ -71,10 +71,6 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
 
         change_degre_pol_bigfloat(R , i);
 
-        printf("R (degree %d) : ",R->degree);
-        print_pol_bigfloat(*R);
-
-
     }
 
 

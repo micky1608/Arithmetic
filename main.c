@@ -203,7 +203,7 @@ int main () {
     set_coeff_pol_bigint_d(other_polynomial , 1 , 1);
 
 
-    printf("\tEuclidean division\n");
+    printf("\t\t***** Euclidean division *****\n\n");
     printf("A : \t");
     print_pol_bigint(my_polynomial);
 
@@ -239,10 +239,10 @@ int main () {
 
 
     printf("\n");
-    printf("A (degree %d) : \t",my_polynomial.degree);
+    printf("A : \t");
     print_pol_bigint(my_polynomial);
 
-    printf("B (degree %d) : \t",other_polynomial.degree);
+    printf("B : \t");
     print_pol_bigint(other_polynomial);
 
     euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
@@ -256,6 +256,7 @@ int main () {
 
     printf("\n\n*******************************************\n\n");
 
+    printf("\t\t***** Polynomial multiplication *****\n\n");
 
     pol_bigint F , G;
     init_pol_bigint(&F, 3);
