@@ -32,7 +32,7 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
     pol_bigfloat temp , temp2 , A_float, B_float;
 
     init_pol_bigfloat(&temp, A.degree - B.degree);
-    init_pol_bigfloat(&temp2, A.degree - B.degree);
+    init_pol_bigfloat(&temp2, A.degree);
     init_pol_bigfloat(&A_float , 0);
     init_pol_bigfloat(&B_float , 0);
 
@@ -43,43 +43,39 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
     copy_pol_bigfloat(R, A_float);
     set_all_coeffs_to_pol_bigfloat(*Q, zero);
 
-    printf("A_float : ");
-    print_pol_bigfloat(A_float);
-    printf("\n");
 
-    printf("R : ");
-    print_pol_bigfloat(*R);
-    printf("\n");
-//
-//    while(R->degree > B.degree) {
-//        mpf_set(a,R->coeffs[R->degree]);
-//        mpf_div(a_on_b , a , b);
-//        mpf_neg(a_on_b_neg , a_on_b);
-//
-//        set_all_coeffs_to_pol_bigfloat(temp, zero);
-//        if(temp.degree != R->degree-B.degree) change_degre_pol_bigfloat(&temp, R->degree - B.degree);
-//        set_coeff_pol_bigfloat(temp, R->degree - B.degree, a_on_b);
-//
-//        add_pol_bigfloat(Q, *Q, temp);
-//
-//        set_coeff_pol_bigfloat(temp, R->degree - B.degree, a_on_b_neg);
-//
-//        mult_pol_bigfloat(&temp2, temp, B_float);
-//
-//        printf("R : ");
-//        print_pol_bigfloat(*R);
-//        printf("\n");
-//
-//        printf("temp : ");
-//        print_pol_bigfloat(temp);
-//        printf("\n");
-//
-//        printf("temp2 : ");
-//        print_pol_bigfloat(temp2);
-//        printf("\n");
-//
-//        add_pol_bigfloat(R, *R, temp2);
-//    }
+    while(R->degree >= B.degree) {
+    //for(int k=0 ; k<1 ; k++) {
+        mpf_set(a,R->coeffs[R->degree]);
+        mpf_div(a_on_b , a , b);
+        mpf_neg(a_on_b_neg , a_on_b);
+
+        set_all_coeffs_to_pol_bigfloat(temp, zero);
+        if(temp.degree != R->degree-B.degree) change_degre_pol_bigfloat(&temp, R->degree - B.degree);
+        set_coeff_pol_bigfloat(temp, R->degree - B.degree, a_on_b);
+
+        add_pol_bigfloat(Q, *Q, temp);
+
+        set_coeff_pol_bigfloat(temp, R->degree - B.degree, a_on_b_neg);
+
+        if(temp2.degree != R->degree) change_degre_pol_bigfloat(&temp2 , R->degree);
+
+        mult_pol_bigfloat(&temp2, temp, B_float);
+
+        add_pol_bigfloat(R, *R, temp2);
+
+        // update the degree of R
+        unsigned int i;
+
+        for(i=R->degree ; mpf_cmp_d(R->coeffs[i],0) == 0 ; --i);
+
+        change_degre_pol_bigfloat(R , i);
+
+        printf("R (degree %d) : ",R->degree);
+        print_pol_bigfloat(*R);
+
+
+    }
 
 
     mpf_clears(a, b, a_on_b, a_on_b_neg, zero, (mpf_t*)NULL);

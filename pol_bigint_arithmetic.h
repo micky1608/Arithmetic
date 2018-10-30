@@ -27,6 +27,8 @@ void set_all_coeffs_random_pol_bigint(pol_bigint polynomial, unsigned int max);
 
 void set_coeff_pol_bigint(pol_bigint polynomial, unsigned int degree_coeff, mpz_t newValue);
 
+void set_coeff_pol_bigint_d(pol_bigint polynomial, unsigned int degree_coeff, int newValue);
+
 void set_all_coeffs_to_pol_bigint(pol_bigint polynomial, mpz_t value);
 
 void destroy_pol_bigint(pol_bigint polynomial);

@@ -28,6 +28,8 @@ void set_all_coeffs_random_pol_bigfloat(pol_bigfloat polynomial, unsigned int ma
 
 void set_coeff_pol_bigfloat(pol_bigfloat polynomial, unsigned int degree_coeff, mpf_t newValue);
 
+void set_coeff_pol_bigfloat_d(pol_bigfloat polynomial, unsigned int degree_coeff, int newValue);
+
 void set_all_coeffs_to_pol_bigfloat(pol_bigfloat polynomial, mpf_t value);
 
 void destroy_pol_bigfloat(pol_bigfloat polynomial);

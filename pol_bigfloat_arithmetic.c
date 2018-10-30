@@ -98,6 +98,22 @@ void set_coeff_pol_bigfloat(pol_bigfloat polynomial, unsigned int degree_coeff, 
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Change one coefficient in a polynomial
+ * @param polynome
+ * @param degre_coeff
+ * @param newValue
+ */
+void set_coeff_pol_bigfloat_d(pol_bigfloat polynomial, unsigned int degree_coeff, int newValue) {
+    if(degree_coeff <= polynomial.degree) {
+        mpf_set_d(polynomial.coeffs[degree_coeff] , newValue);
+    }
+
+}
+
+
+/* ********************************************************************************************************************** */
+
 
 /**
  * Change the degree of a polynomial
@@ -106,7 +122,7 @@ void set_coeff_pol_bigfloat(pol_bigfloat polynomial, unsigned int degree_coeff, 
  * @param polynomial
  */
 void change_degre_pol_bigfloat(pol_bigfloat *polynomial, unsigned int new_degree) {
-    if(new_degree == polynomial->degree) return;
+    if(new_degree == polynomial->degree || new_degree < 0) return;
 
     mpf_t *new_coeffs = calloc(new_degree+1 , sizeof(mpf_t));
 
@@ -153,17 +169,19 @@ void print_pol_bigfloat(pol_bigfloat polynomial) {
     mpf_t temp;
     mpf_init(temp);
 
-    gmp_printf("%.2F",polynomial.coeffs[0]);
+    if (mpf_cmp_ui(polynomial.coeffs[0],0) != 0 ) gmp_printf("%.3Ff",polynomial.coeffs[0]);
     for(int i=1 ; i <= polynomial.degree ; i++) {
 
-        if (mpf_cmp_ui(polynomial.coeffs[i],0) < 0 )
+        if (mpf_cmp_d(polynomial.coeffs[i],0) < 0 )
             printf(" - ");
-        else
+        else if (mpf_cmp_d(polynomial.coeffs[i],0) > 0 )
             printf(" + ");
+        else
+            continue;
 
         mpf_abs(temp , polynomial.coeffs[i]);
         printf("(");
-        gmp_printf("%.2F",temp);
+        gmp_printf("%.3Ff",temp);
         printf(" * X^%d)" , i);
 
     }

@@ -192,11 +192,16 @@ int main () {
     init_pol_bigfloat(&quotient_pol_bigfloat, 0);
     init_pol_bigfloat(&remainder_pol_bigfloat, 0);
 
-    change_degre_pol_bigint(&my_polynomial , 5);
-    change_degre_pol_bigint(&other_polynomial , 2);
+    change_degre_pol_bigint(&my_polynomial , 2);
+    change_degre_pol_bigint(&other_polynomial , 1);
 
-    set_all_coeffs_random_pol_bigint(my_polynomial , 10);
-    set_all_coeffs_random_pol_bigint(other_polynomial , 10);
+    set_coeff_pol_bigint_d(my_polynomial , 0 , 3);
+    set_coeff_pol_bigint_d(my_polynomial , 1 , 2);
+    set_coeff_pol_bigint_d(my_polynomial , 2 , 1);
+
+    set_coeff_pol_bigint_d(other_polynomial , 0 , -4);
+    set_coeff_pol_bigint_d(other_polynomial , 1 , 1);
+
 
     printf("\tEuclidean division\n");
     printf("A : \t");
@@ -207,14 +212,47 @@ int main () {
 
     euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
 
-
-
-    printf("\n\tResult\n");
     printf("Q : \t");
     print_pol_bigfloat(quotient_pol_bigfloat);
 
     printf("R : \t");
     print_pol_bigfloat(remainder_pol_bigfloat);
+
+    change_degre_pol_bigint(&my_polynomial , 5);
+    change_degre_pol_bigint(&other_polynomial , 2);
+
+    set_coeff_pol_bigint_d(my_polynomial , 0 , 0);
+    set_coeff_pol_bigint_d(my_polynomial , 1 , -2);
+    set_coeff_pol_bigint_d(my_polynomial , 2 , 3);
+    set_coeff_pol_bigint_d(my_polynomial , 3 , -1);
+    set_coeff_pol_bigint_d(my_polynomial , 4 , -1);
+    set_coeff_pol_bigint_d(my_polynomial , 5 , 1);
+
+    set_coeff_pol_bigint_d(other_polynomial , 0 , 1);
+    set_coeff_pol_bigint_d(other_polynomial , 1 , -1);
+    set_coeff_pol_bigint_d(other_polynomial , 2 , 1);
+
+    destroy_pol_bigfloat(quotient_pol_bigfloat);
+    destroy_pol_bigfloat(remainder_pol_bigfloat);
+    init_pol_bigfloat(&quotient_pol_bigfloat , 0);
+    init_pol_bigfloat(&remainder_pol_bigfloat , 0);
+
+
+    printf("\n");
+    printf("A (degree %d) : \t",my_polynomial.degree);
+    print_pol_bigint(my_polynomial);
+
+    printf("B (degree %d) : \t",other_polynomial.degree);
+    print_pol_bigint(other_polynomial);
+
+    euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
+
+    printf("Q : \t");
+    print_pol_bigfloat(quotient_pol_bigfloat);
+
+    printf("R : \t");
+    print_pol_bigfloat(remainder_pol_bigfloat);
+
 
     printf("\n\n*******************************************\n\n");
 

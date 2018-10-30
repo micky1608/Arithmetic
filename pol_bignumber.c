@@ -15,7 +15,6 @@ void pol_bigint_to_pol_bigfloat(pol_bigfloat *res , pol_bigint A) {
 
     for(int i=0 ; i<=res->degree ; i++) {
         mpf_set_z(res->coeffs[i] , A.coeffs[i]);
-        gmp_printf("A.coeff[%d] = %Zd\tres->coeffs[%d] = %.2F\n",i,A.coeffs[i],i,res->coeffs[i]);
     }
 }
 

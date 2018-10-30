@@ -99,6 +99,21 @@ void set_coeff_pol_bigint(pol_bigint polynomial, unsigned int degree_coeff, mpz_
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Change one coefficient in a polynomial
+ * @param polynome
+ * @param degre_coeff
+ * @param newValue
+ */
+void set_coeff_pol_bigint_d(pol_bigint polynomial, unsigned int degree_coeff, int newValue) {
+    if(degree_coeff <= polynomial.degree) {
+        mpz_set_d(polynomial.coeffs[degree_coeff] , newValue);
+    }
+
+}
+
+/* ********************************************************************************************************************** */
+
 
 /**
  * Change the degree of a polynomial
@@ -107,7 +122,7 @@ void set_coeff_pol_bigint(pol_bigint polynomial, unsigned int degree_coeff, mpz_
  * @param polynomial
  */
 void change_degre_pol_bigint(pol_bigint *polynomial, unsigned int new_degree) {
-    if(new_degree == polynomial->degree) return;
+    if(new_degree == polynomial->degree || new_degree < 0) return;
 
     mpz_t *new_coeffs = calloc(new_degree+1 , sizeof(mpz_t));
 
@@ -155,17 +170,19 @@ void print_pol_bigint(pol_bigint polynomial) {
     mpz_init(temp);
 
 
-    mpz_out_str(stdout,10,polynomial.coeffs[0]);
+    if (mpz_cmp_ui(polynomial.coeffs[0],0) != 0 ) gmp_printf("%Zd",polynomial.coeffs[0]);
     for(int i=1 ; i <= polynomial.degree ; i++) {
 
         if (mpz_cmp_ui(polynomial.coeffs[i],0) < 0 )
             printf(" - ");
-        else
+        else if (mpz_cmp_ui(polynomial.coeffs[i],0) > 0 )
             printf(" + ");
+        else
+            continue;
 
         mpz_abs(temp , polynomial.coeffs[i]);
         printf("(");
-        mpz_out_str(stdout , 10 , temp);
+        gmp_printf("%Zd",temp);
         printf(" * X^%d)" , i);
 
     }
