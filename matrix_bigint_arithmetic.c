@@ -187,3 +187,66 @@ void change_dim_matrix_bigint(matrix_bigint *matrix , unsigned int new_nb_line ,
     if(new_nb_line != matrix->nb_line) change_nb_line_matrix_bigint(matrix , new_nb_line);
     if(new_nb_col != matrix->nb_col)   change_nb_col_matrix_bigint(matrix , new_nb_col);
 }
+
+/* ********************************************************************************************************************** */
+
+void add_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
+    if(A.nb_line != B.nb_line || A.nb_col != B.nb_col) {
+        perror("Try to add two matrix with different dimensions");
+        return;
+    }
+
+    change_dim_matrix_bigint(res , A.nb_line , A.nb_col);
+
+    for(int i=0 ; i<res->nb_line ; i++) {
+        for(int j=0 ; j<res->nb_col ; j++) {
+            mpz_add(res->values[i*res->nb_col + j] , A.values[i*res->nb_col + j] , B.values[i*res->nb_col + j]);
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void sub_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
+
+    scalar_mult_matrix_bigint(&B , B , -1);
+    add_matrix_bigint(res , A , B);
+}
+
+/* ********************************************************************************************************************** */
+
+void scalar_mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , long lambda) {
+    change_dim_matrix_bigint(res , A.nb_line , A.nb_col);
+
+    for(int i=0 ; i<res->nb_line ; i++) {
+        for (int j = 0; j < res->nb_col; j++) {
+            mpz_mul_si(res->values[i*res->nb_col + j] , A.values[i*res->nb_col + j] , lambda);
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
+    if(A.nb_col != B.nb_line) {
+        perror("Try to multiply matrix with incorrect dimensions");
+        return;
+    }
+
+    mpz_t temp;
+    mpz_init(temp);
+    change_dim_matrix_bigint(res , A.nb_line , B.nb_col);
+
+    for(int i=0 ; i<res->nb_line ; i++) {
+        for(int j=0 ; j<res->nb_col ; j++) {
+            mpz_set_d(res->values[i*res->nb_col + j] , 0);
+
+            for(int k=0 ; k<A.nb_col ; k++) {
+                mpz_mul(temp , A.values[i*A.nb_col + k] , B.values[k*B.nb_col + j]);
+                mpz_add(res->values[i*res->nb_col + j] , res->values[i*res->nb_col + j] , temp);
+            }
+        }
+    }
+
+    mpz_clear(temp);
+}

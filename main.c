@@ -342,7 +342,44 @@ int main () {
     change_dim_matrix_bigint(&matrix , 4 , 2);
     print_matrix_bigint(matrix);
 
+
+    matrix_bigint A,B,res_matrix;
+    init_matrix_bigint(&A , 3 , 3);
+    init_matrix_bigint(&B , 3 , 3);
+    init_matrix_bigint(&res_matrix , 3 , 3);
+
+    set_all_coeffs_random_matrix_bigint(A , 10);
+    set_all_coeffs_random_matrix_bigint(B , 10);
+
+    add_matrix_bigint(&res_matrix , A , B);
+
+    printf("A : \n");
+    print_matrix_bigint(A);
+
+    printf("B : \n");
+    print_matrix_bigint(B);
+
+    printf("A+B : \n");
+    print_matrix_bigint(res_matrix);
+
+    sub_matrix_bigint(&res_matrix , B , A);
+
+    printf("B-A : \n");
+    print_matrix_bigint(res_matrix);
+
+    destroy_matrix_bigint(res_matrix);
+    init_matrix_bigint(&res_matrix , 3 , 3);
+
+    mult_matrix_bigint(&res_matrix , A , B);
+
+    printf("A*B (naive) :\n");
+    print_matrix_bigint(res_matrix);
+
+
     destroy_matrix_bigint(matrix);
+    destroy_matrix_bigint(A);
+    destroy_matrix_bigint(B);
+    destroy_matrix_bigint(res_matrix);
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 

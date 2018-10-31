@@ -34,4 +34,12 @@ void change_nb_col_matrix_bigint(matrix_bigint *matrix , unsigned int new_nb_col
 
 void change_dim_matrix_bigint(matrix_bigint *matrix , unsigned int new_nb_line , unsigned int new_nb_col);
 
+void add_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B);
+
+void sub_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B);
+
+void scalar_mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , long lambda);
+
+void mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B);
+
 #endif //ARITHMETIC_MATRIX_BIGINT_ARITHMETIC_H
