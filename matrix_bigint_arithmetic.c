@@ -209,8 +209,11 @@ void add_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
 
 void sub_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
 
-    scalar_mult_matrix_bigint(&B , B , -1);
-    add_matrix_bigint(res , A , B);
+    matrix_bigint B_neg;
+    init_matrix_bigint(&B_neg , B.nb_line , B.nb_col);
+    scalar_mult_matrix_bigint(&B_neg , B , -1);
+    add_matrix_bigint(res , A , B_neg);
+    destroy_matrix_bigint(B_neg);
 }
 
 /* ********************************************************************************************************************** */
@@ -249,4 +252,29 @@ void mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) 
     }
 
     mpz_clear(temp);
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Apply the Strassen product between the matrix A and B. These must be square matrix with a 2^n size
+ * @param res
+ * @param A
+ * @param B
+ */
+void strassen_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B) {
+    if(A.nb_col != B.nb_line) {
+        perror("Try to multiply matrix with incorrect dimensions (strassen)");
+        return;
+    }
+
+    change_dim_matrix_bigint(res , A.nb_line , B.nb_col);
+
+    mpz_t Q1, Q2, Q3, Q4, Q5, Q6, Q7, temp , temp2;
+    mpz_inits(Q1, Q2, Q3, Q4, Q5, Q6, Q7,temp, temp2, (mpz_t*)NULL);
+
+    mpz_clears(Q1, Q2, Q3, Q4, Q5, Q6, Q7, temp, temp2, (mpz_t*)NULL);
+
+    //TODO
+
 }
