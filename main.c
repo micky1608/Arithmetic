@@ -383,7 +383,27 @@ int main () {
     destroy_matrix_bigint(res_matrix);
 
     printf("\n\n*******************************************\n\n");
-    
+
+    matrix_bigQ matrixBigQ , res_matrixBigQ;
+
+    init_matrix_bigQ(&matrixBigQ , 3 , 3);
+    init_matrix_bigQ(&res_matrixBigQ , 3 , 3);
+
+    set_coeff_matrix_bigQ_d(matrixBigQ , 0 , 1 , 1 , 2);
+
+    scalar_mult_matrix_bigQ(&matrixBigQ , matrixBigQ , 2);
+
+    change_dim_matrix_bigQ(&matrixBigQ , 2 , 4);
+
+    print_matrix_bigQ(matrixBigQ);
+
+    set_all_coeffs_random_matrix_bigQ(matrixBigQ , 100);
+
+    print_matrix_bigQ(matrixBigQ);
+
+    destroy_matrix_bigQ(matrixBigQ);
+    destroy_matrix_bigQ(res_matrixBigQ);
+
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 
     return 0;

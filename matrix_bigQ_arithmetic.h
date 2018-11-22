@@ -2,8 +2,8 @@
 // Created by root on 30/10/18.
 //
 
-#ifndef ARITHMETIC_MATRIX_BIGINT_ARITHMETIC_H
-#define ARITHMETIC_MATRIX_BIGINT_ARITHMETIC_H
+#ifndef ARITHMETIC_MATRIX_BIGQ_ARITHMETIC_H
+#define ARITHMETIC_MATRIX_BIGQ_ARITHMETIC_H
 
 #include <gmp.h>
 #include <stdio.h>
@@ -42,4 +42,4 @@ void scalar_mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , long lambda);
 
 void mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , matrix_bigQ B);
 
-#endif //ARITHMETIC_MATRIX_BIGINT_ARITHMETIC_H
+#endif //ARITHMETIC_MATRIX_BIGQ_ARITHMETIC_H

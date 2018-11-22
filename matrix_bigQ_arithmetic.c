@@ -113,7 +113,7 @@ void print_matrix_bigQ(matrix_bigQ matrix) {
 
             if(mpq_cmp_si(matrix.values[i*matrix.nb_col + j],0,1) == 0) printf(" 0 ");
             if(mpq_cmp_si(matrix.values[i*matrix.nb_col + j],0,1) > 0) printf("+");
-            if(mpq_cmp_si(matrix.values[i*matrix.nb_col + j],0,1) != 0) gmp_printf("%Qx ",matrix.values[i*matrix.nb_col + j]);
+            if(mpq_cmp_si(matrix.values[i*matrix.nb_col + j],0,1) != 0) gmp_printf("%Qd ",matrix.values[i*matrix.nb_col + j]);
             if(mpq_cmp_si(matrix.values[i*matrix.nb_col + j],10,1) < 0  && mpq_cmp_si(matrix.values[i*matrix.nb_col + j],-10,1) > 0) printf(" ");
             if(j == matrix.nb_col - 1) printf("|\n");
         }
@@ -243,18 +243,26 @@ void sub_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , matrix_bigQ B) {
 void scalar_mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , long lambda) {
     change_dim_matrix_bigQ(res , A.nb_line , A.nb_col);
 
-    mpz_t new_numerator;
-    mpz_init(new_numerator);
+    mpz_t numerator, denominator , gcd;
+    mpz_inits(numerator,denominator,gcd,(mpq_t*)NULL);
 
     for(int i=0 ; i<res->nb_line ; i++) {
         for (int j = 0; j < res->nb_col; j++) {
-            mpq_get_num(new_numerator, A.values[i*res->nb_col + j]);
-            mpz_mul_si(new_numerator , new_numerator , lambda);
-            mpq_set_num(res->values[i*res->nb_col + j] , new_numerator);
+            mpq_get_num(numerator, A.values[i*res->nb_col + j]);
+            mpq_get_den(denominator , res->values[i*res->nb_col + j]);
+
+            mpz_mul_si(numerator , numerator , lambda);
+            mpz_gcd(gcd , numerator , denominator);
+
+            mpz_div(numerator , numerator , gcd);
+            mpz_div(denominator , denominator , gcd);
+
+            mpq_set_num(res->values[i*res->nb_col + j] , numerator);
+            mpq_set_den(res->values[i*res->nb_col + j] , denominator);
         }
     }
 
-    mpz_clear(new_numerator);
+    mpz_clears(numerator,denominator,gcd,(mpq_t*)NULL);
 }
 
 /* ********************************************************************************************************************** */
