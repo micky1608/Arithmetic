@@ -42,6 +42,4 @@ void scalar_mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , long lambd
 
 void mult_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B);
 
-void strassen_matrix_bigint(matrix_bigint *res , matrix_bigint A , matrix_bigint B);
-
 #endif //ARITHMETIC_MATRIX_BIGINT_ARITHMETIC_H

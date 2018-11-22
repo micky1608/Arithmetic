@@ -12,6 +12,7 @@
 #include "pol_bigfloat_arithmetic.h"
 #include "Euclidean.h"
 #include "matrix_bigint_arithmetic.h"
+#include "matrix_bigQ_arithmetic.h"
 
 int main () {
 
@@ -381,6 +382,8 @@ int main () {
     destroy_matrix_bigint(B);
     destroy_matrix_bigint(res_matrix);
 
+    printf("\n\n*******************************************\n\n");
+    
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 
     return 0;
