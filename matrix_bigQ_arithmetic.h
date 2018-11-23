@@ -42,4 +42,8 @@ void scalar_mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , long lambda);
 
 void mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , matrix_bigQ B);
 
+void copy_matrix_bigQ(matrix_bigQ *DEST , matrix_bigQ SRC);
+
+void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ A);
+
 #endif //ARITHMETIC_MATRIX_BIGQ_ARITHMETIC_H

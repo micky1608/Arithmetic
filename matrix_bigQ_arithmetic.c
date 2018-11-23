@@ -290,3 +290,21 @@ void mult_matrix_bigQ(matrix_bigQ *res , matrix_bigQ A , matrix_bigQ B) {
 
     mpq_clear(temp);
 }
+
+/* ********************************************************************************************************************** */
+
+void copy_matrix_bigQ(matrix_bigQ *DEST , matrix_bigQ SRC) {
+    change_dim_matrix_bigQ(DEST , SRC.nb_line , SRC.nb_col);
+
+    for(int i=0 ; i<SRC.nb_line ; i++) {
+        for (int j = 0; j < SRC.nb_col; j++) {
+            mpq_set(DEST->values[i*SRC.nb_col + j] , SRC.values[i*SRC.nb_col + j]);
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ A) {
+    
+}

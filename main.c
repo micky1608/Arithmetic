@@ -13,6 +13,7 @@
 #include "Euclidean.h"
 #include "matrix_bigint_arithmetic.h"
 #include "matrix_bigQ_arithmetic.h"
+#include "CRT_bigint.h"
 
 int main () {
 
@@ -404,6 +405,54 @@ int main () {
     destroy_matrix_bigQ(matrixBigQ);
     destroy_matrix_bigQ(res_matrixBigQ);
 
+    printf("\n\n*******************************************\n\n");
+
+    crt_bigint CRT1 , CRT2, resCRT, resCRT_DAC;
+
+    init_CRT_bigint_d(&CRT1 , 3 , 5);
+    init_CRT_bigint_d(&CRT2 , 4 , 7);
+    init_CRT_bigint_d(&resCRT , 0 , 0);
+    init_CRT_bigint_d(&resCRT_DAC , 0 , 0);
+
+    crt_bigint arg_crt[2];
+    arg_crt[0] = CRT1;
+    arg_crt[1] = CRT2;
+
+
+    solve_CRT_bigint(&resCRT , arg_crt ,2);
+
+    print_CRT_bigint_arg(arg_crt , 2);
+    printf("\t ***** CRT result *****\n");
+    print_CRT_bigint(resCRT);
+    printf("\n");
+
+    crt_bigint arg_crt_dac[4];
+    for(size_t i=0 ; i<4 ; i++) init_CRT_bigint_d(&arg_crt_dac[i] , 0 , 0);
+
+    mpz_set_d(arg_crt_dac[0].Ai , 3);
+    mpz_set_d(arg_crt_dac[0].Ni , 5);
+
+    mpz_set_d(arg_crt_dac[1].Ai , 4);
+    mpz_set_d(arg_crt_dac[1].Ni , 7);
+
+    mpz_set_d(arg_crt_dac[2].Ai , 6);
+    mpz_set_d(arg_crt_dac[2].Ni , 9);
+
+    mpz_set_d(arg_crt_dac[3].Ai , 11);
+    mpz_set_d(arg_crt_dac[3].Ni , 16);
+
+    solve_CRT_bigint_DAC(&resCRT_DAC , arg_crt_dac , 4);
+
+    print_CRT_bigint_arg(arg_crt_dac , 4);
+    printf("\t ***** CRT result *****\n");
+    print_CRT_bigint(resCRT_DAC);
+    printf("\n");
+
+
+    destroy(CRT1);
+    destroy(CRT2);
+    destroy(resCRT);
+    destroy(resCRT_DAC);
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
 
     return 0;
