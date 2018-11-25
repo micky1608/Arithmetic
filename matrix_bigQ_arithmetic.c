@@ -305,6 +305,74 @@ void copy_matrix_bigQ(matrix_bigQ *DEST , matrix_bigQ SRC) {
 
 /* ********************************************************************************************************************** */
 
+void identity_matrix_bigQ(matrix_bigQ *Id , unsigned size) {
+    change_dim_matrix_bigQ(Id, size, size);
+
+    for(int i=0 ; i<size ; i++) {
+        for(int j=0 ; j<size ; j++) {
+            if(i == j)
+                mpq_set_d(Id->values[i*size +j] , 1);
+            else
+                mpq_set_d(Id->values[i*size +j] , 0);
+
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Compute the LU decomposition of a SQUARE matrix
+ * @param L
+ * @param U
+ * @param A
+ */
 void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ A) {
-    
+
+    if(L != NULL)
+        identity_matrix_bigQ(L , A.nb_line); // L = Id
+    copy_matrix_bigQ(U , A);             // U = A
+
+    mpq_t coeff, temp;
+    mpq_inits(coeff,temp , (mpq_t*)NULL);
+
+    for(int j=0 ; j<A.nb_col ; j++) {
+        for(int i=j+1 ; i<A.nb_line ; i++) {
+            //mpq_mul(U->values[i*U->nb_col + j] , U->values[i*U->nb_col + j] , U->values[j*U->nb_col + j]);
+
+            mpq_div(coeff , U->values[i*U->nb_col + j] , U->values[j*U->nb_col + j]);
+            mpq_neg(coeff,coeff);
+
+            for(int k=0 ; k<A.nb_col ; k++) {
+                mpq_mul(temp , U->values[j*U->nb_col+k], coeff);
+
+                if(L != NULL)
+                    mpq_set(L->values[i*L->nb_col+j] , coeff);
+
+                mpq_add(U->values[i*U->nb_col+k] , U->values[i*U->nb_col+k] , temp);
+            }
+
+        }
+    }
+
+    mpq_clears(coeff,temp , (mpq_t*)NULL);
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Compute the determinant of a SQUARE matrix
+ * @param det
+ * @param A
+ */
+void determinant_matrix_bigQ(mpq_t *det , matrix_bigQ A) {
+
+    matrix_bigQ U;
+    init_matrix_bigQ(&U , A.nb_line , A.nb_line);
+
+    LU_decomposition_matrix_bigQ(NULL , &U , A);
+
+    mpq_set_d(*det , 1);
+
+    for(int i=0 ; i<A.nb_line ; i++) mpq_mul(*det , *det , U.values[i*A.nb_line + i]);
 }

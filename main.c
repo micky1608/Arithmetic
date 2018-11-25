@@ -400,7 +400,47 @@ int main () {
 
     set_all_coeffs_random_matrix_bigQ(matrixBigQ , 100);
 
+
+    printf("\n\n*******************************************\n\n");
+
+    matrix_bigQ L , U;
+    mpq_t det;
+    mpq_init(det);
+
+    init_matrix_bigQ(&L , 4 , 4);
+    init_matrix_bigQ(&U , 4 , 4);
+
+    change_dim_matrix_bigQ(&matrixBigQ , 4 , 4);
+
+    for(unsigned int j=0 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ , 0 , j , 5 , 1);
+
+    set_coeff_matrix_bigQ_d(matrixBigQ, 1 , 0 , 10 , 1);
+
+    for(unsigned int j=1 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ, 1 , j, 16 , 1);
+
+    set_coeff_matrix_bigQ_d(matrixBigQ, 2 , 0 , 15 , 1);
+    set_coeff_matrix_bigQ_d(matrixBigQ, 2 , 1 , 27 , 1);
+
+    for(unsigned int j=2 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ,2 , j , 34 , 1);
+
+    set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 0 , 20 , 1);
+    set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 1 , 38 , 1);
+    set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 2 , 52 , 1);
+    set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 3 , 60 , 1);
+
+    LU_decomposition_matrix_bigQ(&L , &U , matrixBigQ);
+
+    printf("A : \n");
     print_matrix_bigQ(matrixBigQ);
+
+    printf("L : \n");
+    print_matrix_bigQ(L);
+
+    printf("U : \n");
+    print_matrix_bigQ(U);
+
+    determinant_matrix_bigQ(&det , matrixBigQ);
+    gmp_printf("\ndet(A) = %Qd\n",det);
 
     destroy_matrix_bigQ(matrixBigQ);
     destroy_matrix_bigQ(res_matrixBigQ);
@@ -454,6 +494,7 @@ int main () {
     destroy(resCRT);
     destroy(resCRT_DAC);
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
+    mpq_clear(det);
 
     return 0;
 }
