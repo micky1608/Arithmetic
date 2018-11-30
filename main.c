@@ -15,6 +15,7 @@
 #include "matrix_bigint_arithmetic.h"
 #include "matrix_bigQ_arithmetic.h"
 #include "CRT_bigint.h"
+#include "Lagrange.h"
 
 int main () {
 
@@ -383,8 +384,6 @@ int main () {
     destroy_matrix_bigint(B);
     destroy_matrix_bigint(res_matrix);
 
-    printf("\n\n*******************************************\n\n");
-
     matrix_bigQ matrixBigQ , res_matrixBigQ;
 
     init_matrix_bigQ(&matrixBigQ , 3 , 3);
@@ -488,21 +487,68 @@ int main () {
     print_CRT_bigint(resCRT_DAC);
     printf("\n");
 
-    printf("\n\n*******************************************\n\n");
-
-    pol_bigQ polBigQ;
-    init_pol_bigQ(&polBigQ , 4);
-    set_all_coeffs_random_pol_bigQ(polBigQ , 10);
-
-    print_pol_bigQ(polBigQ);
-
-    destroy_pol_bigQ(polBigQ);
-
-
     destroy(CRT1);
     destroy(CRT2);
     destroy(resCRT);
     destroy(resCRT_DAC);
+
+    printf("\n\n*******************************************\n\n");
+
+    pol_bigQ A_bigQ,B_bigQ,Q_bigQ,R_bigQ;
+
+    init_pol_bigQ(&A_bigQ , 5);
+    init_pol_bigQ(&B_bigQ , 2);
+    init_pol_bigQ(&Q_bigQ , 0);
+    init_pol_bigQ(&R_bigQ , 0);
+
+    set_coeff_pol_bigQ_d(A_bigQ , 1 , -2);
+    set_coeff_pol_bigQ_d(A_bigQ , 2 , 3);
+    set_coeff_pol_bigQ_d(A_bigQ , 3 , -1);
+    set_coeff_pol_bigQ_d(A_bigQ , 4 , -1);
+    set_coeff_pol_bigQ_d(A_bigQ , 5 , 1);
+
+    set_coeff_pol_bigQ_d(B_bigQ , 0 , 1);
+    set_coeff_pol_bigQ_d(B_bigQ , 1 , -1);
+    set_coeff_pol_bigQ_d(B_bigQ , 2 , 1);
+
+    euclideDiv_pol_bigQ(&Q_bigQ , &R_bigQ , A_bigQ , B_bigQ);
+
+    printf("\t\t***** Euclidean division bigQ *****\n\n");
+
+    printf("A : ");
+    print_pol_bigQ(A_bigQ);
+
+    printf("B : ");
+    print_pol_bigQ(B_bigQ);
+
+    printf("Q : ");
+    print_pol_bigQ(Q_bigQ);
+
+    printf("R : ");
+    print_pol_bigQ(R_bigQ);
+
+
+    destroy_pol_bigQ(A_bigQ);
+    destroy_pol_bigQ(B_bigQ);
+    destroy_pol_bigQ(Q_bigQ);
+    destroy_pol_bigQ(R_bigQ);
+
+
+    printf("\n\n*******************************************\n\n");
+
+    pol_bigQ_value constraints[3];
+
+    init_polbigQ_value_si(&constraints[0] , 0 , 1 , 1 , 1);
+    init_polbigQ_value_si(&constraints[1] , 1 , 1 , 4 , 1);
+    init_polbigQ_value_si(&constraints[2] , -1 , 1 , 0 , 1);
+
+    print_lagrange_constaints(constraints , 3);
+
+
+    destroy_polbigQ_value(constraints[0]);
+    destroy_polbigQ_value(constraints[1]);
+    destroy_polbigQ_value(constraints[2]);
+
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
     mpq_clear(det);
 

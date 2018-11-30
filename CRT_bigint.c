@@ -17,8 +17,6 @@ void init_CRT_bigint_d(crt_bigint *crt , int A , int N) {
     mpz_inits(crt->Ai , crt->Ni, (mpz_t*)NULL);
     mpz_set_d(crt->Ai , A);
     mpz_set_d(crt->Ni , N);
-//    mpz_init_set_d(crt.Ai , A);
-//    mpz_init_set_d(crt.Ni , N);
 }
 
 /* ************************************************************************************************************* */
