@@ -11,4 +11,6 @@
 
 void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A , pol_bigint B);
 
+
+
 #endif //ARITHMETIC_EUCLIDEAN_H

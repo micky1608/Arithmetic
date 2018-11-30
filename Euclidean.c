@@ -81,5 +81,3 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
     destroy_pol_bigfloat(B_float);
 
 }
-
-

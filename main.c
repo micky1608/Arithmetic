@@ -10,6 +10,7 @@
 #include "arithmetic.h"
 #include "pol_bigint_arithmetic.h"
 #include "pol_bigfloat_arithmetic.h"
+#include "pol_bigQ_arithmetic.h"
 #include "Euclidean.h"
 #include "matrix_bigint_arithmetic.h"
 #include "matrix_bigQ_arithmetic.h"
@@ -314,7 +315,6 @@ int main () {
     destroy_pol_bigint(res_polynomial);
     destroy_pol_bigfloat(remainder_pol_bigfloat);
 
-
     printf("\n\n*******************************************\n\n");
 
     matrix_bigint matrix;
@@ -487,6 +487,16 @@ int main () {
     printf("\t ***** CRT result *****\n");
     print_CRT_bigint(resCRT_DAC);
     printf("\n");
+
+    printf("\n\n*******************************************\n\n");
+
+    pol_bigQ polBigQ;
+    init_pol_bigQ(&polBigQ , 4);
+    set_all_coeffs_random_pol_bigQ(polBigQ , 10);
+
+    print_pol_bigQ(polBigQ);
+
+    destroy_pol_bigQ(polBigQ);
 
 
     destroy(CRT1);
