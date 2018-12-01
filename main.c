@@ -546,14 +546,32 @@ int main () {
 
     pol_bigQ M;
     init_pol_bigQ(&M , 2);
-
     lagrange_interpolation(&M , constraints , 3);
-
     print_pol_bigQ(M , "Lagrange result");
+
+    printf("\n\n*******************************************\n\n");
+
+    pol_bigQ_value constraints2[4];
+
+    init_polbigQ_value_si(&constraints2[0] , -2 , 1 , 17 , 1);
+    init_polbigQ_value_si(&constraints2[1] , -1 , 1 , 13 , 1);
+    init_polbigQ_value_si(&constraints2[2] , 1 , 1 , 5 , 1);
+    init_polbigQ_value_si(&constraints2[3] , 2 , 1 , 25 , 1);
+
+    print_lagrange_constaints(constraints2 , 4);
+
+    set_all_coeffs_to_pol_bigQ_si(M , 0 , 1);
+    lagrange_interpolation(&M , constraints2 , 4);
+    print_pol_bigQ(M , "Lagrange results");
 
     destroy_polbigQ_value(constraints[0]);
     destroy_polbigQ_value(constraints[1]);
     destroy_polbigQ_value(constraints[2]);
+
+    destroy_polbigQ_value(constraints2[0]);
+    destroy_polbigQ_value(constraints2[1]);
+    destroy_polbigQ_value(constraints2[2]);
+    destroy_polbigQ_value(constraints2[3]);
 
     destroy_pol_bigQ(A_bigQ);
     destroy_pol_bigQ(B_bigQ);
