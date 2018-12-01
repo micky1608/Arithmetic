@@ -6,6 +6,7 @@
 #define ARITHMETIC_POL_BIGQ_ARITHMETIC_H
 
 #include <gmp.h>
+#include "Util.h"
 
 typedef struct pol_bigQ {
     unsigned int degree;
@@ -33,15 +34,22 @@ void change_degre_pol_bigQ(pol_bigQ *polynomial, unsigned int new_degree);
 
 void copy_pol_bigQ(pol_bigQ *res, pol_bigQ polynomial);
 
-void print_pol_bigQ(pol_bigQ polynomial);
+void print_pol_bigQ(pol_bigQ polynomial , char *polbigQ_name);
 
 void add_pol_bigQ(pol_bigQ *res, pol_bigQ A, pol_bigQ B);
 
 void sub_pol_bigQ(pol_bigQ *res, pol_bigQ A, pol_bigQ B);
 
+void mpq_mult_polbigQ(pol_bigQ *res, pol_bigQ A, mpq_t lambda);
+
+void mpq_mult_polbigQ_si(pol_bigQ *res, pol_bigQ A, int lambda_num, unsigned int lambda_den);
+
 void mult_pol_bigQ(pol_bigQ *res, pol_bigQ A, pol_bigQ B);
 
 void euclideDiv_pol_bigQ(pol_bigQ *Q , pol_bigQ *R , pol_bigQ A , pol_bigQ B);
+
+bool is_null_polbigQ(pol_bigQ A);
+
 
 
 

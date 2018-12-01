@@ -19,7 +19,10 @@ void init_pol_bigQ(pol_bigQ *polynomial, unsigned int degree_p) {
     if(degree_p >=0) {
         polynomial->degree = degree_p;
         polynomial->coeffs = calloc(degree_p + 1 , sizeof(mpq_t));
-        for(int i=0 ; i<= polynomial->degree ; i++) mpq_init(polynomial->coeffs[i]);
+        for(int i=0 ; i<= polynomial->degree ; i++) {
+            mpq_init(polynomial->coeffs[i]);
+            mpq_set_d(polynomial->coeffs[i] , 0);
+        }
     }
     else {
         perror("Try to create a polynomial with negative degree !!");
@@ -36,6 +39,7 @@ void init_pol_bigQ(pol_bigQ *polynomial, unsigned int degree_p) {
 void destroy_pol_bigQ(pol_bigQ polynomial) {
     for(int i=0 ; i<= polynomial.degree ; i++)
         mpq_clear(polynomial.coeffs[i]);
+
     free(polynomial.coeffs);
 }
 
@@ -156,7 +160,6 @@ void change_degre_pol_bigQ(pol_bigQ *polynomial, unsigned int new_degree) {
                 mpq_init(new_coeffs[i]);
                 mpq_set_d(new_coeffs[i],0);
             }
-
         }
     }
 
@@ -180,9 +183,16 @@ void copy_pol_bigQ(pol_bigQ *res, pol_bigQ polynomial) {
 
 /* ********************************************************************************************************************** */
 
-void print_pol_bigQ(pol_bigQ polynomial) {
+void print_pol_bigQ(pol_bigQ polynomial, char *polbigQ_name) {
     mpq_t temp;
     mpq_init(temp);
+
+    printf("%s : ",polbigQ_name);
+
+    if(is_null_polbigQ(polynomial) == TRUE) {
+        printf("0\n");
+        return;
+    }
 
     if (mpq_cmp_si(polynomial.coeffs[0],0,1) != 0 ) gmp_printf("%Qd",polynomial.coeffs[0]);
     for(int i=1 ; i <= polynomial.degree ; i++) {
@@ -289,6 +299,43 @@ void mult_pol_bigQ(pol_bigQ *res, pol_bigQ A, pol_bigQ B) {
     }
 
     mpq_clear(temp);
+}
+
+/* ********************************************************************************************************************** */
+
+void mpq_mult_polbigQ(pol_bigQ *res, pol_bigQ A, mpq_t lambda) {
+    change_degre_pol_bigQ(res , A.degree);
+
+    for(int i=0 ; i<=res->degree ; i++) {
+            mpq_mul(res->coeffs[i] , A.coeffs[i] , lambda);
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void mpq_mult_polbigQ_si(pol_bigQ *res, pol_bigQ A, int lambda_num, unsigned int lambda_den) {
+    change_degre_pol_bigQ(res , A.degree);
+
+    mpz_t numerator, denominator,gcd;
+    mpz_inits(numerator , denominator , gcd , NULL);
+
+    for(int i=0 ; i<=res->degree ; i++) {
+        mpq_get_num(numerator , A.coeffs[i]);
+        mpq_get_den(denominator , A.coeffs[i]);
+
+        mpz_mul_si(numerator , numerator , lambda_num);
+        mpz_mul_si(denominator , denominator , lambda_den);
+
+        mpz_gcd(gcd , numerator , denominator);
+        mpz_div(numerator , numerator , gcd);
+        mpz_div(denominator , denominator , gcd);
+
+        mpq_set_num(res->coeffs[i] , numerator);
+        mpq_set_den(res->coeffs[i] , denominator);
+
+    }
+
+    mpz_clears(numerator , denominator , gcd , NULL);
 }
 
 /* ********************************************************************************************************************** */
@@ -422,7 +469,7 @@ void euclideDiv_pol_bigQ(pol_bigQ *Q , pol_bigQ *R , pol_bigQ A , pol_bigQ B) {
         // update the degree of R
         unsigned int i;
 
-        for(i=R->degree ; mpq_cmp_si(R->coeffs[i],0,1) == 0 ; --i);
+        for(i=R->degree ; mpq_cmp_si(R->coeffs[i],0,1) == 0 && i>0; --i);
 
         change_degre_pol_bigQ(R , i);
 
@@ -432,6 +479,16 @@ void euclideDiv_pol_bigQ(pol_bigQ *Q , pol_bigQ *R , pol_bigQ A , pol_bigQ B) {
     destroy_pol_bigQ(temp);
     destroy_pol_bigQ(temp2);
 
+}
+
+/* ********************************************************************************************************************** */
+
+bool is_null_polbigQ(pol_bigQ A) {
+    for(int i=0 ; i<=A.degree ; i++) {
+        if(mpq_cmp_si(A.coeffs[i] , 0 , 1) != 0)
+            return FALSE;
+    }
+    return TRUE;
 }
 
 

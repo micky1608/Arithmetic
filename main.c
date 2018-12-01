@@ -515,23 +515,23 @@ int main () {
 
     printf("\t\t***** Euclidean division bigQ *****\n\n");
 
-    printf("A : ");
-    print_pol_bigQ(A_bigQ);
+    print_pol_bigQ(A_bigQ , "A");
+    print_pol_bigQ(B_bigQ , "B");
+    print_pol_bigQ(Q_bigQ , "Q");
+    print_pol_bigQ(R_bigQ , "R");
 
-    printf("B : ");
-    print_pol_bigQ(B_bigQ);
+    printf("\n\n*******************************************\n\n");
 
-    printf("Q : ");
-    print_pol_bigQ(Q_bigQ);
+    mpq_t lamdda;
+    mpq_init(lamdda);
+    mpq_set_si(lamdda , 3 , 4);
 
-    printf("R : ");
-    print_pol_bigQ(R_bigQ);
+    mpq_mult_polbigQ_si(&R_bigQ , A_bigQ , 1 , 2);
+    print_pol_bigQ(R_bigQ , "1/2 * A");
 
+    mpq_mult_polbigQ(&R_bigQ , A_bigQ , lamdda);
+    print_pol_bigQ(R_bigQ , "3/4 * A");
 
-    destroy_pol_bigQ(A_bigQ);
-    destroy_pol_bigQ(B_bigQ);
-    destroy_pol_bigQ(Q_bigQ);
-    destroy_pol_bigQ(R_bigQ);
 
 
     printf("\n\n*******************************************\n\n");
@@ -544,13 +544,24 @@ int main () {
 
     print_lagrange_constaints(constraints , 3);
 
+    pol_bigQ M;
+    init_pol_bigQ(&M , 2);
+
+    lagrange_interpolation(&M , constraints , 3);
+
+    print_pol_bigQ(M , "Lagrange result");
 
     destroy_polbigQ_value(constraints[0]);
     destroy_polbigQ_value(constraints[1]);
     destroy_polbigQ_value(constraints[2]);
 
+    destroy_pol_bigQ(A_bigQ);
+    destroy_pol_bigQ(B_bigQ);
+    destroy_pol_bigQ(Q_bigQ);
+    destroy_pol_bigQ(R_bigQ);
+
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
-    mpq_clear(det);
+    mpq_clears(det,lamdda,(mpq_t*)NULL);
 
     return 0;
 }

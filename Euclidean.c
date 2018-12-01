@@ -67,7 +67,7 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
         // update the degree of R
         unsigned int i;
 
-        for(i=R->degree ; mpf_cmp_d(R->coeffs[i],0) == 0 ; --i);
+        for(i=R->degree ; mpf_cmp_d(R->coeffs[i],0) == 0 && i>0; --i);
 
         change_degre_pol_bigfloat(R , i);
 

@@ -6,6 +6,7 @@
 #define ARITHMETIC_LAGRANGE_H
 
 #include <gmp.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "pol_bigQ_arithmetic.h"
 
