@@ -320,19 +320,7 @@ void mpq_mult_polbigQ_si(pol_bigQ *res, pol_bigQ A, int lambda_num, unsigned int
     mpz_inits(numerator , denominator , gcd , NULL);
 
     for(int i=0 ; i<=res->degree ; i++) {
-        mpq_get_num(numerator , A.coeffs[i]);
-        mpq_get_den(denominator , A.coeffs[i]);
-
-        mpz_mul_si(numerator , numerator , lambda_num);
-        mpz_mul_si(denominator , denominator , lambda_den);
-
-        mpz_gcd(gcd , numerator , denominator);
-        mpz_div(numerator , numerator , gcd);
-        mpz_div(denominator , denominator , gcd);
-
-        mpq_set_num(res->coeffs[i] , numerator);
-        mpq_set_den(res->coeffs[i] , denominator);
-
+        mpq_mul_si(res->coeffs[i] , A.coeffs[i] , lambda_num , lambda_den);
     }
 
     mpz_clears(numerator , denominator , gcd , NULL);
@@ -493,6 +481,12 @@ bool is_null_polbigQ(pol_bigQ A) {
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Return the Sylvester matrix of two polynomials
+ * @param sylvester
+ * @param F  must have degree > 0
+ * @param G  must have degree > 0
+ */
 void sylvester_matrix_bigQ(matrix_bigQ *sylvester , pol_bigQ F , pol_bigQ G) {
     unsigned int p = F.degree , q=G.degree;
     change_dim_matrix_bigQ(sylvester , p+q , p+q);
@@ -526,7 +520,18 @@ void sylvester_matrix_bigQ(matrix_bigQ *sylvester , pol_bigQ F , pol_bigQ G) {
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Compute the resultant of two polynomial
+ * @param resultant
+ * @param F
+ * @param G
+ */
 void resultant_pol_bigQ(mpq_t *resultant , pol_bigQ F , pol_bigQ G) {
+    if(F.degree == 0 || G.degree == 0) {
+        mpq_set_d(*resultant , 1);
+        return;
+    }
+
     matrix_bigQ sylvester;
     init_matrix_bigQ(&sylvester , F.degree+G.degree , F.degree+G.degree);
     sylvester_matrix_bigQ(&sylvester , F , G);
@@ -534,4 +539,39 @@ void resultant_pol_bigQ(mpq_t *resultant , pol_bigQ F , pol_bigQ G) {
     destroy_matrix_bigQ(sylvester);
 }
 
+/* ********************************************************************************************************************** */
 
+/**
+ * Compute the resultant of two polynomial
+ * @param resultant
+ * @param F
+ * @param G
+ */
+void resultant_pol_bigQ_euclidean(mpq_t *resultant , pol_bigQ F , pol_bigQ G) {
+    pol_bigQ Q,H;
+    init_pol_bigQ(&Q , 1);
+    init_pol_bigQ(&H , 1);
+    euclideDiv_pol_bigQ(&Q , &H , F , G);
+
+    if(H.degree == 0) {
+        mpq_set_d(*resultant , 1);
+        destroy_pol_bigQ(Q);
+        destroy_pol_bigQ(H);
+        return;
+    }
+
+    mpq_t RES,g;
+    mpq_inits(RES,g,NULL);
+
+    mpq_pow(g , G.coeffs[G.degree] , F.degree-H.degree);
+    resultant_pol_bigQ(&RES , G , H);
+
+    mpq_mul(*resultant , RES , g);
+
+    if((F.degree*G.degree) % 2 == 1) mpq_neg(*resultant , *resultant);
+
+
+    mpq_clears(RES,g,NULL);
+    destroy_pol_bigQ(Q);
+    destroy_pol_bigQ(H);
+}

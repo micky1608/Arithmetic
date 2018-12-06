@@ -617,6 +617,9 @@ int main () {
     resultant_pol_bigQ(&resultant , F_bigQ , G_bigQ);
     gmp_printf("Res(F,G) : %Qd\n",resultant);
 
+    mpq_set_d(resultant , -1);
+    resultant_pol_bigQ_euclidean(&resultant , F_bigQ , G_bigQ);
+    gmp_printf("Res(F,G) [Euclidean]: %Qd\n\n",resultant);
 
     destroy_matrix_bigQ(sylvesterFG);
     destroy_pol_bigQ(F_bigQ);

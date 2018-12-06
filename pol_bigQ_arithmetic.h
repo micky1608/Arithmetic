@@ -8,6 +8,7 @@
 #include <gmp.h>
 #include "matrix_bigQ_arithmetic.h"
 #include "Util.h"
+#include <math.h>
 
 typedef struct pol_bigQ {
     unsigned int degree;
@@ -54,5 +55,7 @@ bool is_null_polbigQ(pol_bigQ A);
 void sylvester_matrix_bigQ(matrix_bigQ *sylvester , pol_bigQ F , pol_bigQ G);
 
 void resultant_pol_bigQ(mpq_t *resultant , pol_bigQ F , pol_bigQ G);
+
+void resultant_pol_bigQ_euclidean(mpq_t *resultant , pol_bigQ F , pol_bigQ G);
 
 #endif //ARITHMETIC_POL_BIGQ_ARITHMETIC_H
