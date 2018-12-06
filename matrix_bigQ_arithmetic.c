@@ -376,3 +376,15 @@ void determinant_matrix_bigQ(mpq_t *det , matrix_bigQ A) {
 
     for(int i=0 ; i<A.nb_line ; i++) mpq_mul(*det , *det , U.values[i*A.nb_line + i]);
 }
+
+/* ********************************************************************************************************************** */
+
+void transpose_matrix_bigQ(matrix_bigQ *transpose , matrix_bigQ A) {
+    change_dim_matrix_bigQ(transpose , A.nb_col , A.nb_line);
+
+    for(int i=0 ; i<A.nb_line ; i++) {
+        for(int j=0 ; j<A.nb_col ; j++) {
+            mpq_set(transpose->values[j*transpose->nb_col + i] , A.values[i*A.nb_col + j]);
+        }
+    }
+}

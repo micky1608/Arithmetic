@@ -50,4 +50,6 @@ void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ 
 
 void determinant_matrix_bigQ(mpq_t *det , matrix_bigQ A);
 
+void transpose_matrix_bigQ(matrix_bigQ *transpose , matrix_bigQ A);
+
 #endif //ARITHMETIC_MATRIX_BIGQ_ARITHMETIC_H

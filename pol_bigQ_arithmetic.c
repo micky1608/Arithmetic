@@ -491,4 +491,47 @@ bool is_null_polbigQ(pol_bigQ A) {
     return TRUE;
 }
 
+/* ********************************************************************************************************************** */
+
+void sylvester_matrix_bigQ(matrix_bigQ *sylvester , pol_bigQ F , pol_bigQ G) {
+    unsigned int p = F.degree , q=G.degree;
+    change_dim_matrix_bigQ(sylvester , p+q , p+q);
+
+    int j;
+    for(int i=0 ; i<q ; i++) {
+        for(j=0 ; j<i ; j++) mpq_set_d(sylvester->values[i*sylvester->nb_col+j] , 0);
+        for(int k=p ; k>=0 ; k--) {
+            mpq_set(sylvester->values[i*sylvester->nb_col+j] , F.coeffs[k]);
+            j++;
+        }
+        while(j<p+q) {
+            mpq_set_d(sylvester->values[i*sylvester->nb_col+j] , 0);
+            j++;
+        }
+    }
+
+
+    for(int i=q ; i<p+q ; i++) {
+        for(j=0 ; j<i-q ; j++) mpq_set_d(sylvester->values[i*sylvester->nb_col+j] , 0);
+        for(int k=q ; k>=0 ; k--) {
+            mpq_set(sylvester->values[i*sylvester->nb_col+j] , G.coeffs[k]);
+            j++;
+        }
+        while(j<p+q) {
+            mpq_set_d(sylvester->values[i*sylvester->nb_col+j] , 0);
+            j++;
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void resultant_pol_bigQ(mpq_t *resultant , pol_bigQ F , pol_bigQ G) {
+    matrix_bigQ sylvester;
+    init_matrix_bigQ(&sylvester , F.degree+G.degree , F.degree+G.degree);
+    sylvester_matrix_bigQ(&sylvester , F , G);
+    determinant_matrix_bigQ(resultant , sylvester);
+    destroy_matrix_bigQ(sylvester);
+}
+
 

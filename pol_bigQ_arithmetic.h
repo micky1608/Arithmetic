@@ -6,6 +6,7 @@
 #define ARITHMETIC_POL_BIGQ_ARITHMETIC_H
 
 #include <gmp.h>
+#include "matrix_bigQ_arithmetic.h"
 #include "Util.h"
 
 typedef struct pol_bigQ {
@@ -50,7 +51,8 @@ void euclideDiv_pol_bigQ(pol_bigQ *Q , pol_bigQ *R , pol_bigQ A , pol_bigQ B);
 
 bool is_null_polbigQ(pol_bigQ A);
 
+void sylvester_matrix_bigQ(matrix_bigQ *sylvester , pol_bigQ F , pol_bigQ G);
 
-
+void resultant_pol_bigQ(mpq_t *resultant , pol_bigQ F , pol_bigQ G);
 
 #endif //ARITHMETIC_POL_BIGQ_ARITHMETIC_H

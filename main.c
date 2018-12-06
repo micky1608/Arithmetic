@@ -384,6 +384,8 @@ int main () {
     destroy_matrix_bigint(B);
     destroy_matrix_bigint(res_matrix);
 
+    printf("\n\n*******************************************\n\n");
+
     matrix_bigQ matrixBigQ , res_matrixBigQ;
 
     init_matrix_bigQ(&matrixBigQ , 3 , 3);
@@ -396,6 +398,10 @@ int main () {
     change_dim_matrix_bigQ(&matrixBigQ , 2 , 4);
 
     print_matrix_bigQ(matrixBigQ);
+
+    transpose_matrix_bigQ(&res_matrixBigQ , matrixBigQ);
+
+    print_matrix_bigQ(res_matrixBigQ);
 
     set_all_coeffs_random_matrix_bigQ(matrixBigQ , 100);
 
@@ -578,8 +584,47 @@ int main () {
     destroy_pol_bigQ(Q_bigQ);
     destroy_pol_bigQ(R_bigQ);
 
+    printf("\n\n*******************************************\n\n");
+
+    pol_bigQ F_bigQ, G_bigQ;
+
+    init_pol_bigQ(&F_bigQ , 3);
+    init_pol_bigQ(&G_bigQ , 2);
+
+    set_coeff_pol_bigQ_d(F_bigQ , 0 , 1);
+    set_coeff_pol_bigQ_d(F_bigQ , 1 , 7);
+    set_coeff_pol_bigQ_d(F_bigQ , 2 , -2);
+    set_coeff_pol_bigQ_d(F_bigQ , 3 , 3);
+
+    set_coeff_pol_bigQ_d(G_bigQ , 0 , 1);
+    set_coeff_pol_bigQ_d(G_bigQ , 1 , -1);
+    set_coeff_pol_bigQ_d(G_bigQ , 2 , 5);
+
+    print_pol_bigQ(F_bigQ , "F");
+    print_pol_bigQ(G_bigQ , "G");
+
+    matrix_bigQ sylvesterFG;
+    init_matrix_bigQ(&sylvesterFG , 5 , 5);
+
+    mpq_t resultant;
+    mpq_init(resultant);
+
+    sylvester_matrix_bigQ(&sylvesterFG , F_bigQ , G_bigQ);
+
+    printf("Sylvester(F,G) : \n");
+    print_matrix_bigQ(sylvesterFG);
+
+    resultant_pol_bigQ(&resultant , F_bigQ , G_bigQ);
+    gmp_printf("Res(F,G) : %Qd\n",resultant);
+
+
+    destroy_matrix_bigQ(sylvesterFG);
+    destroy_pol_bigQ(F_bigQ);
+    destroy_pol_bigQ(G_bigQ);
+
+
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
-    mpq_clears(det,lamdda,(mpq_t*)NULL);
+    mpq_clears(det,lamdda,resultant,(mpq_t*)NULL);
 
     return 0;
 }
