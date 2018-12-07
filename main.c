@@ -14,6 +14,7 @@
 #include "Euclidean.h"
 #include "matrix_bigint_arithmetic.h"
 #include "matrix_bigQ_arithmetic.h"
+#include "matrix_double.h"
 #include "CRT_bigint.h"
 #include "Lagrange.h"
 
@@ -412,28 +413,55 @@ int main () {
     mpq_t det;
     mpq_init(det);
 
+    matrix_double A_double,L_double , U_double;
+
     init_matrix_bigQ(&L , 4 , 4);
     init_matrix_bigQ(&U , 4 , 4);
 
+    init_matrix_double(&A_double , 4 , 4);
+    init_matrix_double(&L_double , 4 , 4);
+    init_matrix_double(&U_double , 4 , 4);
+
+
     change_dim_matrix_bigQ(&matrixBigQ , 4 , 4);
 
-    for(unsigned int j=0 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ , 0 , j , 5 , 1);
+    for(unsigned int j=0 ; j<matrixBigQ.nb_col ; j++) {
+        set_coeff_matrix_bigQ_d(matrixBigQ , 0 , j , 5 , 1);
+        setCoeff_matrix_double(&A_double , 0 , j , 5);
+    }
 
     set_coeff_matrix_bigQ_d(matrixBigQ, 1 , 0 , 10 , 1);
+    setCoeff_matrix_double(&A_double , 1 , 0 , 10);
 
-    for(unsigned int j=1 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ, 1 , j, 16 , 1);
+    for(unsigned int j=1 ; j<matrixBigQ.nb_col ; j++) {
+        set_coeff_matrix_bigQ_d(matrixBigQ, 1 , j, 16 , 1);
+        setCoeff_matrix_double(&A_double , 1 , j , 16);
+    }
 
     set_coeff_matrix_bigQ_d(matrixBigQ, 2 , 0 , 15 , 1);
     set_coeff_matrix_bigQ_d(matrixBigQ, 2 , 1 , 27 , 1);
 
-    for(unsigned int j=2 ; j<matrixBigQ.nb_col ; j++) set_coeff_matrix_bigQ_d(matrixBigQ,2 , j , 34 , 1);
+    setCoeff_matrix_double(&A_double , 2 , 0 , 15);
+    setCoeff_matrix_double(&A_double , 2 , 1 , 27);
+
+
+    for(unsigned int j=2 ; j<matrixBigQ.nb_col ; j++) {
+        set_coeff_matrix_bigQ_d(matrixBigQ,2 , j , 34 , 1);
+        setCoeff_matrix_double(&A_double , 2 , j , 34);
+    }
 
     set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 0 , 20 , 1);
     set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 1 , 38 , 1);
     set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 2 , 52 , 1);
     set_coeff_matrix_bigQ_d(matrixBigQ, 3 , 3 , 60 , 1);
 
+    setCoeff_matrix_double(&A_double , 3 , 0 , 20);
+    setCoeff_matrix_double(&A_double , 3 , 1 , 38);
+    setCoeff_matrix_double(&A_double , 3 , 2 , 52);
+    setCoeff_matrix_double(&A_double , 3 , 3 , 60);
+
     LU_decomposition_matrix_bigQ(&L , &U , matrixBigQ);
+    LU_decomposition_matrix_double(&L_double , &U_double , A_double);
 
     printf("A : \n");
     print_matrix_bigQ(matrixBigQ);
@@ -444,11 +472,19 @@ int main () {
     printf("U : \n");
     print_matrix_bigQ(U);
 
+    print_matrix_double(A_double , "A_double");
+    print_matrix_double(L_double , "L_double");
+    print_matrix_double(U_double , "U_double");
+
     determinant_matrix_bigQ(&det , matrixBigQ);
     gmp_printf("\ndet(A) = %Qd\n",det);
 
     destroy_matrix_bigQ(matrixBigQ);
     destroy_matrix_bigQ(res_matrixBigQ);
+
+    destroy_matrix_double(A_double);
+    destroy_matrix_double(L_double);
+    destroy_matrix_double(U_double);
 
     printf("\n\n*******************************************\n\n");
 
@@ -624,6 +660,7 @@ int main () {
     destroy_matrix_bigQ(sylvesterFG);
     destroy_pol_bigQ(F_bigQ);
     destroy_pol_bigQ(G_bigQ);
+
 
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);

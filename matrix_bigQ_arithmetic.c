@@ -193,7 +193,6 @@ void change_nb_col_matrix_bigQ(matrix_bigQ *matrix , unsigned int new_nb_col) {
                     mpq_init(newvalues[i*new_nb_col + j]);
                     mpq_set_d(newvalues[i*new_nb_col + j] , 0);
                 }
-
             }
         }
     }
@@ -338,8 +337,6 @@ void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ 
 
     for(int j=0 ; j<A.nb_col ; j++) {
         for(int i=j+1 ; i<A.nb_line ; i++) {
-            //mpq_mul(U->values[i*U->nb_col + j] , U->values[i*U->nb_col + j] , U->values[j*U->nb_col + j]);
-
             mpq_div(coeff , U->values[i*U->nb_col + j] , U->values[j*U->nb_col + j]);
             mpq_neg(coeff,coeff);
 
