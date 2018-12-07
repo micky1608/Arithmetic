@@ -181,7 +181,20 @@ void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix
 
                 U->values[i*U->nb_col+k] += temp;
             }
-
         }
     }
+}
+
+/* ********************************************************************************************************************** */
+
+void swap_ligne_matrix_double(matrix_double *A , unsigned int line1 , unsigned int line2) {
+    for(int j=0 ; j<A->nb_col ; j++)
+        swap(&A->values[line1*A->nb_col + j] , &A->values[line2*A->nb_col + j]);
+}
+
+/* ********************************************************************************************************************** */
+
+void swap_col_matrix_double(matrix_double *A , unsigned int col1 , unsigned int col2) {
+    for(int i=0 ; i<A->nb_line ; i++)
+        swap(&A->values[i*A->nb_col + col1] , &A->values[i*A->nb_col + col2]);
 }

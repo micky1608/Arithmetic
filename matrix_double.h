@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "Util.h"
 
 typedef struct matrix_double {
     unsigned int nb_line;
@@ -34,5 +35,9 @@ void copy_matrix_double(matrix_double *DEST , matrix_double SRC);
 void identity_matrix_double(matrix_double *id , unsigned int size);
 
 void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix_double A);
+
+void swap_ligne_matrix_double(matrix_double *A , unsigned int line1 , unsigned int line2);
+
+void swap_col_matrix_double(matrix_double *A , unsigned int col1 , unsigned int col2);
 
 #endif //ARITHMETIC_MATRIX_FACTORIZATION_H

@@ -18,4 +18,6 @@ void mpq_mul_si(mpq_t res , mpq_t x , int lambda_num , unsigned int lambda_den);
 
 void mpq_pow(mpq_t res , mpq_t x , int p);
 
+void swap(double *a , double *b);
+
 #endif //ARITHMETIC_UTIL_H

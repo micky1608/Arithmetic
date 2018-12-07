@@ -476,6 +476,14 @@ int main () {
     print_matrix_double(L_double , "L_double");
     print_matrix_double(U_double , "U_double");
 
+    swap_ligne_matrix_double(&U_double , 0 , 3);
+
+    print_matrix_double(U_double , "Swap line 1 and 4 U_double");
+
+    swap_col_matrix_double(&U_double , 2 , 0);
+
+    print_matrix_double(U_double , "Swap col 1 and 3 U_double");
+
     determinant_matrix_bigQ(&det , matrixBigQ);
     gmp_printf("\ndet(A) = %Qd\n",det);
 
