@@ -413,7 +413,7 @@ int main () {
     mpq_t det;
     mpq_init(det);
 
-    matrix_double A_double,L_double , U_double;
+    matrix_double A_double,L_double , U_double , P_double , Q_double, T_double , PLUQ;
 
     init_matrix_bigQ(&L , 4 , 4);
     init_matrix_bigQ(&U , 4 , 4);
@@ -421,6 +421,11 @@ int main () {
     init_matrix_double(&A_double , 4 , 4);
     init_matrix_double(&L_double , 4 , 4);
     init_matrix_double(&U_double , 4 , 4);
+    init_matrix_double(&P_double , 4 , 4);
+    init_matrix_double(&Q_double , 4 , 4);
+    init_matrix_double(&T_double , 4 , 4);
+    init_matrix_double(&PLUQ , 4 , 4);
+
 
 
     change_dim_matrix_bigQ(&matrixBigQ , 4 , 4);
@@ -485,7 +490,31 @@ int main () {
     print_matrix_double(U_double , "Swap col 1 and 3 U_double");
 
     determinant_matrix_bigQ(&det , matrixBigQ);
-    gmp_printf("\ndet(A) = %Qd\n",det);
+    gmp_printf("\ndet(A) = %Qd\n\n",det);
+
+    unsigned int line_max, col_max;
+    double max = index_max_submatrix_double(&line_max , &col_max , U_double , 0 , 0);
+    printf("U_double max is %.2lf in position (%u,%u)\n",max,line_max,col_max);
+
+    printf("\n\n\t********** PLUQ factorization **********\n\n");
+
+    PLUQ_decomposition(&P_double , &L_double , &U_double , &Q_double , A_double);
+
+    print_matrix_double(A_double , "A_double");
+    print_matrix_double(P_double , "P_double");
+    print_matrix_double(L_double , "L_double");
+    print_matrix_double(U_double , "U_double");
+    print_matrix_double(Q_double , "Q_double");
+
+    mul_matrix_double(&PLUQ , P_double , L_double);
+    mul_matrix_double(&T_double , PLUQ , U_double);
+    copy_matrix_double(&PLUQ , T_double);
+    mul_matrix_double(&T_double , PLUQ , Q_double);
+    copy_matrix_double(&PLUQ , T_double);
+
+    print_matrix_double(PLUQ , "PLUQ");
+
+
 
     destroy_matrix_bigQ(matrixBigQ);
     destroy_matrix_bigQ(res_matrixBigQ);
@@ -493,6 +522,10 @@ int main () {
     destroy_matrix_double(A_double);
     destroy_matrix_double(L_double);
     destroy_matrix_double(U_double);
+    destroy_matrix_double(P_double);
+    destroy_matrix_double(Q_double);
+    destroy_matrix_double(T_double);
+    destroy_matrix_double(PLUQ);
 
     printf("\n\n*******************************************\n\n");
 

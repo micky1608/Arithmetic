@@ -344,7 +344,7 @@ void LU_decomposition_matrix_bigQ(matrix_bigQ *L , matrix_bigQ *U , matrix_bigQ 
                 mpq_mul(temp , U->values[j*U->nb_col+k], coeff);
 
                 if(L != NULL)
-                    mpq_set(L->values[i*L->nb_col+j] , coeff);
+                    mpq_neg(L->values[i*L->nb_col+j] , coeff);
 
                 mpq_add(U->values[i*U->nb_col+k] , U->values[i*U->nb_col+k] , temp);
             }

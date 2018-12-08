@@ -133,6 +133,25 @@ void change_dim_matrix_double(matrix_double *matrixDouble , unsigned int new_nb_
 
 /* ********************************************************************************************************************** */
 
+void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
+    if(A.nb_col != B.nb_line) {
+        perror("Error dimension mul_matrix_double");
+        exit(EXIT_FAILURE);
+    }
+    change_dim_matrix_double(res , A.nb_line , A.nb_col);
+
+    for(int i=0 ; i<res->nb_line ; i++) {
+        for(int j=0 ; j<res->nb_col ; j++) {
+            res->values[i*res->nb_col + j] = 0;
+            for(int k=0 ; k<A.nb_line ; k++) {
+                res->values[i*res->nb_col+j] += A.values[i*A.nb_col + k]*B.values[k*B.nb_col + j];
+            }
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
 void copy_matrix_double(matrix_double *DEST , matrix_double SRC) {
     change_dim_matrix_double(DEST , SRC.nb_line , SRC.nb_col);
 
@@ -160,6 +179,20 @@ void identity_matrix_double(matrix_double *id, unsigned int size) {
 
 /* ********************************************************************************************************************** */
 
+void matrix_line_permutation(matrix_double *P , unsigned int size , unsigned int line1 , unsigned int line2) {
+    identity_matrix_double(P , size);
+    swap_ligne_matrix_double(P , line1 , line2);
+}
+
+/* ********************************************************************************************************************** */
+
+void matrix_col_permutation(matrix_double *Q ,unsigned int size ,  unsigned int col1 , unsigned int col2) {
+    identity_matrix_double(Q , size);
+    swap_col_matrix_double(Q , col1 , col2);
+}
+
+/* ********************************************************************************************************************** */
+
 void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix_double A) {
 
     if(L != NULL)
@@ -173,11 +206,11 @@ void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix
 
             coeff = -1 * U->values[i*U->nb_col + j] / U->values[j*U->nb_col + j];
 
-            for(int k=0 ; k<A.nb_col ; k++) {
+            for(int k=j ; k<A.nb_col ; k++) {
                 temp = U->values[j*U->nb_col+k] * coeff;
 
                 if(L != NULL)
-                    L->values[i*L->nb_col+j] = coeff;
+                    L->values[i*L->nb_col+j] = -coeff;
 
                 U->values[i*U->nb_col+k] += temp;
             }
@@ -187,14 +220,114 @@ void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Swap two lines
+ * Index start from 0
+ * @param A
+ * @param line1
+ * @param line2
+ */
 void swap_ligne_matrix_double(matrix_double *A , unsigned int line1 , unsigned int line2) {
-    for(int j=0 ; j<A->nb_col ; j++)
-        swap(&A->values[line1*A->nb_col + j] , &A->values[line2*A->nb_col + j]);
+    if(line1 != line2) {
+        for(int j=0 ; j<A->nb_col ; j++)
+            swap(&A->values[line1*A->nb_col + j] , &A->values[line2*A->nb_col + j]);
+    }
+
 }
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Swap two columns
+ * Index start from 0
+ * @param A
+ * @param col1
+ * @param col2
+ */
 void swap_col_matrix_double(matrix_double *A , unsigned int col1 , unsigned int col2) {
-    for(int i=0 ; i<A->nb_line ; i++)
-        swap(&A->values[i*A->nb_col + col1] , &A->values[i*A->nb_col + col2]);
+    if(col1 != col2) {
+        for(int i=0 ; i<A->nb_line ; i++)
+            swap(&A->values[i*A->nb_col + col1] , &A->values[i*A->nb_col + col2]);
+    }
+
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Return the max element in a submatrix of A
+ * Set the index of the max in max_index_line and max_index_col
+ * @param max_index_line
+ * @param max_index_col
+ * @param A
+ * @param submatrix_index_line
+ * @param submatrix_index_col
+ * @return
+ */
+double index_max_submatrix_double(unsigned int *max_index_line , unsigned int *max_index_col , matrix_double A , unsigned int submatrix_index_line , unsigned int submatrix_index_col) {
+    double max = A.values[submatrix_index_line*A.nb_col + submatrix_index_col];
+    *max_index_line = submatrix_index_line;
+    *max_index_col = submatrix_index_col;
+
+    for (unsigned int i=submatrix_index_line ; i<A.nb_line ; i++) {
+        for(unsigned int j=submatrix_index_col ; j<A.nb_col ; j++) {
+            if(A.values[i*A.nb_col + j] > max) {
+                max = A.values[i*A.nb_col + j];
+                *max_index_line = i;
+                *max_index_col = j;
+            }
+        }
+    }
+    return max;
+}
+
+/* ********************************************************************************************************************** */
+
+void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U , matrix_double *Q , matrix_double A) {
+    double coeff;
+    unsigned int size = A.nb_line;
+    unsigned int max_index_line, max_index_col;
+
+    matrix_double R,S,temp;
+    init_matrix_double(&R , A.nb_line , A.nb_col);
+    init_matrix_double(&S , A.nb_line , A.nb_col);
+    init_matrix_double(&temp , A.nb_line , A.nb_col);
+
+    identity_matrix_double(L , size);
+    identity_matrix_double(P , size);
+    identity_matrix_double(Q , size);
+    copy_matrix_double(U , A);
+
+    for(unsigned int j=0 ; j<U->nb_col ; j++) {
+        index_max_submatrix_double(&max_index_line , &max_index_col , *U , j , j);
+
+        swap_ligne_matrix_double(U , j , max_index_line);
+        matrix_line_permutation(&R , size , j , max_index_line);
+
+        swap_col_matrix_double(U , j , max_index_col);
+        matrix_col_permutation(&S , size , j , max_index_col);
+
+        mul_matrix_double(&temp , S , *Q);
+        copy_matrix_double(Q , temp);
+
+        mul_matrix_double(&temp , *L , R);
+        copy_matrix_double(L , temp);
+
+        mul_matrix_double(&temp, R , *L);
+        copy_matrix_double(L , temp);
+
+        mul_matrix_double(&temp , *P , R);
+        copy_matrix_double(P , temp);
+
+
+        for(int i=j+1 ; i<U->nb_line ; i++) {
+            coeff = U->values[i * U->nb_col + j] / U->values[j * U->nb_col + j];
+            for (int k = j; k < U->nb_col; k++) U->values[i * U->nb_col + k] -= coeff * U->values[j * U->nb_col + k];
+            L->values[i * L->nb_col + j] = coeff;
+        }
+    }
+
+    destroy_matrix_double(R);
+    destroy_matrix_double(S);
+    destroy_matrix_double(temp);
 }
