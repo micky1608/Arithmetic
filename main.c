@@ -702,6 +702,10 @@ int main () {
     destroy_pol_bigQ(F_bigQ);
     destroy_pol_bigQ(G_bigQ);
 
+    printf("\n\n*******************************************\n\n");
+
+    
+
 
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);

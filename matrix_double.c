@@ -34,6 +34,19 @@ void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , un
 
 /* ********************************************************************************************************************** */
 
+void setCoeff_matrix_double_array(matrix_double *matrixDouble , double *coeffs, unsigned int sizeArray) {
+    if(matrixDouble->nb_line*matrixDouble->nb_col != sizeArray) {
+        perror("Error array size not correct");
+        exit(EXIT_FAILURE);
+    }
+
+    for(unsigned int i=0 ; i<sizeArray ; i++)
+        matrixDouble->values[i] = coeffs[i];
+
+}
+
+/* ********************************************************************************************************************** */
+
 void destroy_matrix_double(matrix_double matrixDouble) {
     free(matrixDouble.values);
 }
@@ -193,6 +206,19 @@ void matrix_col_permutation(matrix_double *Q ,unsigned int size ,  unsigned int 
 
 /* ********************************************************************************************************************** */
 
+void transpose_matrix_double(matrix_double *transpose , matrix_double A) {
+    change_dim_matrix_double(transpose , A.nb_line , A.nb_col);
+
+    for(unsigned int i=0 ; i< A.nb_line ; i++) {
+        for(unsigned int j=0 ; j<A.nb_col ; j++) {
+            setCoeff_matrix_double(transpose , j , i , A.values[i*A.nb_col + j]);
+        }
+    }
+}
+
+
+/* ********************************************************************************************************************** */
+
 void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix_double A) {
 
     if(L != NULL)
@@ -329,5 +355,51 @@ void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U ,
 
     destroy_matrix_double(R);
     destroy_matrix_double(S);
+    destroy_matrix_double(temp);
+}
+
+/* ********************************************************************************************************************** */
+
+void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A) {
+    int m = A.nb_line , n = A.nb_col;
+    double c,s;
+
+    matrix_double G,Gt,temp;
+    init_matrix_double(&G , A.nb_line , A.nb_col);
+    init_matrix_double(&temp , A.nb_line , A.nb_col);
+    init_matrix_double(&Gt , A.nb_line , A.nb_col);
+
+
+    identity_matrix_double(Q , A.nb_col);
+    copy_matrix_double(R , A);
+
+    for(unsigned int j=0 ; j<n ; j++) {
+        for(unsigned int i=j+1 ; i<m ; i++) {
+            for(unsigned int k=1 ; k<=n ; k++) {
+                if(k != i && k != j) setCoeff_matrix_double(&G , k , k , 1);
+            }
+
+            c = (R->values[j*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
+            s = (R->values[i*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
+
+
+            setCoeff_matrix_double(&G , i , i , c);
+            setCoeff_matrix_double(&G , j , j , c);
+
+            setCoeff_matrix_double(&G , i , j , s);
+            setCoeff_matrix_double(&G , j , i , s);
+
+            mul_matrix_double(&temp , G , *R);
+            copy_matrix_double(R , temp);
+
+            transpose_matrix_double(&Gt , G);
+            mul_matrix_double(&temp , *Q , Gt);
+            copy_matrix_double(Q , temp);
+
+        }
+    }
+
+    destroy_matrix_double(G);
+    destroy_matrix_double(Gt);
     destroy_matrix_double(temp);
 }

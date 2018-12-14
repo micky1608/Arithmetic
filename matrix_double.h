@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Util.h"
+#include <math.h>
 
 typedef struct matrix_double {
     unsigned int nb_line;
@@ -19,6 +20,8 @@ typedef struct matrix_double {
 void init_matrix_double(matrix_double *matrixDouble , unsigned int nb_line , unsigned int nb_col);
 
 void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , unsigned int col , double newvalue);
+
+void setCoeff_matrix_double_array(matrix_double *matrixDouble , double *coeffs , unsigned int sizeArray);
 
 void destroy_matrix_double(matrix_double matrixDouble);
 
@@ -49,5 +52,9 @@ void swap_col_matrix_double(matrix_double *A , unsigned int col1 , unsigned int 
 double index_max_submatrix_double(unsigned int *max_index_line , unsigned int *max_index_col , matrix_double A , unsigned int submatrix_index_line , unsigned int submatrix_index_col);
 
 void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U , matrix_double *Q , matrix_double A);
+
+void transpose_matrix_double(matrix_double *transpose , matrix_double A);
+
+void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A);
 
 #endif //ARITHMETIC_MATRIX_FACTORIZATION_H
