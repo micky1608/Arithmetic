@@ -34,6 +34,22 @@ void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , un
 
 /* ********************************************************************************************************************** */
 
+void setAllCoeff_matrix_double(matrix_double *matrixDouble , double value) {
+    for(unsigned int i=0 ; i<matrixDouble->nb_line ; i++) {
+        for(unsigned int j=0 ; j<matrixDouble->nb_col ; j++) {
+            matrixDouble->values[i*matrixDouble->nb_col + j] = value;
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Set the coefficients of a matrix line by line from an array
+ * @param matrixDouble
+ * @param coeffs
+ * @param sizeArray
+ */
 void setCoeff_matrix_double_array(matrix_double *matrixDouble , double *coeffs, unsigned int sizeArray) {
     if(matrixDouble->nb_line*matrixDouble->nb_col != sizeArray) {
         perror("Error array size not correct");
@@ -151,7 +167,8 @@ void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
         perror("Error dimension mul_matrix_double");
         exit(EXIT_FAILURE);
     }
-    change_dim_matrix_double(res , A.nb_line , A.nb_col);
+
+    change_dim_matrix_double(res , A.nb_line , B.nb_col);
 
     for(int i=0 ; i<res->nb_line ; i++) {
         for(int j=0 ; j<res->nb_col ; j++) {
@@ -365,37 +382,44 @@ void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A) {
     double c,s;
 
     matrix_double G,Gt,temp;
-    init_matrix_double(&G , A.nb_line , A.nb_col);
     init_matrix_double(&temp , A.nb_line , A.nb_col);
-    init_matrix_double(&Gt , A.nb_line , A.nb_col);
+    init_matrix_double(&G , m , m);
+    init_matrix_double(&Gt , m , m);
 
-
-    identity_matrix_double(Q , A.nb_col);
+    identity_matrix_double(Q , A.nb_line);
     copy_matrix_double(R , A);
 
     for(unsigned int j=0 ; j<n ; j++) {
         for(unsigned int i=j+1 ; i<m ; i++) {
-            for(unsigned int k=1 ; k<=n ; k++) {
+
+            /* ******************************************************************** */
+            // Build G
+
+            setAllCoeff_matrix_double(&G , 0);
+
+            for(unsigned int k=0 ; k<m ; k++) {
                 if(k != i && k != j) setCoeff_matrix_double(&G , k , k , 1);
             }
 
             c = (R->values[j*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
             s = (R->values[i*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
 
-
             setCoeff_matrix_double(&G , i , i , c);
             setCoeff_matrix_double(&G , j , j , c);
 
-            setCoeff_matrix_double(&G , i , j , s);
+            setCoeff_matrix_double(&G , i , j , -s);
             setCoeff_matrix_double(&G , j , i , s);
 
+            /* ******************************************************************** */
+
+            // update R
             mul_matrix_double(&temp , G , *R);
             copy_matrix_double(R , temp);
 
+            // update Q
             transpose_matrix_double(&Gt , G);
             mul_matrix_double(&temp , *Q , Gt);
             copy_matrix_double(Q , temp);
-
         }
     }
 

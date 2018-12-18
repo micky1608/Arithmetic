@@ -23,6 +23,8 @@ void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , un
 
 void setCoeff_matrix_double_array(matrix_double *matrixDouble , double *coeffs , unsigned int sizeArray);
 
+void setAllCoeff_matrix_double(matrix_double *matrixDouble , double value);
+
 void destroy_matrix_double(matrix_double matrixDouble);
 
 void print_matrix_double(matrix_double matrixDouble , char *name);

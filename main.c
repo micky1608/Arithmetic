@@ -94,8 +94,6 @@ int main () {
         printf("!= P64 - 1\n");
 
 
-
-
     printf("\n\n*******************************************\n\n");
 
     div64_mod_P(&res , 2 , 4 , 5);
@@ -704,9 +702,29 @@ int main () {
 
     printf("\n\n*******************************************\n\n");
 
-    
+    matrix_double AA , QQ , RR , QR;
+    init_matrix_double(&AA , 4 , 3);
+    init_matrix_double(&QQ , 4 , 4);
+    init_matrix_double(&RR , 4 , 3);
+    init_matrix_double(&QR , 4 , 3);
+
+    double AA_coeff[] = {3,2,16,4,11,13,0,0,12,0,0,9};
+    setCoeff_matrix_double_array(&AA , AA_coeff ,12);
+
+    print_matrix_double(AA , "A");
+
+    QR_Givens(&QQ , &RR , AA);
+    mul_matrix_double(&QR , QQ , RR);
+
+    print_matrix_double(QQ , "Q");
+    print_matrix_double(RR , "R");
+    print_matrix_double(QR, "QR");
 
 
+    destroy_matrix_double(AA);
+    destroy_matrix_double(QQ);
+    destroy_matrix_double(RR);
+    destroy_matrix_double(QR);
 
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
     mpq_clears(det,lamdda,resultant,(mpq_t*)NULL);
