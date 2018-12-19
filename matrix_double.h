@@ -10,6 +10,9 @@
 #include "Util.h"
 #include <math.h>
 
+#define MATRIX(matrix ,i,j) matrix.values[i * matrix.nb_col + j]
+#define MATRIX_P(matrix,i,j) matrix->values[i * matrix->nb_col + j]
+
 typedef struct matrix_double {
     unsigned int nb_line;
     unsigned int nb_col;
@@ -35,7 +38,17 @@ void change_nb_col_matrix_double(matrix_double *matrixDouble , unsigned int new_
 
 void change_dim_matrix_double(matrix_double *matrixDouble , unsigned int new_nb_line , unsigned int new_nb_col);
 
+void add_matrix_double(matrix_double *res , matrix_double A , matrix_double B);
+
+void sub_matrix_double(matrix_double *res , matrix_double A , matrix_double B);
+
+void scalar_mul_matrix_double(matrix_double *res , matrix_double A , double lambda);
+
 void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B);
+
+void scalar_div_matrix_double(matrix_double *res , matrix_double A , double lambda);
+
+void dot_product(double *dot , matrix_double u , matrix_double v);
 
 void copy_matrix_double(matrix_double *DEST , matrix_double SRC);
 
@@ -57,6 +70,17 @@ void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U ,
 
 void transpose_matrix_double(matrix_double *transpose , matrix_double A);
 
+void setColumn_matrix_double(matrix_double *A , matrix_double vector , unsigned int indexColumn);
+
+void getColum_matrix_double(matrix_double *column , matrix_double A , unsigned int indexColumn);
+
 void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A);
+
+void QR_Gram_Schimdt(matrix_double *Q , matrix_double *R , matrix_double A);
+
+double norm_vector_double(matrix_double matrixDouble);
+
+
+
 
 #endif //ARITHMETIC_MATRIX_FACTORIZATION_H

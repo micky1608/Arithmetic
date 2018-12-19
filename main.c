@@ -702,6 +702,36 @@ int main () {
 
     printf("\n\n*******************************************\n\n");
 
+    matrix_double vector, randomMatrix;
+
+    init_matrix_double(&vector , 3 , 1);
+    init_matrix_double(&randomMatrix , 3 , 2);
+
+    setCoeff_matrix_double_array(&vector , (double[]) {1,2,2} , 3);
+
+    setCoeff_matrix_double_array(&randomMatrix , (double[]) {1,2,3,4,5,6} , 6);
+
+    double norm_vector = norm_vector_double(vector);
+
+    print_matrix_double(vector , "Vector");
+    printf("Norm : %lf\n\n",norm_vector);
+
+    print_matrix_double(randomMatrix , "Random");
+    setCoeff_matrix_double_array(&vector , (double[]) {42,42,42} , 3);
+
+    setColumn_matrix_double(&randomMatrix , vector , 0);
+
+    print_matrix_double(randomMatrix , "Random set first column vector [42,42,42]");
+
+    getColum_matrix_double(&vector , randomMatrix , 1);
+
+    print_matrix_double(vector , "get second column Random");
+
+    destroy_matrix_double(vector);
+    destroy_matrix_double(randomMatrix);
+
+    printf("\n\n*******************************************\n\n");
+
     matrix_double AA , QQ , RR , QR;
     init_matrix_double(&AA , 4 , 3);
     init_matrix_double(&QQ , 4 , 4);
@@ -719,7 +749,6 @@ int main () {
     print_matrix_double(QQ , "Q");
     print_matrix_double(RR , "R");
     print_matrix_double(QR, "QR");
-
 
     destroy_matrix_double(AA);
     destroy_matrix_double(QQ);

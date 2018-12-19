@@ -29,7 +29,8 @@ void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , un
         perror("Matrix index not correct");
         return;
     }
-    matrixDouble->values[line*matrixDouble->nb_col + col] = newvalue;
+    //matrixDouble->values[line*matrixDouble->nb_col + col] = newvalue;
+    MATRIX_P(matrixDouble,line,col) = newvalue;
 }
 
 /* ********************************************************************************************************************** */
@@ -37,7 +38,8 @@ void setCoeff_matrix_double(matrix_double *matrixDouble , unsigned int line , un
 void setAllCoeff_matrix_double(matrix_double *matrixDouble , double value) {
     for(unsigned int i=0 ; i<matrixDouble->nb_line ; i++) {
         for(unsigned int j=0 ; j<matrixDouble->nb_col ; j++) {
-            matrixDouble->values[i*matrixDouble->nb_col + j] = value;
+            //matrixDouble->values[i*matrixDouble->nb_col + j] = value;
+            MATRIX_P(matrixDouble,i,j) = value;
         }
     }
 }
@@ -52,7 +54,7 @@ void setAllCoeff_matrix_double(matrix_double *matrixDouble , double value) {
  */
 void setCoeff_matrix_double_array(matrix_double *matrixDouble , double *coeffs, unsigned int sizeArray) {
     if(matrixDouble->nb_line*matrixDouble->nb_col != sizeArray) {
-        perror("Error array size not correct");
+        perror("SetCoeffArray : Error array size not correct");
         exit(EXIT_FAILURE);
     }
 
@@ -97,7 +99,8 @@ void change_nb_line_matrix_double(matrix_double *matrixDouble , unsigned int new
         for(int i=0 ; i<matrixDouble->nb_line ; i++) {
             for(int j=0 ; j<matrixDouble->nb_col ; j++) {
                 if(i < new_nb_line) {
-                    new_values[i*matrixDouble->nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    //new_values[i*matrixDouble->nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    new_values[i*matrixDouble->nb_col + j] = MATRIX_P(matrixDouble,i,j);
                 }
             }
         }
@@ -106,10 +109,12 @@ void change_nb_line_matrix_double(matrix_double *matrixDouble , unsigned int new
         for(int i=0 ; i<new_nb_line ; i++) {
             for(int j=0 ; j<matrixDouble->nb_col ; j++) {
                 if(i <matrixDouble->nb_line) {
-                    new_values[i*matrixDouble->nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    //new_values[i*matrixDouble->nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    new_values[i*matrixDouble->nb_col + j] = MATRIX_P(matrixDouble,i,j);
                 }
                 else {
-                    new_values[i*matrixDouble->nb_col + j] = 0;
+                    //new_values[i*matrixDouble->nb_col + j] = 0;
+                    MATRIX_P(matrixDouble,i,j) = 0;
                 }
             }
         }
@@ -130,7 +135,8 @@ void change_nb_col_matrix_double(matrix_double *matrixDouble , unsigned int new_
         for(int i=0 ; i<matrixDouble->nb_line ; i++) {
             for(int j=0 ; j<matrixDouble->nb_col ; j++) {
                 if(j < new_nb_col) {
-                    newvalues[i*new_nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    //newvalues[i*new_nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    newvalues[i*new_nb_col + j] = MATRIX_P(matrixDouble,i,j);
                 }
             }
         }
@@ -139,7 +145,8 @@ void change_nb_col_matrix_double(matrix_double *matrixDouble , unsigned int new_
         for(int i=0 ; i<matrixDouble->nb_line ; i++) {
             for(int j=0 ; j<new_nb_col ; j++) {
                 if(j < matrixDouble->nb_col) {
-                    newvalues[i*new_nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    //newvalues[i*new_nb_col + j] = matrixDouble->values[i*matrixDouble->nb_col + j];
+                    newvalues[i*new_nb_col + j] = MATRIX_P(matrixDouble,i,j);
                 }
                 else {
                     newvalues[i*new_nb_col + j] = 0;
@@ -162,6 +169,76 @@ void change_dim_matrix_double(matrix_double *matrixDouble , unsigned int new_nb_
 
 /* ********************************************************************************************************************** */
 
+void add_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
+    if(A.nb_line != B.nb_line || A.nb_col != B.nb_col) {
+        perror("Add matrix : error dimensions");
+        return;
+    }
+
+    change_dim_matrix_double(res , A.nb_line , A.nb_col);
+
+    for(unsigned int i=0 ; i<res->nb_line ; i++) {
+        for(unsigned int j=0 ; j<res->nb_col ; j++)
+            MATRIX_P(res,i,j) = MATRIX(A,i,j) + MATRIX(B,i,j);
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void sub_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
+    if(A.nb_line != B.nb_line || A.nb_col != B.nb_col) {
+        perror("Sub matrix : error dimensions");
+        return;
+    }
+
+    change_dim_matrix_double(res , A.nb_line , A.nb_col);
+
+    matrix_double B_neg;
+    init_matrix_double(&B_neg , B.nb_line , B.nb_col);
+
+    scalar_mul_matrix_double(&B_neg , B , -1);
+    add_matrix_double(res , A , B_neg);
+    destroy_matrix_double(B_neg);
+}
+
+/* ********************************************************************************************************************** */
+
+void scalar_mul_matrix_double(matrix_double *res , matrix_double A , double lambda) {
+
+    change_dim_matrix_double(res, A.nb_line, A.nb_col);
+
+    for (unsigned int i = 0; i < res->nb_line; i++) {
+        for (unsigned int j = 0; j < res->nb_col; j++)
+            MATRIX_P(res, i, j) = lambda * MATRIX(A, i, j);
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void scalar_div_matrix_double(matrix_double *res , matrix_double A , double lambda) {
+    if(!lambda) {
+        perror("Scalar div : lambda must be != 0");
+        return;
+    }
+    scalar_mul_matrix_double(res,A,1/lambda);
+}
+
+/* ********************************************************************************************************************** */
+
+void dot_product(double *dot , matrix_double u , matrix_double v) {
+    *dot = 0;
+
+    if(u.nb_line != 1 || v.nb_col != 1 || u.nb_col != v.nb_line) {
+        perror("Error dot product : dimensions not respected");
+        return;
+    }
+
+    for(unsigned int i=0 ; i<u.nb_col ; i++)
+        *dot += u.values[i]*v.values[i];
+}
+
+/* ********************************************************************************************************************** */
+
 void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
     if(A.nb_col != B.nb_line) {
         perror("Error dimension mul_matrix_double");
@@ -172,9 +249,13 @@ void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B) {
 
     for(int i=0 ; i<res->nb_line ; i++) {
         for(int j=0 ; j<res->nb_col ; j++) {
-            res->values[i*res->nb_col + j] = 0;
+
+            //res->values[i*res->nb_col + j] = 0;
+            MATRIX_P(res,i,j) = 0;
+
             for(int k=0 ; k<A.nb_line ; k++) {
-                res->values[i*res->nb_col+j] += A.values[i*A.nb_col + k]*B.values[k*B.nb_col + j];
+                //res->values[i*res->nb_col+j] += A.values[i*A.nb_col + k]*B.values[k*B.nb_col + j];
+                MATRIX_P(res,i,j) += MATRIX(A,i,k)*MATRIX(B,k,j);
             }
         }
     }
@@ -187,7 +268,8 @@ void copy_matrix_double(matrix_double *DEST , matrix_double SRC) {
 
     for(int i=0 ; i<SRC.nb_line ; i++) {
         for (int j = 0; j < SRC.nb_col; j++) {
-            DEST->values[i*SRC.nb_col + j] = SRC.values[i*SRC.nb_col + j];
+            //DEST->values[i*SRC.nb_col + j] = SRC.values[i*SRC.nb_col + j];
+            MATRIX_P(DEST,i,j) = MATRIX(SRC,i,j);
         }
     }
 }
@@ -247,15 +329,16 @@ void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix
     for(int j=0 ; j<A.nb_col ; j++) {
         for(int i=j+1 ; i<A.nb_line ; i++) {
 
-            coeff = -1 * U->values[i*U->nb_col + j] / U->values[j*U->nb_col + j];
+            coeff = -1 * MATRIX_P(U,i,j) / MATRIX_P(U,j,j);
 
             for(int k=j ; k<A.nb_col ; k++) {
-                temp = U->values[j*U->nb_col+k] * coeff;
+                temp = MATRIX_P(U,j,k) * coeff;
 
-                if(L != NULL)
-                    L->values[i*L->nb_col+j] = -coeff;
+                if(L != NULL) {
+                    MATRIX_P(L,i,j) = -coeff;
+                }
 
-                U->values[i*U->nb_col+k] += temp;
+                MATRIX_P(U,i,k) += temp;
             }
         }
     }
@@ -308,20 +391,44 @@ void swap_col_matrix_double(matrix_double *A , unsigned int col1 , unsigned int 
  * @return
  */
 double index_max_submatrix_double(unsigned int *max_index_line , unsigned int *max_index_col , matrix_double A , unsigned int submatrix_index_line , unsigned int submatrix_index_col) {
-    double max = A.values[submatrix_index_line*A.nb_col + submatrix_index_col];
+    double max = MATRIX(A,submatrix_index_line,submatrix_index_col);
     *max_index_line = submatrix_index_line;
     *max_index_col = submatrix_index_col;
 
     for (unsigned int i=submatrix_index_line ; i<A.nb_line ; i++) {
         for(unsigned int j=submatrix_index_col ; j<A.nb_col ; j++) {
-            if(A.values[i*A.nb_col + j] > max) {
-                max = A.values[i*A.nb_col + j];
+            //if(A.values[i*A.nb_col + j] > max) {
+            if(MATRIX(A,i,j) > max) {
+                max = MATRIX(A,i,j);
                 *max_index_line = i;
                 *max_index_col = j;
             }
         }
     }
     return max;
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Input : a matrix of size m*1
+ * Output : the norm -> sqrt(sum(xi^2))
+ * @param matrixDouble
+ * @return
+ */
+double norm_vector_double(matrix_double matrixDouble) {
+    if(matrixDouble.nb_col != 1) {
+        perror("Norm must be called on vectors only");
+        return -1;
+    }
+
+    double norm = 0;
+
+    for(unsigned int i=0 ; i<matrixDouble.nb_line ; i++)
+        norm += pow(matrixDouble.values[i] , 2);
+
+    norm = sqrt(norm);
+    return norm;
 }
 
 /* ********************************************************************************************************************** */
@@ -364,9 +471,9 @@ void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U ,
 
 
         for(int i=j+1 ; i<U->nb_line ; i++) {
-            coeff = U->values[i * U->nb_col + j] / U->values[j * U->nb_col + j];
-            for (int k = j; k < U->nb_col; k++) U->values[i * U->nb_col + k] -= coeff * U->values[j * U->nb_col + k];
-            L->values[i * L->nb_col + j] = coeff;
+            coeff = MATRIX_P(U,i,j) / MATRIX_P(U,j,j);
+            for (int k = j; k < U->nb_col; k++) MATRIX_P(U,i,k) -= coeff * MATRIX_P(U,j,k);
+            MATRIX_P(L,i,j) = coeff;
         }
     }
 
@@ -377,14 +484,65 @@ void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U ,
 
 /* ********************************************************************************************************************** */
 
+/**
+ * Replace one column of a matrix with another vector
+ * @param A
+ * @param vector
+ * @param indexColumn
+ */
+void setColumn_matrix_double(matrix_double *A , matrix_double vector , unsigned int indexColumn) {
+    if(vector.nb_col != 1 || vector.nb_line != A->nb_line) {
+        perror("Set column : second argument must be a vector with correct dimensions");
+        return;
+    }
+
+    if(indexColumn < 0 || indexColumn >= A->nb_col) {
+        perror("Set column : index is not valid");
+        return;
+    }
+
+    for(unsigned int i=0 ; i<vector.nb_line ; i++)
+        MATRIX_P(A,i,indexColumn) = vector.values[i];
+
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Extract one column from a matrix
+ * @param column
+ * @param A
+ * @param indexColumn
+ */
+void getColum_matrix_double(matrix_double *column , matrix_double A , unsigned int indexColumn) {
+    if(indexColumn < 0 || indexColumn >= A.nb_col) {
+        perror("getColumn : index is not valid");
+        return;
+    }
+
+    change_dim_matrix_double(column , A.nb_line , 1);
+
+    for(unsigned int i=0 ; i<A.nb_line ; i++)
+        column->values[i] = MATRIX(A,i,indexColumn);
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Input : A of size m*n
+ * Output : QR factorization
+ * @param Q
+ * @param R
+ * @param A
+ */
 void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A) {
-    int m = A.nb_line , n = A.nb_col;
+    unsigned int m = A.nb_line , n = A.nb_col;
     double c,s;
 
     matrix_double G,Gt,temp;
-    init_matrix_double(&temp , A.nb_line , A.nb_col);
+    init_matrix_double(&temp , m , n);
     init_matrix_double(&G , m , m);
-    init_matrix_double(&Gt , m , m);
+    init_matrix_double(&Gt , m ,m);
 
     identity_matrix_double(Q , A.nb_line);
     copy_matrix_double(R , A);
@@ -401,8 +559,8 @@ void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A) {
                 if(k != i && k != j) setCoeff_matrix_double(&G , k , k , 1);
             }
 
-            c = (R->values[j*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
-            s = (R->values[i*R->nb_col + j]) / (sqrt(pow(R->values[j*R->nb_col + j] , 2) + pow(R->values[i*R->nb_col + j] , 2)));
+            c = MATRIX_P(R,j,j) / (sqrt(pow(MATRIX_P(R,j,j) , 2) + pow(MATRIX_P(R,i,j) , 2)));
+            s = MATRIX_P(R,i,j) / (sqrt(pow(MATRIX_P(R,j,j) , 2) + pow(MATRIX_P(R,i,j) , 2)));
 
             setCoeff_matrix_double(&G , i , i , c);
             setCoeff_matrix_double(&G , j , j , c);
@@ -426,4 +584,69 @@ void QR_Givens(matrix_double *Q , matrix_double *R , matrix_double A) {
     destroy_matrix_double(G);
     destroy_matrix_double(Gt);
     destroy_matrix_double(temp);
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Input : A of size m*n
+ * Output : QR factorization
+ * @param Q
+ * @param R
+ * @param A
+ */
+void QR_Gram_Schimdt(matrix_double *Q , matrix_double *R , matrix_double A) {
+
+    unsigned int m = A.nb_line , n= A.nb_col;
+
+    change_dim_matrix_double(Q , A.nb_line , A.nb_line);
+
+    change_dim_matrix_double(R , m , n);
+    setAllCoeff_matrix_double(R , 0);
+
+    matrix_double a,q_j,q_i,q_iT;
+    init_matrix_double(&a , A.nb_line , 1);
+    init_matrix_double(&q_j , A.nb_line , 1);
+    init_matrix_double(&q_i , A.nb_line , 1);
+    init_matrix_double(&q_iT , 1 , A.nb_line);
+
+
+    getColum_matrix_double(&a , A , 0);
+    MATRIX_P(R,0,0) = norm_vector_double(a);
+
+    scalar_div_matrix_double(&q_j , a , MATRIX_P(R,0,0));
+    setColumn_matrix_double(Q , q_j , 0);
+
+
+    for(unsigned int j=1 ; j<A.nb_col ; j++) {
+
+        // q(j) = a(j)
+        getColum_matrix_double(&q_j , A , j);
+
+        for(unsigned int i=0 ; i<j ; i++) {
+            getColum_matrix_double(&q_i, *Q, i);
+            transpose_matrix_double(&q_iT, q_i);
+
+            dot_product(&MATRIX_P(R, i, j), q_iT, q_j);
+
+            /* **************************************** */
+            // TODO
+            // q(j) <- q(j) - R(i,j)*q(j)
+            /* **************************************** */
+
+
+        }
+
+        MATRIX_P(R,j,j) = norm_vector_double(q_j);
+        scalar_div_matrix_double(&q_j , MATRIX_P(R,j,j));
+
+        setColumn_matrix_double(Q, q_j, j);
+    }
+
+    
+    destroy_matrix_double(a);
+    destroy_matrix_double(q_j);
+    destroy_matrix_double(q_i);
+    destroy_matrix_double(q_iT);
+
 }
