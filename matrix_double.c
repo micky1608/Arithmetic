@@ -306,7 +306,7 @@ void matrix_col_permutation(matrix_double *Q ,unsigned int size ,  unsigned int 
 /* ********************************************************************************************************************** */
 
 void transpose_matrix_double(matrix_double *transpose , matrix_double A) {
-    change_dim_matrix_double(transpose , A.nb_line , A.nb_col);
+    change_dim_matrix_double(transpose , A.nb_col , A.nb_line);
 
     for(unsigned int i=0 ; i< A.nb_line ; i++) {
         for(unsigned int j=0 ; j<A.nb_col ; j++) {
@@ -599,16 +599,17 @@ void QR_Gram_Schimdt(matrix_double *Q , matrix_double *R , matrix_double A) {
 
     unsigned int m = A.nb_line , n= A.nb_col;
 
-    change_dim_matrix_double(Q , A.nb_line , A.nb_line);
-
+    change_dim_matrix_double(Q , m , m);
     change_dim_matrix_double(R , m , n);
     setAllCoeff_matrix_double(R , 0);
 
-    matrix_double a,q_j,q_i,q_iT;
+    matrix_double a,q_j,q_i,q_iT,temp,temp2;
     init_matrix_double(&a , A.nb_line , 1);
     init_matrix_double(&q_j , A.nb_line , 1);
     init_matrix_double(&q_i , A.nb_line , 1);
     init_matrix_double(&q_iT , 1 , A.nb_line);
+    init_matrix_double(&temp , A.nb_line , 1);
+    init_matrix_double(&temp2 , A.nb_line , 1);
 
 
     getColum_matrix_double(&a , A , 0);
@@ -629,24 +630,24 @@ void QR_Gram_Schimdt(matrix_double *Q , matrix_double *R , matrix_double A) {
 
             dot_product(&MATRIX_P(R, i, j), q_iT, q_j);
 
-            /* **************************************** */
-            // TODO
             // q(j) <- q(j) - R(i,j)*q(j)
-            /* **************************************** */
-
-
+            scalar_mul_matrix_double(&temp , q_i , MATRIX_P(R,i,j));
+            copy_matrix_double(&temp2 , q_j);
+            sub_matrix_double(&q_j , temp2 , temp);
         }
 
         MATRIX_P(R,j,j) = norm_vector_double(q_j);
-        scalar_div_matrix_double(&q_j , MATRIX_P(R,j,j));
-
+        copy_matrix_double(&temp2 , q_j);
+        scalar_div_matrix_double(&q_j , temp2 , MATRIX_P(R,j,j));
         setColumn_matrix_double(Q, q_j, j);
     }
 
-    
+
     destroy_matrix_double(a);
     destroy_matrix_double(q_j);
     destroy_matrix_double(q_i);
     destroy_matrix_double(q_iT);
+    destroy_matrix_double(temp);
+    destroy_matrix_double(temp2);
 
 }

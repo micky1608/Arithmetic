@@ -727,6 +727,7 @@ int main () {
 
     print_matrix_double(vector , "get second column Random");
 
+
     destroy_matrix_double(vector);
     destroy_matrix_double(randomMatrix);
 
@@ -743,7 +744,8 @@ int main () {
 
     print_matrix_double(AA , "A");
 
-    QR_Givens(&QQ , &RR , AA);
+    //QR_Givens(&QQ , &RR , AA);
+    QR_Gram_Schimdt(&QQ , &RR , AA);
     mul_matrix_double(&QR , QQ , RR);
 
     print_matrix_double(QQ , "Q");
