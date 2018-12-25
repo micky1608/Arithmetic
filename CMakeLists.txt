@@ -12,6 +12,6 @@ add_executable(Arithmetic main.c arithmetic.c
         matrix_bigint_arithmetic.c matrix_bigint_arithmetic.h
         matrix_bigQ_arithmetic.c matrix_bigQ_arithmetic.h CRT_bigint.c CRT_bigint.h Lagrange.c Lagrange.h
         pol_bigQ_arithmetic.c pol_bigQ_arithmetic.h matrix_double.c matrix_double.h
-        )
+        Complex.c Complex.h FFT.c FFT.h)
 
-target_link_libraries(Arithmetic gmp mpfr m)
+target_link_libraries(Arithmetic gmp mpfr m mpc)

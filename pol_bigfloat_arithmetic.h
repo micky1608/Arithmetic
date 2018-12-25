@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <memory.h>
+#include <mpfr.h>
+
+// convert the mpf functions in mpfr functions
+#include <mpf2mpfr.h>
 
 typedef struct pol_bigfloat {
     unsigned int degree;
@@ -38,7 +42,7 @@ void change_degre_pol_bigfloat(pol_bigfloat *polynomial, unsigned int new_degree
 
 void copy_pol_bigfloat(pol_bigfloat *res, pol_bigfloat polynomial);
 
-void print_pol_bigfloat(pol_bigfloat polynomial);
+void print_pol_bigfloat(pol_bigfloat polynomial , char *name);
 
 void add_pol_bigfloat(pol_bigfloat *res, pol_bigfloat A, pol_bigfloat B);
 

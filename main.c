@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <mpc.h>
+
 #include "arithmetic.h"
 #include "pol_bigint_arithmetic.h"
 #include "pol_bigfloat_arithmetic.h"
@@ -17,6 +19,8 @@
 #include "matrix_double.h"
 #include "CRT_bigint.h"
 #include "Lagrange.h"
+#include "Complex.h"
+#include "FFT.h"
 
 int main () {
 
@@ -216,11 +220,9 @@ int main () {
 
     euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
 
-    printf("Q : \t");
-    print_pol_bigfloat(quotient_pol_bigfloat);
+    print_pol_bigfloat(quotient_pol_bigfloat , "Q");
 
-    printf("R : \t");
-    print_pol_bigfloat(remainder_pol_bigfloat);
+    print_pol_bigfloat(remainder_pol_bigfloat , "R");
 
     change_degre_pol_bigint(&my_polynomial , 5);
     change_degre_pol_bigint(&other_polynomial , 2);
@@ -250,11 +252,9 @@ int main () {
 
     euclideDiv_pol_bignumber(&quotient_pol_bigfloat , &remainder_pol_bigfloat , my_polynomial , other_polynomial);
 
-    printf("Q : \t");
-    print_pol_bigfloat(quotient_pol_bigfloat);
+    print_pol_bigfloat(quotient_pol_bigfloat , "Q");
 
-    printf("R : \t");
-    print_pol_bigfloat(remainder_pol_bigfloat);
+    print_pol_bigfloat(remainder_pol_bigfloat , "R");
 
 
     printf("\n\n*******************************************\n\n");
@@ -760,5 +760,35 @@ int main () {
     mpz_clears(e,f,PM,resM,P,(mpz_t *)NULL);
     mpq_clears(det,lamdda,resultant,(mpq_t*)NULL);
 
+    printf("\n\n*******************************************\n\n");
+
+   pol_bigfloat P_bigFloat, Q_bigFloat , P_even , P_odd;
+   init_pol_bigfloat(&P_bigFloat , 5);
+   init_pol_bigfloat(&Q_bigFloat , 5);
+   init_pol_bigfloat(&P_even , 5);
+   init_pol_bigfloat(&P_odd , 5);
+
+
+
+   set_all_coeffs_random_pol_bigfloat(P_bigFloat , 50);
+   split_pol_bigfloat(&P_even , &P_odd , P_bigFloat);
+
+   print_pol_bigfloat(P_bigFloat , "P");
+   print_pol_bigfloat(P_even , "P_even");
+   print_pol_bigfloat(P_odd , "P_odd");
+
+   mpc_t X[4];
+   n_unit_roots(X , 4);
+
+   printf("\n");
+   print_complex(X[0] , "X[0]");
+   print_complex(X[1] , "X[1]");
+   print_complex(X[2] , "X[2]");
+   print_complex(X[3] , "X[3]");
+
+   destroy_pol_bigfloat(P_bigFloat);
+   destroy_pol_bigfloat(Q_bigFloat);
+   destroy_pol_bigfloat(P_even);
+   destroy_pol_bigfloat(P_odd);
     return 0;
 }

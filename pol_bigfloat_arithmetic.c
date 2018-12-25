@@ -165,11 +165,13 @@ void copy_pol_bigfloat(pol_bigfloat *res, pol_bigfloat polynomial) {
 
 /* ********************************************************************************************************************** */
 
-void print_pol_bigfloat(pol_bigfloat polynomial) {
+void print_pol_bigfloat(pol_bigfloat polynomial, char *name) {
     mpf_t temp;
     mpf_init(temp);
 
-    if (mpf_cmp_ui(polynomial.coeffs[0],0) != 0 ) gmp_printf("%.3Ff",polynomial.coeffs[0]);
+    printf("%s : ",name);
+
+    if (mpf_cmp_ui(polynomial.coeffs[0],0) != 0 ) mpfr_printf("%.3Rf",polynomial.coeffs[0]);
     for(int i=1 ; i <= polynomial.degree ; i++) {
 
         if (mpf_cmp_d(polynomial.coeffs[i],0) < 0 )
@@ -181,7 +183,7 @@ void print_pol_bigfloat(pol_bigfloat polynomial) {
 
         mpf_abs(temp , polynomial.coeffs[i]);
         printf("(");
-        gmp_printf("%.3Ff",temp);
+        mpfr_printf("%.3Rf",temp);
         printf(" * X^%d)" , i);
 
     }
