@@ -18,7 +18,23 @@ A complex rounding mode is of the form MPC_RNDxy where x and y are one of :
 #include <mpc.h>
 #include <mpfr.h>
 #include <stdio.h>
+#include <malloc.h>
+
+typedef struct pol_complex {
+    unsigned int degree;
+    mpc_t *coeffs;
+} pol_complex;
 
 void print_complex(mpc_t z , char *name);
+
+void init_pol_complex(pol_complex *pol , unsigned int degree);
+
+void set_coeffs_pol_complex(pol_complex *pol , mpc_t *new_coeffs , unsigned int nb_coeffs);
+
+void change_degre_pol_complex(pol_complex *pol, unsigned int new_degree);
+
+void destroy_pol_complex(pol_complex pol);
+
+
 
 #endif //ARITHMETIC_COMPLEX_H
