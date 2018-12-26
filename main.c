@@ -768,8 +768,6 @@ int main () {
    init_pol_bigfloat(&P_even , 5);
    init_pol_bigfloat(&P_odd , 5);
 
-
-
    set_all_coeffs_random_pol_bigfloat(P_bigFloat , 50);
    split_pol_bigfloat(&P_even , &P_odd , P_bigFloat);
 
@@ -778,17 +776,33 @@ int main () {
    print_pol_bigfloat(P_odd , "P_odd");
 
    mpc_t X[4];
+   mpc_t Y[4];
    n_unit_roots(X , 4);
 
+   change_degre_pol_bigfloat(&P_bigFloat , 2);
+   set_coeff_pol_bigfloat_d(P_bigFloat , 0 , 5);
+   set_coeff_pol_bigfloat_d(P_bigFloat , 1 , 0);
+   set_coeff_pol_bigfloat_d(P_bigFloat , 2 , 2);
+
+   FFT_evaluation(Y , P_bigFloat , X , 4);
+
+   print_pol_bigfloat(P_bigFloat , "\nP");
+
    printf("\n");
-   print_complex(X[0] , "X[0]");
-   print_complex(X[1] , "X[1]");
-   print_complex(X[2] , "X[2]");
-   print_complex(X[3] , "X[3]");
+   for(unsigned int i=0 ; i<4 ; i++) {
+       print_complex(X[i] , "Xi");
+       print_complex(Y[i] , "P(Xi)");
+       printf("\n");
+   }
+
+   for(unsigned int i=0 ; i<4 ; i++) {
+       mpc_clear(X[i]);
+       mpc_clear(Y[i]);
+   }
 
    destroy_pol_bigfloat(P_bigFloat);
    destroy_pol_bigfloat(Q_bigFloat);
    destroy_pol_bigfloat(P_even);
    destroy_pol_bigfloat(P_odd);
-    return 0;
+   return 0;
 }

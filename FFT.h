@@ -18,7 +18,9 @@ void split_pol_bigfloat(pol_bigfloat *pol_even , pol_bigfloat *pol_odd , pol_big
 
 void n_unit_roots(mpc_t X[] , unsigned int n);
 
-void FFT_evaluation(mpc_t *P_eval , pol_bigfloat P , mpc_t omega , unsigned int n);
+void polynomial_naive_evaluation(mpc_t *y , pol_bigfloat P , mpc_t x);
+
+void FFT_evaluation(mpc_t *P_eval , pol_bigfloat P , mpc_t *Xi , unsigned int n);
 
 void FFT_multiplication(mpc_t *R_eval , mpc_t *P_eval , mpc_t Q_eval);
 
