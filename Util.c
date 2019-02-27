@@ -26,6 +26,14 @@ void swap(double *a , double *b) {
 
 /* ********************************************************************************************************************** */
 
+void swap_long(long *a , long *b) {
+    long temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+/* ********************************************************************************************************************** */
+
 void mpq_mul_si(mpq_t res , mpq_t x , int lambda_num , unsigned int lambda_den) {
     mpz_t numerator, denominator,gcd;
 

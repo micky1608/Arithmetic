@@ -225,7 +225,7 @@ void scalar_div_matrix_double(matrix_double *res , matrix_double A , double lamb
 
 /* ********************************************************************************************************************** */
 
-void dot_product(double *dot , matrix_double u , matrix_double v) {
+void dot_product_double(double *dot, matrix_double u, matrix_double v) {
     *dot = 0;
 
     if(u.nb_line != 1 || v.nb_col != 1 || u.nb_col != v.nb_line) {
@@ -291,14 +291,14 @@ void identity_matrix_double(matrix_double *id, unsigned int size) {
 
 /* ********************************************************************************************************************** */
 
-void matrix_line_permutation(matrix_double *P , unsigned int size , unsigned int line1 , unsigned int line2) {
+void matrix_double_line_permutation(matrix_double *P, unsigned int size, unsigned int line1, unsigned int line2) {
     identity_matrix_double(P , size);
     swap_ligne_matrix_double(P , line1 , line2);
 }
 
 /* ********************************************************************************************************************** */
 
-void matrix_col_permutation(matrix_double *Q ,unsigned int size ,  unsigned int col1 , unsigned int col2) {
+void matrix_double_col_permutation(matrix_double *Q, unsigned int size, unsigned int col1, unsigned int col2) {
     identity_matrix_double(Q , size);
     swap_col_matrix_double(Q , col1 , col2);
 }
@@ -452,10 +452,10 @@ void PLUQ_decomposition(matrix_double *P , matrix_double *L , matrix_double *U ,
         index_max_submatrix_double(&max_index_line , &max_index_col , *U , j , j);
 
         swap_ligne_matrix_double(U , j , max_index_line);
-        matrix_line_permutation(&R , size , j , max_index_line);
+        matrix_double_line_permutation(&R, size, j, max_index_line);
 
         swap_col_matrix_double(U , j , max_index_col);
-        matrix_col_permutation(&S , size , j , max_index_col);
+        matrix_double_col_permutation(&S, size, j, max_index_col);
 
         mul_matrix_double(&temp , S , *Q);
         copy_matrix_double(Q , temp);
@@ -628,7 +628,7 @@ void QR_Gram_Schimdt(matrix_double *Q , matrix_double *R , matrix_double A) {
             getColum_matrix_double(&q_i, *Q, i);
             transpose_matrix_double(&q_iT, q_i);
 
-            dot_product(&MATRIX_P(R, i, j), q_iT, q_j);
+            dot_product_double(&MATRIX_P(R, i, j), q_iT, q_j);
 
             // q(j) <- q(j) - R(i,j)*q(j)
             scalar_mul_matrix_double(&temp , q_i , MATRIX_P(R,i,j));

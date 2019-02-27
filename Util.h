@@ -20,4 +20,6 @@ void mpq_pow(mpq_t res , mpq_t x , int p);
 
 void swap(double *a , double *b);
 
+void swap_long(long *a , long *b);
+
 #endif //ARITHMETIC_UTIL_H

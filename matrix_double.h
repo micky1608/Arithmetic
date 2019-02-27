@@ -48,15 +48,15 @@ void mul_matrix_double(matrix_double *res , matrix_double A , matrix_double B);
 
 void scalar_div_matrix_double(matrix_double *res , matrix_double A , double lambda);
 
-void dot_product(double *dot , matrix_double u , matrix_double v);
+void dot_product_double(double *dot, matrix_double u, matrix_double v);
 
 void copy_matrix_double(matrix_double *DEST , matrix_double SRC);
 
 void identity_matrix_double(matrix_double *id , unsigned int size);
 
-void matrix_line_permutation(matrix_double *P , unsigned int size , unsigned int line1 , unsigned int line2);
+void matrix_double_line_permutation(matrix_double *P, unsigned int size, unsigned int line1, unsigned int line2);
 
-void matrix_col_permutation(matrix_double *Q , unsigned int size , unsigned int col1 , unsigned int col2);
+void matrix_double_col_permutation(matrix_double *Q, unsigned int size, unsigned int col1, unsigned int col2);
 
 void LU_decomposition_matrix_double(matrix_double *L , matrix_double *U , matrix_double A);
 

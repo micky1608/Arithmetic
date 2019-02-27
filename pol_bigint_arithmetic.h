@@ -2,8 +2,8 @@
 // Created by root on 12/10/18.
 //
 
-#ifndef ARITHMETIC_POLYNOMIAL_ARITHMETIC_H
-#define ARITHMETIC_POLYNOMIAL_ARITHMETIC_H
+#ifndef ARITHMETIC_POL_BIGINT_ARITHMETIC_H
+#define ARITHMETIC_POL_BIGINT_ARITHMETIC_H
 
 #include <gmp.h>
 #include "Util.h"
@@ -48,4 +48,4 @@ void mult_pol_bigint(pol_bigint *res, pol_bigint A, pol_bigint B);
 void karatsuba_pol_bigint(pol_bigint *res, pol_bigint A, pol_bigint B);
 
 
-#endif //ARITHMETIC_POLYNOMIAL_ARITHMETIC_H
+#endif //ARITHMETIC_POL_BIGINT_ARITHMETIC_H
