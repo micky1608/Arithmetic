@@ -79,5 +79,32 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
     destroy_pol_bigfloat(temp2);
     destroy_pol_bigfloat(A_float);
     destroy_pol_bigfloat(B_float);
+}
 
+/* ********************************************************************************************************************** */
+
+void halfGCD(matrix *Mgcd , pol A , pol B) {
+    if(B.degree >= A.degree) {
+        perror("HalfGCD B degree must be smaller");
+        exit(EXIT_FAILURE);
+    }
+
+    int n = A.degree;
+
+    int m = (int)ceil((double)n/2);
+
+    if(B.degree < m) {
+        identity_matrix(Mgcd , 2);
+        return;
+    }
+
+    pol x_pow_m;
+    init_pol(&x_pow_m , (unsigned int)m);
+    set_coeff_pol(x_pow_m , (unsigned int)m , 1);
+
+    print_pol(x_pow_m , "x^m");
+
+
+
+    destroy_pol(x_pow_m);
 }

@@ -6,7 +6,7 @@
 #include "test.h"
 
 int main () {
-    size_t a;
     srand(time(NULL));
     test_pol();
+    test_horner();
 }

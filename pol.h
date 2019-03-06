@@ -32,7 +32,7 @@ void change_degre_pol(pol *polynomial, unsigned int new_degree);
 
 void copy_pol(pol *res, pol polynomial);
 
-void print_pol(pol *polynomial , char *name);
+void print_pol(pol polynomial , char *name);
 
 void add_pol(pol *res, pol A, pol B);
 
@@ -43,6 +43,10 @@ void mult_pol(pol *res, pol A, pol B);
 int is_zero_pol(pol *polynomial);
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B);
+
+void horner_eval(long *res , pol f , long x);
+
+void horner_eval_multi(long *res , pol f , long *x , unsigned int nb_x);
 
 
 #endif //ARITHMETIC_POLYNOMIAL_ARITHMETIC_H

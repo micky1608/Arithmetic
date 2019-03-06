@@ -27,6 +27,8 @@
 
 void test_all();
 void test_pol();
+void test_halfGCD();
+void test_horner();
 
 
 #endif //ARITHMETIC_TEST_H

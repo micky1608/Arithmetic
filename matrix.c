@@ -29,7 +29,6 @@ void setCoeff_matrix(matrix *matrix , unsigned int line , unsigned int col , lon
         perror("Matrix index not correct");
         return;
     }
-    //matrix->values[line*matrix->nb_col + col] = newvalue;
     MATRIX_P(matrix,line,col) = newvalue;
 }
 
@@ -79,7 +78,7 @@ void print_matrix(matrix matrix , char *name) {
 
             if(matrix.values[i*matrix.nb_col + j] == 0) printf(" 0.00 ");
             if(matrix.values[i*matrix.nb_col + j] > 0) printf("+");
-            if(matrix.values[i*matrix.nb_col + j] != 0) printf("%.2lf ",matrix.values[i*matrix.nb_col + j]);
+            if(matrix.values[i*matrix.nb_col + j] != 0) printf("%.2ld ",matrix.values[i*matrix.nb_col + j]);
             if(matrix.values[i*matrix.nb_col + j] < 10  && matrix.values[i*matrix.nb_col + j] > -10) printf(" ");
             if(j == matrix.nb_col - 1) printf("|\n");
         }

@@ -138,26 +138,26 @@ void copy_pol(pol *res, pol polynomial) {
 
 /* ********************************************************************************************************************** */
 
-void print_pol(pol *polynomial, char *name) {
+void print_pol(pol polynomial, char *name) {
     printf("%s : ",name);
-    if(is_zero_pol(polynomial)) {
+    if(is_zero_pol(&polynomial)) {
         printf("0\n");
         return;
     }
 
     long temp;
 
-    if (polynomial->coeffs[0]) printf("%ld",polynomial->coeffs[0]);
-    for(int i=1 ; i <= polynomial->degree ; i++) {
+    if (polynomial.coeffs[0]) printf("%ld",polynomial.coeffs[0]);
+    for(int i=1 ; i <= polynomial.degree ; i++) {
 
-        if (polynomial->coeffs[i] < 0 )
+        if (polynomial.coeffs[i] < 0 )
             printf(" - ");
-        else if (polynomial->coeffs[i] > 0 )
+        else if (polynomial.coeffs[i] > 0 )
             printf(" + ");
         else
             continue;
 
-        temp = (polynomial->coeffs[i] > 0) ? polynomial->coeffs[i] : -1*polynomial->coeffs[i];
+        temp = (polynomial.coeffs[i] > 0) ? polynomial.coeffs[i] : -1*polynomial.coeffs[i];
         printf("(");
         printf("%ld",temp);
         printf(" * X^%d)" , i);
@@ -312,5 +312,20 @@ void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
         change_degre_pol(R , i);
 
     }
+}
+
+/* ********************************************************************************************************************** */
+
+
+void horner_eval(long *res , pol f , long x) {
+    *res = f.coeffs[f.degree];
+    for(unsigned int i=1 ; i<=f.degree ; i++) {
+        *res *= x;
+        *res += f.coeffs[f.degree - i];
+    }
+}
+
+void horner_eval_multi(long *res , pol f , long *x , unsigned int nb_x) {
+    for(unsigned int i=0 ; i<nb_x ; i++) horner_eval(res + i , f , *(x + i));
 }
 

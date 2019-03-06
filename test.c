@@ -792,6 +792,8 @@ void test_all() {
 
 };
 
+/* ********************************************************************************************************************** */
+
 void test_pol() {
     pol A,B,Q,R;
     init_pol(&A , 3);
@@ -807,16 +809,35 @@ void test_pol() {
 
     euclide_div_pol(&Q , &R , A , B);
 
-    print_pol(&A , "A");
-    print_pol(&B , "B");
-    print_pol(&Q , "Q");
-    print_pol(&R , "R");
+    print_pol(A , "A");
+    print_pol(B , "B");
+    print_pol(Q , "Q");
+    print_pol(R , "R");
 
     euclide_div_pol(&Q , &R , A , B);
-
-
 
     destroy_pol(A);
     destroy_pol(B);
 
+}
+
+/* ********************************************************************************************************************** */
+
+void test_horner() {
+    pol f;
+    init_pol(&f , 3);
+
+    long coeffs[] = {1,2,3,4};
+    set_all_coeffs_pol(f , coeffs , 4);
+    print_pol(f , "f");
+
+    long res[3];
+    long x[] = {1,2,-1};
+    horner_eval_multi(res , f , x , 3);
+    for(unsigned int i=0 ; i<3 ; i++)printf("f(%ld) = %ld\n",x[i] , res[i]);
+    destroy_pol(f);
+}
+
+void test_halfGCD() {
+    //TODO
 }
