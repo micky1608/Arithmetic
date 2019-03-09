@@ -71,12 +71,18 @@ void test_matrix_pol() {
 
     print_matrix_pol(M , "M");
 
-    change_dim_matrix_pol(&M , 3 , 3);
-
     change_degre_pol(&M.values[0] , 0);
     set_coeff_pol(M.values[0] , 0 , 0);
 
     print_matrix_pol(M , "M");
+
+    matrix_pol id;
+    identity_matrix_pol(&id , 2);
+
+    matrix_pol res;
+    mul_matrix_pol(&res , M , M);
+
+    print_matrix_pol(res , "M*M");
 
     destroy_pol(A);
     destroy_matrix_pol(M);

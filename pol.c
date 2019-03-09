@@ -178,8 +178,7 @@ void print_pol_center(pol polynomial , char *name , unsigned int size) {
 
     int blank , i=0;
 
-    if(is_zero_pol(polynomial)) blank = size+1;
-    else blank = size - polynomial.degree; 
+    blank = size - polynomial.degree; 
 
     while(i<ceil((double)blank/2)) {
         if(!i) printf("   ");

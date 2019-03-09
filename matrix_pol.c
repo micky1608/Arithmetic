@@ -69,13 +69,12 @@ void destroy_matrix_pol(matrix_pol matrix_pol) {
 /* ********************************************************************************************************************** */
 
 void print_matrix_pol(matrix_pol matrix_pol , char *name) {
-    int max_degree_col[matrix_pol.nb_col];
-    memset(max_degree_col , 0 , matrix_pol.nb_col * sizeof(int));
+    int max_degree = 0;
 
     for(int j=0 ; j<matrix_pol.nb_col ; j++) {
         for(int i=0 ; i<matrix_pol.nb_line ; i++) {
-            if(MATRIX(matrix_pol,i,j).degree > max_degree_col[j]) {
-                max_degree_col[j] = MATRIX(matrix_pol,i,j).degree;
+            if(MATRIX(matrix_pol,i,j).degree > max_degree) {
+                max_degree = MATRIX(matrix_pol,i,j).degree;
             }
         }
     }
@@ -84,7 +83,7 @@ void print_matrix_pol(matrix_pol matrix_pol , char *name) {
     for(int i=0 ; i<matrix_pol.nb_line ; i++) {
         for(int j=0 ; j<matrix_pol.nb_col ; j++) {
             if(j == 0) printf("| ");
-            print_pol_center(MATRIX(matrix_pol,i,j) , NULL , max_degree_col[j]);
+            print_pol_center(MATRIX(matrix_pol,i,j) , NULL , max_degree);
             if(j == matrix_pol.nb_col - 1) printf(" |\n");
             else printf("     ");
         }
@@ -188,7 +187,63 @@ void change_dim_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line , u
 
 /* ********************************************************************************************************************** */
 
-void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B);
+/**
+ * Create a polynomial identity matrix.
+ */
+void identity_matrix_pol(matrix_pol *id, unsigned int size) {
+    init_matrix_pol(id, size, size);
+
+    for(int i=0 ; i<size ; i++) {
+        for(int j=0 ; j<size ; j++) {
+            if(i == j) set_coeff_pol(MATRIX_P(id,i,j) , 0 , 1);
+        }
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void add_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
+     if(A.nb_line != B.nb_line || A.nb_col != B.nb_col) {
+        perror("Add matrix : error dimensions");
+        return;
+    }
+
+    change_dim_matrix(res , A.nb_line , A.nb_col);
+
+    for(unsigned int i=0 ; i<res->nb_line ; i++) {
+        for(unsigned int j=0 ; j<res->nb_col ; j++)
+            add_pol(&MATRIX_P(res,i,j) , MATRIX(A,i,j) , MATRIX(B,i,j));
+    }
+}
+
+/* ********************************************************************************************************************** */
+
+void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
+     if(A.nb_col != B.nb_line) {
+        perror("Error dimension mul_matrix_pol");
+        exit(EXIT_FAILURE);
+    }
+
+    init_matrix_pol(res , A.nb_line , B.nb_col);
+
+    pol temp_product , temp_add;
+    init_pol(&temp_product , A.values[0].coeffs[0] + B.values[0].coeffs[0]);
+    init_pol(&temp_add , 0);
+
+    for(int i=0 ; i<res->nb_line ; i++) {
+        for(int j=0 ; j<res->nb_col ; j++) {
+
+            for(int k=0 ; k<A.nb_line ; k++) {
+                mult_pol(&temp_product , MATRIX(A,i,k) , MATRIX(B,k,j));
+                add_pol(&temp_add , temp_product , MATRIX_P(res,i,j));
+                copy_pol(&MATRIX_P(res,i,j) , temp_add);
+            }
+        }
+    }
+
+    destroy_pol(temp_product);
+    destroy_pol(temp_add);
+}
 
 /* ********************************************************************************************************************** */
 

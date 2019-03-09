@@ -1,5 +1,5 @@
 CC=gcc
-EXEC=artihmetic
+EXEC=arithmetic
 
 DEPS=$(wildcard *.h) 
 SOURCE=$(wildcard *.c) 

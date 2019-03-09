@@ -34,9 +34,13 @@ void change_nb_col_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_col);
 
 void change_dim_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line , unsigned int new_nb_col);
 
+void add_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B);
+
 void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B);
 
 void copy_matrix_pol(matrix_pol *DEST , matrix_pol SRC);
+
+void identity_matrix_pol(matrix_pol *id, unsigned int size);
 
 
 #endif //ARITHMETIC_MATRIX_pol_POL_H
