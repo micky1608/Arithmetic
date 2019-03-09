@@ -247,4 +247,12 @@ void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
 
 /* ********************************************************************************************************************** */
 
-void copy_matrix_pol(matrix_pol *DEST , matrix_pol SRC);
+void copy_matrix_pol(matrix_pol *DEST , matrix_pol SRC) {
+    change_dim_matrix(DEST , SRC.nb_line , SRC.nb_col);
+
+    for(int i=0 ; i<SRC.nb_line ; i++) {
+        for (int j = 0; j < SRC.nb_col; j++) {
+            copy_pol(&MATRIX_P(DEST,i,j) , MATRIX(SRC,i,j));
+        }
+    }
+}
