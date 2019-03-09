@@ -95,15 +95,96 @@ void print_matrix_pol(matrix_pol matrix_pol , char *name) {
 
 /* ********************************************************************************************************************** */
 
-void change_nb_line_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line);
+void change_nb_line_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line) {
+     if(new_nb_line == matrix_pol->nb_line) return;
+
+    pol *new_values = (pol*)calloc(sizeof(pol) , new_nb_line*matrix_pol->nb_col);
+    for(int i=0 ; i<new_nb_line*matrix_pol->nb_col ; i++) init_pol(&new_values[i] , 0);
+
+    if(new_nb_line < matrix_pol->nb_line) {
+        for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+            for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+                if(i < new_nb_line) {
+                    //new_values[i*matrix->nb_col + j] = MATRIX_P(matrix,i,j);
+                    copy_pol(&new_values[i*matrix_pol->nb_col + j] , MATRIX_P(matrix_pol,i,j));
+                }
+            }
+        }
+    }
+    else {
+        for(int i=0 ; i<new_nb_line ; i++) {
+            for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+                if(i <matrix_pol->nb_line) {
+                    //new_values[i*matrix_pol->nb_col + j] = MATRIX_P(matrix,i,j);
+                    copy_pol(&new_values[i*matrix_pol->nb_col + j] , MATRIX_P(matrix_pol,i,j));
+                }
+                else {
+                    change_degre_pol(&new_values[i*matrix_pol->nb_col + j] , 0);
+                    set_coeff_pol(new_values[i*matrix_pol->nb_col + j] , 0 , 0);
+                }
+            }
+        }
+    }
+
+    for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+        for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+            destroy_pol(MATRIX_P(matrix_pol,i,j));
+        }
+     }
+    free(matrix_pol->values);
+    matrix_pol->values = new_values;
+    matrix_pol->nb_line = new_nb_line;
+}
 
 /* ********************************************************************************************************************** */
 
-void change_nb_col_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_col);
+void change_nb_col_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_col) {
+     if(new_nb_col == matrix_pol->nb_col) return;
+
+    pol *newvalues = (pol*)calloc(sizeof(pol) , matrix_pol->nb_line*new_nb_col);
+    for(int i=0 ; i<matrix_pol->nb_line*new_nb_col ; i++) init_pol(&newvalues[i] , 0);
+
+    if(new_nb_col < matrix_pol->nb_col) {
+        for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+            for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+                if(j < new_nb_col) {
+                    //newvalues[i*new_nb_col + j] = matrix->values[i*matrix->nb_col + j];
+                    copy_pol(&newvalues[i*new_nb_col + j] , MATRIX_P(matrix_pol,i,j));
+                }
+            }
+        }
+    }
+    else {
+        for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+            for(int j=0 ; j<new_nb_col ; j++) {
+                if(j < matrix_pol->nb_col) {
+                    //newvalues[i*new_nb_col + j] = matrix->values[i*matrix->nb_col + j];
+                    copy_pol(&newvalues[i*new_nb_col + j] , MATRIX_P(matrix_pol,i,j));
+                }
+                else {
+                    change_degre_pol(&newvalues[i*new_nb_col + j] , 0);
+                    set_coeff_pol(newvalues[i*new_nb_col + j] , 0 , 0);
+                }
+            }
+        }
+    }
+
+    for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+        for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+            destroy_pol(MATRIX_P(matrix_pol,i,j));
+        }
+     }
+    free(matrix_pol->values);
+    matrix_pol->values = newvalues;
+    matrix_pol->nb_col = new_nb_col;
+}
 
 /* ********************************************************************************************************************** */
 
-void change_dim_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line , unsigned int new_nb_col);
+void change_dim_matrix_pol(matrix_pol *matrix_pol , unsigned int new_nb_line , unsigned int new_nb_col) {
+    if(new_nb_line != matrix_pol->nb_line) change_nb_line_matrix_pol(matrix_pol , new_nb_line);
+    if(new_nb_col != matrix_pol->nb_col)   change_nb_col_matrix_pol(matrix_pol , new_nb_col);
+}
 
 /* ********************************************************************************************************************** */
 
