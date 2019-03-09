@@ -34,13 +34,15 @@ void copy_pol(pol *res, pol polynomial);
 
 void print_pol(pol polynomial , char *name);
 
+void print_pol_center(pol polynomial , char *name , unsigned int size);
+
 void add_pol(pol *res, pol A, pol B);
 
 void sub_pol(pol *res, pol A, pol B);
 
 void mult_pol(pol *res, pol A, pol B);
 
-int is_zero_pol(pol *polynomial);
+int is_zero_pol(pol polynomial);
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B);
 

@@ -12,6 +12,10 @@ $(EXEC): $(SOURCE) $(DEPS)
 %.o: %.c $(DEPS)
 	$(CC) -g -c -o $@ $< $(FLAG)
 
+matrixPol: main.c test.c matrix_pol.c pol.c $(DEPS)
+	$(CC) -g -o matrixPol $^ $(FLAG)
+
+
 .PHONY: clean
 
 clean:

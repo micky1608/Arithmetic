@@ -20,13 +20,9 @@ typedef struct matrix_pol {
 
 void init_matrix_pol(matrix_pol *matrix_pol , unsigned int nb_line , unsigned int nb_col);
 
-void init_matrix_zero_pol(matrix_pol *matrix_pol , unsigned int nb_line , unsigned int nb_col);
-
 void setCoeff_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned int col , pol newvalue);
 
-void setCoeff_matrix_pol_array(matrix_pol *matrix_pol , pol *coeffs , unsigned int sizeArray);
-
-void setAllCoeff_matrix_pol(matrix_pol *matrix_pol , long value);
+void set_allCoeff_matrix_pol(matrix_pol *matrix_pol , pol newvalue);
 
 void destroy_matrix_pol(matrix_pol matrix_pol);
 

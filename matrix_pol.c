@@ -6,7 +6,7 @@
 
 /**
  * Memory allocation for the polynomial matrix. I suppose that the memory for the polynomial has already been allocated.
- * This function reserves memory to store the polynomials structures.
+ * It means that the function init_pol has been called for each polynomial before creating the matrix.
  * @param matrix_pol
  * @param nb_line
  * @param nb_col
@@ -17,67 +17,81 @@ void init_matrix_pol(matrix_pol *matrix_pol , unsigned int nb_line , unsigned in
         return;
     }
 
+    matrix_pol->nb_line = nb_line;
+    matrix_pol->nb_col = nb_col;
     matrix_pol->values = (pol*)calloc(sizeof(pol) , nb_line*nb_col);
     for(int i=0 ; i<nb_line ; i++) {
         for(int j=0 ; j<nb_col ; j++) {
-            set_all_coeffs_to_pol(matrix_pol->values[i*nb_col + j] , 0);
+            init_pol(&MATRIX_P(matrix_pol,i,j) , 0);
         }
     }
-    matrix_pol->nb_line = nb_line;
-    matrix_pol->nb_col = nb_col;
 }
 
 /* ********************************************************************************************************************** */
 
 /**
- * Call the above function and set the coefficients of all the polynomials to 0
- * @param matrix_pol
- * @param nb_line
- * @param nb_col
- */
-void init_matrix_zero_pol(matrix_pol *matrix_pol , unsigned int nb_line , unsigned int nb_col) {
-    init_matrix_pol(matrix_pol , nb_line , nb_col);
-    for(int i=0 ; i<nb_line ; i++) {
-        for(int j=0 ; j<nb_col ; j++) {
-            set_all_coeffs_to_pol(matrix_pol->values[i*nb_col + j] , 0);
-        }
-    }
-}
-
-/* ********************************************************************************************************************** */
-
+ * Replace one polynomial of the matrix with a new polynomial.
+ * The memory allocated for the coefficients of the erased polynomial is freed.
+*/
 void setCoeff_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned int col , pol newvalue) {
     if(line < 0 || line >= matrix_pol->nb_line || col < 0 || col >= matrix_pol->nb_col) {
         perror("Matrix index not correct");
         return;
     }
-    free(MATRIX_P(matrix_pol,line,col).coeffs);
-    MATRIX_P(matrix_pol,line,col) = newvalue;
+    copy_pol(&MATRIX_P(matrix_pol,line,col) , newvalue);
 }
 
 /* ********************************************************************************************************************** */
 
-void setCoeff_matrix_pol_array(matrix_pol *matrix_pol , pol *coeffs , unsigned int sizeArray) {
-    if(matrix_pol->nb_line*matrix_pol->nb_col != sizeArray) {
-        perror("SetCoeffArray : Error array size not correct");
-        exit(EXIT_FAILURE);
+void set_allCoeff_matrix_pol(matrix_pol *matrix_pol , pol newvalue) {
+     for(int i=0 ; i<matrix_pol->nb_line ; i++) {
+        for(int j=0 ; j<matrix_pol->nb_col ; j++) {
+            setCoeff_matrix_pol(matrix_pol , i , j , newvalue);
+        }
+     }
+}
+
+/* ********************************************************************************************************************** */
+
+/**
+ * Free the memory for the coefficients of each element of the matrix.
+ * Then free the memory of each polynomial stucuture of the structure.
+ */
+void destroy_matrix_pol(matrix_pol matrix_pol) {
+     for(int i=0 ; i<matrix_pol.nb_line ; i++) {
+        for(int j=0 ; j<matrix_pol.nb_col ; j++) {
+            destroy_pol(MATRIX(matrix_pol,i,j));
+        }
+     }
+     free(matrix_pol.values);
+}
+
+/* ********************************************************************************************************************** */
+
+void print_matrix_pol(matrix_pol matrix_pol , char *name) {
+    int max_degree_col[matrix_pol.nb_col];
+    memset(max_degree_col , 0 , matrix_pol.nb_col * sizeof(int));
+
+    for(int j=0 ; j<matrix_pol.nb_col ; j++) {
+        for(int i=0 ; i<matrix_pol.nb_line ; i++) {
+            if(MATRIX(matrix_pol,i,j).degree > max_degree_col[j]) {
+                max_degree_col[j] = MATRIX(matrix_pol,i,j).degree;
+            }
+        }
     }
 
-    for(unsigned int i=0 ; i<sizeArray ; i++)
-        matrix_pol->values[i] = coeffs[i];
+    printf("%s :\n",name);
+    for(int i=0 ; i<matrix_pol.nb_line ; i++) {
+        for(int j=0 ; j<matrix_pol.nb_col ; j++) {
+            if(j == 0) printf("| ");
+            print_pol_center(MATRIX(matrix_pol,i,j) , NULL , max_degree_col[j]);
+            if(j == matrix_pol.nb_col - 1) printf(" |\n");
+            else printf("     ");
+        }
+    }
+
+    printf("\n");
 }
-
-/* ********************************************************************************************************************** */
-
-void setAllCoeff_matrix_pol(matrix_pol *matrix_pol , long value);
-
-/* ********************************************************************************************************************** */
-
-void destroy_matrix_pol(matrix_pol matrix_pol);
-
-/* ********************************************************************************************************************** */
-
-void print_matrix_pol(matrix_pol matrix_pol , char *name);
 
 /* ********************************************************************************************************************** */
 

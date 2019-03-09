@@ -1,9 +1,5 @@
-//
-// Created by micky on 27/02/19.
-//
-
-#ifndef ARITHMETIC_TEST_H
-#define ARITHMETIC_TEST_H
+#ifndef TEST_ALL_H
+#define TEST_ALL_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -23,13 +19,7 @@
 #include "Lagrange.h"
 #include "Complex.h"
 #include "FFT.h"
-#include "pol.h"
-#include "matrix_pol.h"
 
-void test_pol();
-void test_halfGCD();
-void test_horner();
-void test_matrix_pol();
+void test_all();
 
-
-#endif //ARITHMETIC_TEST_H
+#endif

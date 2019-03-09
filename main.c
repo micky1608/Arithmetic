@@ -7,6 +7,7 @@
 
 int main () {
     srand(time(NULL));
-    test_pol();
-    test_horner();
+    //test_pol();
+    //test_horner();
+    test_matrix_pol();
 }

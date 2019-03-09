@@ -139,9 +139,10 @@ void copy_pol(pol *res, pol polynomial) {
 /* ********************************************************************************************************************** */
 
 void print_pol(pol polynomial, char *name) {
-    printf("%s : ",name);
-    if(is_zero_pol(&polynomial)) {
-        printf("0\n");
+    if(name != NULL) printf("%s : ",name);
+    if(is_zero_pol(polynomial)) {
+        printf("0");
+        if(name != NULL) printf("\n");
         return;
     }
 
@@ -163,7 +164,30 @@ void print_pol(pol polynomial, char *name) {
         printf(" * X^%d)" , i);
 
     }
-    printf("\n");
+    
+    if(name != NULL) printf("\n");
+}
+
+/* ********************************************************************************************************************** */
+
+void print_pol_center(pol polynomial , char *name , unsigned int size) {
+    if(polynomial.degree >= size) {
+        print_pol(polynomial , name);
+        return;
+    }
+
+    int blank = size - polynomial.degree , i=0;
+    while(i<ceil((double)blank/2)) {
+        if(!i) printf("   ");
+        else printf("         ");
+        i++;
+    }
+    print_pol(polynomial , name);
+    while(i<=ceil((double)blank/2)) {
+        printf("         ");
+        i++;
+    }
+
 }
 
 /* ********************************************************************************************************************** */
@@ -251,9 +275,9 @@ void mult_pol(pol *res, pol A, pol B) {
 
 /* ********************************************************************************************************************** */
 
-int is_zero_pol(pol *polynomial) {
-    for(unsigned int i=0 ; i<=polynomial->degree ; i++)
-        if (polynomial->coeffs[i]) return 0;
+int is_zero_pol(pol polynomial) {
+    for(unsigned int i=0 ; i<=polynomial.degree ; i++)
+        if (polynomial.coeffs[i]) return 0;
     return 1;
 }
 
@@ -266,7 +290,7 @@ void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
         return;
     }
 
-    if(is_zero_pol(&B)) {
+    if(is_zero_pol(B)) {
         perror("Euclidean division : B can't be 0 !!");
         return;
     }
