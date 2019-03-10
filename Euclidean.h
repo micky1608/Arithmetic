@@ -12,10 +12,11 @@
 #include "pol_bignumber.h"
 #include "pol.h"
 #include "matrix.h"
+#include "matrix_pol.h"
 
 void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A , pol_bigint B);
 
-void halfGCD(matrix *Mgcd , pol A , pol B);
+void halfGCD(matrix_pol *Mgcd , pol A , pol B);
 
 
 

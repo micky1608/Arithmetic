@@ -43,6 +43,15 @@ void setCoeff_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned i
 
 /* ********************************************************************************************************************** */
 
+void set_coeff_constant_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned int col , long value) {
+    pol p;
+    init_pol(&p , 0);
+    set_coeff_pol(p , 0 , value);
+    copy_pol(&MATRIX_P(matrix_pol,line,col) , p);
+}
+
+/* ********************************************************************************************************************** */
+
 void set_allCoeff_matrix_pol(matrix_pol *matrix_pol , pol newvalue) {
      for(int i=0 ; i<matrix_pol->nb_line ; i++) {
         for(int j=0 ; j<matrix_pol->nb_col ; j++) {
@@ -208,7 +217,7 @@ void add_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
         return;
     }
 
-    change_dim_matrix(res , A.nb_line , A.nb_col);
+    change_dim_matrix_pol(res , A.nb_line , A.nb_col);
 
     for(unsigned int i=0 ; i<res->nb_line ; i++) {
         for(unsigned int j=0 ; j<res->nb_col ; j++)
@@ -248,7 +257,7 @@ void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
 /* ********************************************************************************************************************** */
 
 void copy_matrix_pol(matrix_pol *DEST , matrix_pol SRC) {
-    change_dim_matrix(DEST , SRC.nb_line , SRC.nb_col);
+    change_dim_matrix_pol(DEST , SRC.nb_line , SRC.nb_col);
 
     for(int i=0 ; i<SRC.nb_line ; i++) {
         for (int j = 0; j < SRC.nb_col; j++) {

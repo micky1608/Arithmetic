@@ -278,6 +278,15 @@ void mult_pol(pol *res, pol A, pol B) {
 
 /* ********************************************************************************************************************** */
 
+void scalar_mult_pol(pol *res , pol A , long lambda) {
+    change_degre_pol(res , A.degree);
+    for(unsigned int i=0 ; i<res->degree ; i++)
+        set_coeff_pol(*res , i , lambda*A.coeffs[i]);
+}
+
+/* ********************************************************************************************************************** */
+
+
 int is_zero_pol(pol polynomial) {
     for(unsigned int i=0 ; i<=polynomial.degree ; i++)
         if (polynomial.coeffs[i]) return 0;
@@ -288,15 +297,19 @@ int is_zero_pol(pol polynomial) {
 
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
-    if(A.degree <= B.degree) {
+ /*  if(A.degree <= B.degree) {
         perror("Euclidean division : A.degree <= B.degree !!");
         return;
     }
-
+*/
     if(is_zero_pol(B)) {
         perror("Euclidean division : B can't be 0 !!");
         return;
     }
+
+    printf("Euclide div : degA = %d , degB = %d\n",A.degree,B.degree);
+    print_pol(A , "A");
+    print_pol(B , "B");
 
     long a,b,t;
 

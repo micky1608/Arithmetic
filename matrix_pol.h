@@ -24,6 +24,8 @@ void setCoeff_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned i
 
 void set_allCoeff_matrix_pol(matrix_pol *matrix_pol , pol newvalue);
 
+void set_coeff_constant_matrix_pol(matrix_pol *matrix_pol , unsigned int line , unsigned int col , long value);
+
 void destroy_matrix_pol(matrix_pol matrix_pol);
 
 void print_matrix_pol(matrix_pol matrix_pol , char *name);

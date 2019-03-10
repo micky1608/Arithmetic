@@ -42,6 +42,8 @@ void sub_pol(pol *res, pol A, pol B);
 
 void mult_pol(pol *res, pol A, pol B);
 
+void scalar_mult_pol(pol *res , pol A , long lambda);
+
 int is_zero_pol(pol polynomial);
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B);
