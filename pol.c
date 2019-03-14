@@ -139,7 +139,7 @@ void copy_pol(pol *res, pol polynomial) {
 /* ********************************************************************************************************************** */
 
 void print_pol(pol polynomial, char *name) {
-    if(name != NULL) printf("%s : ",name);
+    if(name != NULL) printf("%s (degree %d): ",name,polynomial.degree);
     if(is_zero_pol(polynomial)) {
         printf("0");
         if(name != NULL) printf("\n");
@@ -255,6 +255,11 @@ void sub_pol(pol *res, pol A, pol B) {
  * @param B
  */
 void mult_pol(pol *res, pol A, pol B) {
+    if(is_zero_pol(A) || is_zero_pol(B)) {
+        change_degre_pol(res , 0);
+        set_coeff_pol(*res , 0 , 0);
+        return;
+    }
     change_degre_pol(res, A.degree + B.degree);
     long temp;
 
@@ -297,61 +302,75 @@ int is_zero_pol(pol polynomial) {
 
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
- /*  if(A.degree <= B.degree) {
-        perror("Euclidean division : A.degree <= B.degree !!");
+
+    printf("*********** EUCLIDE ***********\n");
+    print_pol(A , "A");
+    print_pol(B , "B");
+
+   if(A.degree < B.degree) {
+        perror("Euclidean division : A.degree < B.degree !!");
         return;
     }
-*/
+
     if(is_zero_pol(B)) {
         perror("Euclidean division : B can't be 0 !!");
         return;
     }
 
-    printf("Euclide div : degA = %d , degB = %d\n",A.degree,B.degree);
-    print_pol(A , "A");
-    print_pol(B , "B");
+    double *coeffsA = (double*) malloc(sizeof(double) * (A.degree+1));
+    double *coeffsB = (double*) malloc(sizeof(double) * (B.degree+1));
+    double *coeffsQ = (double*) malloc(sizeof(double) * (A.degree - B.degree +1));
+    double *coeffsR = (double*) malloc(sizeof(double) * (A.degree+1));
+    double *coeffsT = (double*) malloc(sizeof(double) * (A.degree+1));
 
-    long a,b,t;
+    int sizeB = B.degree, 
+        sizeR = A.degree, 
+        sizeQ = A.degree - B.degree;
 
-    b = B.coeffs[B.degree];
+    for(int i=0 ; i<=A.degree ; i++) {
+        coeffsA[i] = (double)A.coeffs[i];
+        coeffsR[i] = (double)A.coeffs[i];
+        coeffsT[i] = 0;
+        if(i <= sizeB) coeffsB[i] = (double)B.coeffs[i];
+        if(i <= sizeQ) coeffsQ[i] = 0;
+    }
 
-    pol temp , temp2;
+    double a,b,t;
 
-    init_pol(&temp, A.degree - B.degree);
-    init_pol(&temp2, A.degree);
+    b = coeffsB[sizeB];
 
-    change_degre_pol(Q, A.degree - B.degree);
-    copy_pol(R, A);
-    set_all_coeffs_to_pol(*Q, 0);
-
-
-    while(R->degree >= B.degree) {
-
-        a = R->coeffs[R->degree];
+    while(sizeR >= sizeB) {
+        a = coeffsR[sizeR];
         t = a/b;
 
-        set_all_coeffs_to_pol(temp, 0);
-        if(temp.degree != R->degree-B.degree) change_degre_pol(&temp, R->degree - B.degree);
-        set_coeff_pol(temp, R->degree - B.degree, t);
+        coeffsQ[sizeR - sizeB] += t;
 
-        add_pol(Q, *Q, temp);
+        for(int i=0 ; i<=sizeR ; i++) {
+            if(i < (sizeR-sizeB)) coeffsT[i] = 0;
+            else coeffsT[i] = t*coeffsB[i - (sizeR - sizeB)];
+        }
 
-        set_coeff_pol(temp, R->degree - B.degree, -t);
-
-        if(temp2.degree != R->degree) change_degre_pol(&temp2 , R->degree);
-
-        mult_pol(&temp2, temp, B);
-
-        add_pol(R, *R, temp2);
-
-        // update the degree of R
-        unsigned int i;
-
-        for(i=R->degree ; R->coeffs[i] == 0 && i>0; --i);
-
-        change_degre_pol(R , i);
+        for(int i=0 ; i<=sizeR ; i++) coeffsR[i] -= coeffsT[i];
+        for(;coeffsR[sizeR] == 0 && sizeR>0; --sizeR);
 
     }
+
+    for(;coeffsQ[sizeQ] == 0 && sizeQ>0; --sizeQ);
+
+    change_degre_pol(Q , sizeQ);
+    change_degre_pol(R , sizeR);
+    
+    for(int i=0 ; i<=MAX(sizeR,sizeQ) ; i++) {
+        if(i<=sizeR) R->coeffs[i] = (long)coeffsR[i];
+        if(i<=sizeQ) Q->coeffs[i] = (long)coeffsQ[i];
+    }
+
+    free(coeffsA);
+    free(coeffsB);
+    free(coeffsT);
+    free(coeffsR);
+    free(coeffsQ);
+    printf("*********** END EUCLIDE ***********\n");
 }
 
 /* ********************************************************************************************************************** */

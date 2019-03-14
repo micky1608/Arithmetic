@@ -7,11 +7,12 @@
 /* ********************************************************************************************************************** */
 
 void test_pol() {
-    pol A,B,Q,R;
+    pol A,B,Q,R,F;
     init_pol(&A , 3);
     init_pol(&B , 1);
     init_pol(&Q , 1);
     init_pol(&R , 1);
+    init_pol(&F , 0);
 
     long coeffA[] = {-4,0,-2,1};
     long coeffB[] = {-3,1};
@@ -26,10 +27,21 @@ void test_pol() {
     print_pol(Q , "Q");
     print_pol(R , "R");
 
-    euclide_div_pol(&Q , &R , A , B);
+    copy_pol(&F , A);
+    print_pol(F , "F (copy A)");
+    
+    mult_pol(&F , A , B);
+    print_pol(F , "F (A*B)");
+
+    add_pol(&F , Q , B);
+    print_pol(F , "F (Q+B)");
+
 
     destroy_pol(A);
     destroy_pol(B);
+    destroy_pol(Q);
+    destroy_pol(R);
+    destroy_pol(F);
 
 }
 

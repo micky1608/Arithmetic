@@ -236,12 +236,11 @@ void mul_matrix_pol(matrix_pol *res , matrix_pol A , matrix_pol B) {
     init_matrix_pol(res , A.nb_line , B.nb_col);
 
     pol temp_product , temp_add;
-    init_pol(&temp_product , A.values[0].coeffs[0] + B.values[0].coeffs[0]);
+    init_pol(&temp_product , A.values[0].degree + B.values[0].degree);
     init_pol(&temp_add , 0);
 
     for(int i=0 ; i<res->nb_line ; i++) {
         for(int j=0 ; j<res->nb_col ; j++) {
-
             for(int k=0 ; k<A.nb_line ; k++) {
                 mult_pol(&temp_product , MATRIX(A,i,k) , MATRIX(B,k,j));
                 add_pol(&temp_add , temp_product , MATRIX_P(res,i,j));
