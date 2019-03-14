@@ -7,41 +7,41 @@
 /* ********************************************************************************************************************** */
 
 void test_pol() {
-    pol A,B,Q,R,F;
-    init_pol(&A , 3);
-    init_pol(&B , 1);
-    init_pol(&Q , 1);
-    init_pol(&R , 1);
-    init_pol(&F , 0);
+    pol_double A,B,Q,R,F;
+    init_pol_double(&A , 3);
+    init_pol_double(&B , 1);
+    init_pol_double(&Q , 1);
+    init_pol_double(&R , 1);
+    init_pol_double(&F , 0);
 
-    long coeffA[] = {-4,0,-2,1};
-    long coeffB[] = {-3,1};
+    double coeffA[] = {-4,0,-2,1};
+    double coeffB[] = {-3,1};
 
-    set_all_coeffs_pol(A , coeffA , 4);
-    set_all_coeffs_pol(B , coeffB , 2);
+    set_all_coeffs_pol_double(A , coeffA , 4);
+    set_all_coeffs_pol_double(B , coeffB , 2);
 
-    euclide_div_pol(&Q , &R , A , B);
+    euclide_div_pol_double(&Q , &R , A , B);
 
-    print_pol(A , "A");
-    print_pol(B , "B");
-    print_pol(Q , "Q");
-    print_pol(R , "R");
+    print_pol_double(A , "A");
+    print_pol_double(B , "B");
+    print_pol_double(Q , "Q");
+    print_pol_double(R , "R");
 
-    copy_pol(&F , A);
-    print_pol(F , "F (copy A)");
+    copy_pol_double(&F , A);
+    print_pol_double(F , "F (copy A)");
     
-    mult_pol(&F , A , B);
-    print_pol(F , "F (A*B)");
+    mult_pol_double(&F , A , B);
+    print_pol_double(F , "F (A*B)");
 
-    add_pol(&F , Q , B);
-    print_pol(F , "F (Q+B)");
+    add_pol_double(&F , Q , B);
+    print_pol_double(F , "F (Q+B)");
 
 
-    destroy_pol(A);
-    destroy_pol(B);
-    destroy_pol(Q);
-    destroy_pol(R);
-    destroy_pol(F);
+    destroy_pol_double(A);
+    destroy_pol_double(B);
+    destroy_pol_double(Q);
+    destroy_pol_double(R);
+    destroy_pol_double(F);
 
 }
 

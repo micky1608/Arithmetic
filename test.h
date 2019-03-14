@@ -25,6 +25,7 @@
 #include "FFT.h"
 #include "pol.h"
 #include "matrix_pol.h"
+#include "pol_double.h"
 
 void test_pol();
 void test_halfGCD();

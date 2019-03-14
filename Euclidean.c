@@ -137,13 +137,15 @@ void halfGCD(matrix_pol *Mgcd , pol A , pol B) {
 
     euclide_div_pol(&Q , &r , ABprime.values[0] , ABprime.values[1]);
 
+    print_pol(Q , "Q");
+
     scalar_mult_pol(&Qneg , Q , -1);
     set_coeff_constant_matrix_pol(&M_ABprime , 0 , 1 , 1);
     set_coeff_constant_matrix_pol(&M_ABprime , 1 , 0 , 1);
     setCoeff_matrix_pol(&M_ABprime , 1 , 1 , Qneg);
 
     mul_matrix_pol(&BCprime , M_ABprime , ABprime);
-
+    print_matrix_pol(M_ABprime , "M_AB'");
     print_matrix_pol(BCprime , "BC'");
 
     int l = 2*m - ABprime.values[1].degree;
@@ -153,9 +155,11 @@ void halfGCD(matrix_pol *Mgcd , pol A , pol B) {
     init_pol(&b , m);
     init_pol(&c , m);
 
-
     euclide_div_pol(&b , &r , BCprime.values[0] , x_pow_l);
     euclide_div_pol(&c , &r , BCprime.values[1] , x_pow_l);
+
+    print_pol(b , "b");
+    print_pol(c , "c");
 
     halfGCD(&Msecond , b , c); // recursive call
 
