@@ -137,8 +137,6 @@ void halfGCD(matrix_pol *Mgcd , pol A , pol B) {
 
     euclide_div_pol(&Q , &r , ABprime.values[0] , ABprime.values[1]);
 
-    printf("HEYYY\n");
-
     scalar_mult_pol(&Qneg , Q , -1);
     set_coeff_constant_matrix_pol(&M_ABprime , 0 , 1 , 1);
     set_coeff_constant_matrix_pol(&M_ABprime , 1 , 0 , 1);

@@ -303,10 +303,6 @@ int is_zero_pol(pol polynomial) {
 
 void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
 
-    printf("*********** EUCLIDE ***********\n");
-    print_pol(A , "A");
-    print_pol(B , "B");
-
    if(A.degree < B.degree) {
         perror("Euclidean division : A.degree < B.degree !!");
         return;
@@ -370,7 +366,6 @@ void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
     free(coeffsT);
     free(coeffsR);
     free(coeffsQ);
-    printf("*********** END EUCLIDE ***********\n");
 }
 
 /* ********************************************************************************************************************** */
