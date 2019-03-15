@@ -168,6 +168,7 @@ void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B) {
 
     halfGCD(&Msecond , b , c); // recursive call
 
+    
     print_matrix_pol_double(Msecond , "M''");
     print_matrix_pol_double(Mprime , "M'");
     print_matrix_pol_double(M , "M");
