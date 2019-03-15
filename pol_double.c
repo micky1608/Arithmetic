@@ -309,15 +309,24 @@ int is_zero_pol_double(pol_double polynomial) {
 
 
 void euclide_div_pol_double(pol_double *Q , pol_double *R , pol_double A , pol_double B) {
-
+/*
     printf("\n\n $$$ Euclidean division $$$\n");
     print_pol_double(A , "Dividend");
     print_pol_double(B , "Divisor");
-
+*/
    if(A.degree < B.degree) {
         change_degre_pol_double(Q , 0);
         set_coeff_pol_double(*Q , 0 , 0);
         copy_pol_double(R , A);
+        return;
+    }
+
+    if(A.degree==0 && B.degree==0) {
+        change_degre_pol_double(Q , 0);
+        change_degre_pol_double(R , 0);
+        long q = A.coeffs[0] / B.coeffs[0] , r = A.coeffs[0] - B.coeffs[0] *q;
+        set_coeff_pol_double(*Q , 0 , (double)q);
+        set_coeff_pol_double(*R , 0 , (double)r);
         return;
     }
 
@@ -348,9 +357,7 @@ void euclide_div_pol_double(pol_double *Q , pol_double *R , pol_double A , pol_d
 
     b = coeffsB[sizeB];
 
-    printf("sizeR : %d\tsizeB : %d\n",sizeR,sizeB);
     while(sizeR >= sizeB && sizeR) {
-        printf("in the loop !!!");
         a = coeffsR[sizeR];
         t = a/b;
 
@@ -365,11 +372,8 @@ void euclide_div_pol_double(pol_double *Q , pol_double *R , pol_double A , pol_d
         for(;coeffsR[sizeR] == 0 && sizeR>0; --sizeR);
 
     }
-    printf("sizeQ : %d\n",sizeQ);
-    for(int i=0 ; i<=sizeQ ; i++) printf("%.3f ",coeffsQ[i]);
-    printf("\n");
+  
     for(;coeffsQ[sizeQ] == 0 && sizeQ>0; --sizeQ);
-    printf("sizeQ : %d\n",sizeQ);
 
     change_degre_pol_double(Q , sizeQ);
     change_degre_pol_double(R , sizeR);
@@ -384,8 +388,6 @@ void euclide_div_pol_double(pol_double *Q , pol_double *R , pol_double A , pol_d
     free(coeffsT);
     free(coeffsR);
     free(coeffsQ);
-
-    printf("\n\n");
 }
 
 /* ********************************************************************************************************************** */

@@ -85,19 +85,17 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
 
 void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B) {
     static int count = 0;
-    printf("\t\t\t***** Half gcd call : %d *****\n",++count);
-
+//    printf("\t\t\t***** Half gcd call : %d *****\n",++count);
+/*
     print_pol_double(A , "Half gcd A");
     print_pol_double(B , "Half gcd B");
-/*
+
     if(B.degree >= A.degree) {
         perror("HalfGCD B degree must be smaller");
         exit(EXIT_FAILURE);
     }
 */
     int n = A.degree , m = (int)ceil((double)n/2);
-
-    printf("n : %d\tm : %d\n",n,m);
     
     if(n==0 || B.degree < m) {
         identity_matrix_pol_double(Mgcd , 2);
@@ -130,10 +128,10 @@ void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B) {
 
     euclide_div_pol_double(&f , &r , A , x_pow_m);
     euclide_div_pol_double(&g , &r , B , x_pow_m);
-
+/*
     print_pol_double(f , "f");
     print_pol_double(g , "g");
-
+*/
     halfGCD(&M , f , g); // recursive call
 
  //   print_matrix_pol_double(M , "M");   
@@ -220,6 +218,9 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
     static int count = 0;
     printf("\t***** Fast euclide call : %d *****\n",++count);
 
+    print_pol_double(A , "Fast euclide A");
+    print_pol_double(B , "Fast euclide B");
+
     pol_double Q , r;
     matrix_pol_double Mgcd , AB , R , M , R2 , MR, temp;
     
@@ -250,26 +251,25 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
     set_coeff_constant_matrix_pol_double(&M , 0 , 0 , 0);
     set_coeff_constant_matrix_pol_double(&M , 0 , 1 , 1);
     set_coeff_constant_matrix_pol_double(&M , 1 , 0 , 1);
-
-    print_matrix_pol_double(R , "R");
 /*
+    print_matrix_pol_double(R , "R");
+
     print_pol_double(R.values[0] , "R[0,0]");
     print_pol_double(R.values[1] , "R[1,0]");
-*/  
+*/ 
     euclide_div_pol_double(&Q , &r , R.values[0] , R.values[1]);
-    print_pol_double(Q , "Q");
+  //  print_pol_double(Q , "Q");
     scalar_mult_pol_double(&M.values[3] , Q , -1);
     
-    print_matrix_pol_double(M , "M");
+   // print_matrix_pol_double(M , "M");
     mul_matrix_pol_double(&R2 , M , R);
 
-    //if(is_zero_pol_double(R2.values[1])) {
-    if(R2.values[1].degree == 0) {
+   // print_matrix_pol_double(R2 , "R2");
+
+    if(is_zero_pol_double(R2.values[1])) {
         mul_matrix_pol_double(Mab , M , Mgcd);
         return;
     }
-
-    print_matrix_pol_double(R2 , "R2");
 
     fast_euclide(&MR , R2.values[0] , R2.values[1]); // recursive call
 
@@ -278,7 +278,6 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
     mul_matrix_pol_double(&temp , M , Mgcd);
     mul_matrix_pol_double(Mab , MR , temp);
 
-    
     destroy_pol_double(Q);
     destroy_pol_double(r);
 
