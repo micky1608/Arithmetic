@@ -83,105 +83,113 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
 
 /* ********************************************************************************************************************** */
 
-void halfGCD(matrix_pol *Mgcd , pol A , pol B) {
+void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B) {
+    static int count = 0;
+    printf("\t\t\t***** Half gcd call : %d *****\n",++count);
+/*
     if(B.degree >= A.degree) {
         perror("HalfGCD B degree must be smaller");
         exit(EXIT_FAILURE);
     }
-
+*/
     int n = A.degree , m = (int)ceil((double)n/2);
     
-    if(B.degree < m) {
-        identity_matrix_pol(Mgcd , 2);
+    if(n==0 || B.degree < m) {
+        identity_matrix_pol_double(Mgcd , 2);
         return;
     }
 
-    init_matrix_pol(Mgcd , 2 , 2);
+    init_matrix_pol_double(Mgcd , 2 , 2);
 
-    pol x_pow_m , f , g , r , Q , Qneg , x_pow_l , b , c;
-    matrix_pol M , AB , ABprime , Mprime , BCprime , M_ABprime , Msecond , temp;
+    pol_double x_pow_m , f , g , r , Q , Qneg , x_pow_l , b , c;
+    matrix_pol_double M , AB , ABprime , Mprime , BCprime , M_ABprime , Msecond , temp;
 
-    init_pol(&x_pow_m , (unsigned int)m);
-    set_coeff_pol(x_pow_m , (unsigned int)m , 1);
+    init_pol_double(&x_pow_m , (unsigned int)m);
+    set_coeff_pol_double(x_pow_m , (unsigned int)m , 1);
 
-    init_pol(&f , m);
-    init_pol(&g , m);
-    init_pol(&r , m);
-    init_pol(&Q , A.degree - B.degree);
-    init_pol(&Qneg , A.degree-B.degree);
+    init_pol_double(&f , m);
+    init_pol_double(&g , m);
+    init_pol_double(&r , m);
+    init_pol_double(&Q , A.degree - B.degree);
+    init_pol_double(&Qneg , A.degree-B.degree);
 
-    init_matrix_pol(&AB , 2 , 1);
-    init_matrix_pol(&ABprime , 2 , 1);
-    init_matrix_pol(&Mprime , 2 , 1);
-    init_matrix_pol(&BCprime , 2 , 1);
-    init_matrix_pol(&M_ABprime , 2 , 2);
-    init_matrix_pol(&temp , 2 , 2);
+    init_matrix_pol_double(&AB , 2 , 1);
+    init_matrix_pol_double(&ABprime , 2 , 1);
+    init_matrix_pol_double(&Mprime , 2 , 1);
+    init_matrix_pol_double(&BCprime , 2 , 1);
+    init_matrix_pol_double(&M_ABprime , 2 , 2);
+    init_matrix_pol_double(&temp , 2 , 2);
 
-    setCoeff_matrix_pol(&AB , 0 , 0 , A);
-    setCoeff_matrix_pol(&AB , 1 , 0 , B);
+    setCoeff_matrix_pol_double(&AB , 0 , 0 , A);
+    setCoeff_matrix_pol_double(&AB , 1 , 0 , B);
 
-    euclide_div_pol(&f , &r , A , x_pow_m);
-    euclide_div_pol(&g , &r , B , x_pow_m);
+    euclide_div_pol_double(&f , &r , A , x_pow_m);
+    euclide_div_pol_double(&g , &r , B , x_pow_m);
 
     halfGCD(&M , f , g); // recursive call
 
-    mul_matrix_pol(&ABprime , M , AB);
+    mul_matrix_pol_double(&ABprime , M , AB);
 
     if(ABprime.values[1].degree < m) {
-        copy_matrix_pol(Mgcd , M);
+        copy_matrix_pol_double(Mgcd , M);
         return;
     }
 
-    print_pol(ABprime.values[0] , "A'");
-    print_pol(ABprime.values[1] , "B'");
+    print_pol_double(ABprime.values[0] , "A'");
+    print_pol_double(ABprime.values[1] , "B'");
 
-    euclide_div_pol(&Q , &r , ABprime.values[0] , ABprime.values[1]);
+    euclide_div_pol_double(&Q , &r , ABprime.values[0] , ABprime.values[1]);
 
-    print_pol(Q , "Q");
+    print_pol_double(Q , "Q");
 
-    scalar_mult_pol(&Qneg , Q , -1);
-    set_coeff_constant_matrix_pol(&M_ABprime , 0 , 1 , 1);
-    set_coeff_constant_matrix_pol(&M_ABprime , 1 , 0 , 1);
-    setCoeff_matrix_pol(&M_ABprime , 1 , 1 , Qneg);
+    scalar_mult_pol_double(&Qneg , Q , -1);
+    set_coeff_constant_matrix_pol_double(&M_ABprime , 0 , 1 , 1);
+    set_coeff_constant_matrix_pol_double(&M_ABprime , 1 , 0 , 1);
+    setCoeff_matrix_pol_double(&M_ABprime , 1 , 1 , Qneg);
 
-    mul_matrix_pol(&BCprime , M_ABprime , ABprime);
-    print_matrix_pol(M_ABprime , "M_AB'");
-    print_matrix_pol(BCprime , "BC'");
+    mul_matrix_pol_double(&BCprime , M_ABprime , ABprime);
+    print_matrix_pol_double(M_ABprime , "M_AB'");
+    print_matrix_pol_double(BCprime , "BC'");
+
+    /* ----------------------------------------------------------------- */
 
     int l = 2*m - ABprime.values[1].degree;
-    init_pol(&x_pow_l , l);
-    set_coeff_pol(x_pow_l , l , 1);
+    init_pol_double(&x_pow_l , l);
+    set_coeff_pol_double(x_pow_l , l , 1);
 
-    init_pol(&b , m);
-    init_pol(&c , m);
+    init_pol_double(&b , m);
+    init_pol_double(&c , m);
 
-    euclide_div_pol(&b , &r , BCprime.values[0] , x_pow_l);
-    euclide_div_pol(&c , &r , BCprime.values[1] , x_pow_l);
+    euclide_div_pol_double(&b , &r , BCprime.values[0] , x_pow_l);
+    euclide_div_pol_double(&c , &r , BCprime.values[1] , x_pow_l);
 
-    print_pol(b , "b");
-    print_pol(c , "c");
+    print_pol_double(b , "b");
+    print_pol_double(c , "c");
 
     halfGCD(&Msecond , b , c); // recursive call
 
-    mul_matrix_pol(&temp , Mprime , M);
-    mul_matrix_pol(Mgcd , Msecond , temp);
+    print_matrix_pol_double(Msecond , "M''");
+    print_matrix_pol_double(Mprime , "M'");
+    print_matrix_pol_double(M , "M");
+    mul_matrix_pol_double(&temp , M_ABprime , M);
+    mul_matrix_pol_double(Mgcd , Msecond , temp);
 
-    destroy_pol(x_pow_m);
-    destroy_pol(f);
-    destroy_pol(g);
-    destroy_pol(r);
-    destroy_pol(Q);
-    destroy_pol(Qneg);
-    destroy_pol(x_pow_l);
-    destroy_pol(b);
-    destroy_pol(c);
+    destroy_pol_double(x_pow_m);
+    destroy_pol_double(f);
+    destroy_pol_double(g);
+    destroy_pol_double(r);
+    destroy_pol_double(Q);
+    destroy_pol_double(Qneg);
+    destroy_pol_double(x_pow_l);
+    destroy_pol_double(b);
+    destroy_pol_double(c);
 
-    destroy_matrix_pol(M);
-    destroy_matrix_pol(AB);
-    destroy_matrix_pol(ABprime);
-    destroy_matrix_pol(Mprime);
-    destroy_matrix_pol(BCprime);
-    destroy_matrix_pol(M_ABprime);
-    destroy_matrix_pol(Msecond);
-    destroy_matrix_pol(temp);
+    destroy_matrix_pol_double(M);
+    destroy_matrix_pol_double(AB);
+    destroy_matrix_pol_double(ABprime);
+    destroy_matrix_pol_double(Mprime);
+    destroy_matrix_pol_double(BCprime);
+    destroy_matrix_pol_double(M_ABprime);
+    destroy_matrix_pol_double(Msecond);
+    destroy_matrix_pol_double(temp);
 }

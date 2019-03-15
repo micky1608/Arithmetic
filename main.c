@@ -7,9 +7,9 @@
 
 int main () {
     srand(time(NULL));
-    test_pol();
+    //test_pol();
     //test_horner();
     //test_matrix_pol();
     
-    //test_halfGCD();
+    test_halfGCD();
 }

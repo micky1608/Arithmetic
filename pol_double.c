@@ -285,7 +285,7 @@ void mult_pol_double(pol_double *res, pol_double A, pol_double B) {
 
 void scalar_mult_pol_double(pol_double *res , pol_double A , double lambda) {
     change_degre_pol_double(res , A.degree);
-    for(unsigned int i=0 ; i<res->degree ; i++)
+    for(unsigned int i=0 ; i<=res->degree ; i++)
         set_coeff_pol_double(*res , i , lambda*A.coeffs[i]);
 }
 

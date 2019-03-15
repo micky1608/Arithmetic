@@ -8,16 +8,23 @@
 
 void test_pol() {
     pol_double A,B,Q,R,F;
-    init_pol_double(&A , 3);
+
+    //init_pol_double(&A , 3);
+    init_pol_double(&A , 2);
+
     init_pol_double(&B , 1);
     init_pol_double(&Q , 1);
     init_pol_double(&R , 1);
     init_pol_double(&F , 0);
 
-    double coeffA[] = {-4,0,-2,1};
-    double coeffB[] = {-3,1};
+    //double coeffA[] = {-4,0,-2,1};
+    //double coeffB[] = {-3,1};
 
-    set_all_coeffs_pol_double(A , coeffA , 4);
+    double coeffA[] = {2, -1 , 3};
+    double coeffB[] = {6 , 4};
+
+    //set_all_coeffs_pol_double(A , coeffA , 4);
+    set_all_coeffs_pol_double(A , coeffA , 3);
     set_all_coeffs_pol_double(B , coeffB , 2);
 
     euclide_div_pol_double(&Q , &R , A , B);
@@ -103,21 +110,21 @@ void test_matrix_pol() {
 /* ********************************************************************************************************************** */
 
 void test_halfGCD() {
-    matrix_pol Mgcd;
-    pol A,B;
+    matrix_pol_double Mgcd;
+    pol_double A,B;
     
-    init_pol(&A , 2);
-    init_pol(&B , 1);
+    init_pol_double(&A , 2);
+    init_pol_double(&B , 1);
 
-    long coeffsA[] = {2, -1 , 3};
-    long coeffsB[] = {6 , 4};
+    double coeffsA[] = {2, -1 , 3};
+    double coeffsB[] = {6 , 4};
 
-    set_all_coeffs_pol(A , coeffsA , 3);
-    set_all_coeffs_pol(B , coeffsB , 2);
+    set_all_coeffs_pol_double(A , coeffsA , 3);
+    set_all_coeffs_pol_double(B , coeffsB , 2);
     
     halfGCD(&Mgcd , A , B);
 
-    destroy_matrix_pol(Mgcd);
-    destroy_pol(A);
-    destroy_pol(B);
+    destroy_matrix_pol_double(Mgcd);
+    destroy_pol_double(A);
+    destroy_pol_double(B);
 }
