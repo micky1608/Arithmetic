@@ -217,6 +217,7 @@ void add_pol(pol *res, pol A, pol B) {
         else
             set_coeff_pol(*res, i, B.coeffs[i]);
     }
+    while(!res->coeffs[res->degree] && res->degree>0) res->degree--;
 }
 
 /* ********************************************************************************************************************** */
@@ -244,6 +245,7 @@ void sub_pol(pol *res, pol A, pol B) {
             *(res->coeffs+i) = -1 * B.coeffs[i];
     }
 
+    while(!res->coeffs[res->degree] && res->degree>0) res->degree--;
 }
 
 /* ********************************************************************************************************************** */
@@ -279,6 +281,8 @@ void mult_pol(pol *res, pol A, pol B) {
             index_B--;
         }
     }
+
+    while(!res->coeffs[res->degree] && res->degree>0) res->degree--;
 }
 
 /* ********************************************************************************************************************** */

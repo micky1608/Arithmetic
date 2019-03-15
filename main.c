@@ -11,5 +11,6 @@ int main () {
     //test_horner();
     //test_matrix_pol();
     
-    test_halfGCD();
+    //test_halfGCD();
+    test_fastEuclide();
 }

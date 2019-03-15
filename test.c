@@ -124,7 +124,60 @@ void test_halfGCD() {
     
     halfGCD(&Mgcd , A , B);
 
+    print_matrix_pol_double(Mgcd , "Mgcd");
+
     destroy_matrix_pol_double(Mgcd);
     destroy_pol_double(A);
     destroy_pol_double(B);
+}
+
+/* ********************************************************************************************************************** */
+
+void test_fastEuclide() {
+    pol_double A,B,Q,R;
+
+    matrix_pol_double Mab, AB, Rm;
+
+    //init_pol_double(&A , 3);
+    init_pol_double(&A , 2);
+
+    init_pol_double(&B , 1);
+    init_pol_double(&Q , 1);
+    init_pol_double(&R , 1);
+
+    init_matrix_pol_double(&AB , 2 , 1);
+    init_matrix_pol_double(&Rm , 2 , 1);
+
+    //double coeffA[] = {-4,0,-2,1};
+    //double coeffB[] = {-3,1};
+
+    double coeffA[] = {2, -1 , 3};
+    double coeffB[] = {6 , 4};
+
+    //set_all_coeffs_pol_double(A , coeffA , 4);
+    set_all_coeffs_pol_double(A , coeffA , 3);
+    set_all_coeffs_pol_double(B , coeffB , 2);
+
+    fast_euclide(&Mab , A , B);
+
+    print_pol_double(A , "A");
+    print_pol_double(B , "B");
+    
+    print_matrix_pol_double(Mab , "Mab");
+
+    setCoeff_matrix_pol_double(&AB , 0 , 0 , A);
+    setCoeff_matrix_pol_double(&AB , 1 , 0 , B);
+
+    mul_matrix_pol_double(&Rm , Mab , AB);
+
+    print_matrix_pol_double(Rm , "Rm");
+
+    destroy_pol_double(A);
+    destroy_pol_double(B);
+    destroy_pol_double(Q);
+    destroy_pol_double(R);
+
+    destroy_matrix_pol_double(Mab);
+    destroy_matrix_pol_double(Rm);
+    destroy_matrix_pol_double(AB);
 }

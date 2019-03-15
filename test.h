@@ -32,6 +32,7 @@ void test_pol();
 void test_halfGCD();
 void test_horner();
 void test_matrix_pol();
+void test_fastEuclide();
 
 
 #endif //ARITHMETIC_TEST_H

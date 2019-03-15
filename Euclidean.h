@@ -20,6 +20,8 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
 
 void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B);
 
+void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B);
+
 
 
 #endif //ARITHMETIC_EUCLIDEAN_H
