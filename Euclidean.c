@@ -85,11 +85,11 @@ void euclideDiv_pol_bignumber(pol_bigfloat *Q , pol_bigfloat *R , pol_bigint A ,
 
 void halfGCD(matrix_pol_double *Mgcd , pol_double A , pol_double B) {
     static int count = 0;
-//    printf("\t\t\t***** Half gcd call : %d *****\n",++count);
-/*
+   printf("\t\t\t***** Half gcd call : %d *****\n",++count);
+
     print_pol_double(A , "Half gcd A");
     print_pol_double(B , "Half gcd B");
-
+/*
     if(B.degree >= A.degree) {
         perror("HalfGCD B degree must be smaller");
         exit(EXIT_FAILURE);
@@ -237,7 +237,10 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
 
     mul_matrix_pol_double(&R , Mgcd , AB);
 
+    print_matrix_pol_double(R , "R");
+
     if(is_zero_pol_double(R.values[1])) { 
+    //if(R.values[1].degree == 0) {
         copy_matrix_pol_double(Mab , Mgcd);
         return;
     }
@@ -252,8 +255,6 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
     set_coeff_constant_matrix_pol_double(&M , 0 , 1 , 1);
     set_coeff_constant_matrix_pol_double(&M , 1 , 0 , 1);
 /*
-    print_matrix_pol_double(R , "R");
-
     print_pol_double(R.values[0] , "R[0,0]");
     print_pol_double(R.values[1] , "R[1,0]");
 */ 
@@ -261,12 +262,13 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
   //  print_pol_double(Q , "Q");
     scalar_mult_pol_double(&M.values[3] , Q , -1);
     
-   // print_matrix_pol_double(M , "M");
+   print_matrix_pol_double(M , "M");
     mul_matrix_pol_double(&R2 , M , R);
 
-   // print_matrix_pol_double(R2 , "R2");
+   print_matrix_pol_double(R2 , "R2");
 
     if(is_zero_pol_double(R2.values[1])) {
+    //if(R2.values[1].degree == 0) {
         mul_matrix_pol_double(Mab , M , Mgcd);
         return;
     }
@@ -276,6 +278,7 @@ void fast_euclide(matrix_pol_double *Mab , pol_double A , pol_double B) {
     init_matrix_pol_double(&temp , 2 , 2);
 
     mul_matrix_pol_double(&temp , M , Mgcd);
+
     mul_matrix_pol_double(Mab , MR , temp);
 
     destroy_pol_double(Q);
