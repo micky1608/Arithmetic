@@ -299,7 +299,7 @@ void scalar_mult_pol_double(pol_double *res , pol_double A , double lambda) {
 /* ********************************************************************************************************************** */
 
 
-int is_zero_pol_double(pol_double polynomial) {
+int is_zero_pol_double(pol_double polynomial) {    
     for(unsigned int i=0 ; i<=polynomial.degree ; i++)
         if (polynomial.coeffs[i]) return 0;
     return 1;

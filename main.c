@@ -12,5 +12,7 @@ int main () {
     //test_matrix_pol();
     
     //test_halfGCD();
-    test_fastEuclide();
+    //test_fastEuclide();
+
+    test_tree();
 }

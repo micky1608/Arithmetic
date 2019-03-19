@@ -181,3 +181,16 @@ void test_fastEuclide() {
     destroy_matrix_pol_double(Rm);
     destroy_matrix_pol_double(AB);
 }
+
+/* ********************************************************************************************************************** */
+
+void test_tree() {
+    int *myint = (int*)malloc(sizeof(int));
+    tree mytree;
+    init_tree(&mytree , myint);
+
+    print_tree(&mytree);
+    
+
+    destroy_tree(&mytree);
+}
