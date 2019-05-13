@@ -242,6 +242,45 @@ void inv_bigint_mod_P(mpz_t inv , mpz_t A , mpz_t P) {
     mpz_clears(U,V,(mpz_t *)NULL);
 }
 
+/* ********************************************************************************************************************** */
+
+
+void extended_euclidean(long *u , long *v , long *r , long a , long b) {
+    long  U[3] = {1,0,0}, // U0 = 1 , U1 = 0 , U2 = 0
+        V[3] = {0,1,0}, // V0 = 0 , V1 = 1 , V2 = 0
+        R[3] = {a,b,0}; // R0 = a , R1 = b , R2 = 0
+
+        // each loop computes U(i+1), V(i+1) and R(i+1)
+        while(R[1]) {
+
+            long q = R[0]/R[1];   // Quotient R(i-1) / R(i)            
+
+            R[2] = R[0]-R[1]*q;       // Remainder R(i-1) / R(i)
+            U[2] = U[0]-q*U[1]; // Cofactor of a
+            V[2] = V[0]-q*V[1]; // Cofactor of b
+
+            // shift arrays 
+            R[0] = R[1];
+            R[1] = R[2];
+            U[0] = U[1];
+            U[1] = U[2];
+            V[0] = V[1];
+            V[1] = V[2]; 
+        }
+
+        *r = R[0];
+        *u = U[0];
+        *v = V[0];
+}
+
+/* ********************************************************************************************************************** */
+
+long modular_inverse(long a , long N) {
+    long u,v,r;
+    extended_euclidean(&u,&v,&r,a,N);
+    return u + (u<0)*N;
+}
+
 
 
 

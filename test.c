@@ -6,6 +6,7 @@
 
 /* ********************************************************************************************************************** */
 
+
 void test_pol() {
     pol_double A,B,Q,R,F;
 
@@ -49,6 +50,69 @@ void test_pol() {
     destroy_pol_double(Q);
     destroy_pol_double(R);
     destroy_pol_double(F);
+
+    pol D, D_derivate;
+    init_pol(&D , 5);
+    long coeffsD[] = {1,2,3,4,5,6};
+    set_all_coeffs_pol(D , coeffsD , 6);
+
+    derivate_pol(&D_derivate , D);
+
+    print_pol(D , "D");
+    print_pol(D_derivate , "D'");
+
+    reduce_pol_ff(&D , 3);
+
+    print_pol(D , "D in F3[x]");
+
+    destroy_pol(D);
+    destroy_pol(D_derivate);
+
+    pol E,G,Q2,R2;
+    init_pol(&E , 3);
+    init_pol(&G , 2);
+
+    long coeffsE[] = {1,1,1,2};
+    long coeffsF[] = {1,0,2};
+
+    set_all_coeffs_pol(E , coeffsE , 4);
+    set_all_coeffs_pol(G , coeffsF , 3);
+
+
+    euclide_div_pol_ff(&Q2 , &R2 , E , G , 3);
+
+    print_pol(Q2 , "Q2");
+    print_pol(R2 , "R2");
+
+
+    destroy_pol(E);
+    destroy_pol(G);
+    destroy_pol(Q2);
+    destroy_pol(R2);
+
+
+    pol X,Y,gcd;
+    init_pol(&X , 2);
+    init_pol(&Y , 2);
+
+    long coeffsX[] = {0,1,2};
+    long coeffsY[] = {1,0,2};
+
+    set_all_coeffs_pol(X , coeffsX , 3);
+    set_all_coeffs_pol(Y , coeffsY , 3);
+
+    gcd_pol_ff(&gcd , X , Y , 3);
+
+    print_pol(X , "X in F3[x]");
+    print_pol(Y , "Y in F3[x]");
+    print_pol(gcd , "gcd(X,Y) in F3[x]");
+
+
+    destroy_pol(X);
+    destroy_pol(Y);
+    destroy_pol(gcd);
+
+
 
 }
 
@@ -184,13 +248,25 @@ void test_fastEuclide() {
 
 /* ********************************************************************************************************************** */
 
-void test_tree() {
-    int *myint = (int*)malloc(sizeof(int));
-    tree mytree;
-    init_tree(&mytree , myint);
 
-    print_tree(&mytree);
-    
 
-    destroy_tree(&mytree);
+void test_pol_fact() {
+    pol F;
+    init_pol(&F , 6);
+
+    long coeffsA[] = {0,1,0,1,1,0,1};
+
+    set_all_coeffs_pol(F , coeffsA , 7);
+
+    fact_list_info *L;
+
+    pol C;
+
+    fact_algo1(&L , &C , F , 2);
+
+    print_fact_list(L);
+    print_pol(C , "C");
+
+    clean_fact_list(L);
+    destroy_pol(C);
 }

@@ -315,7 +315,9 @@ void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
     if(is_zero_pol(B)) {
         perror("Euclidean division : B can't be 0 !!");
         return;
-    }
+    }   
+
+    /* use double precision floating numbers to avoid round numbers */
 
     double *coeffsA = (double*) malloc(sizeof(double) * (A.degree+1));
     double *coeffsB = (double*) malloc(sizeof(double) * (B.degree+1));
@@ -372,6 +374,7 @@ void euclide_div_pol(pol *Q , pol *R , pol A , pol B) {
     free(coeffsQ);
 }
 
+
 /* ********************************************************************************************************************** */
 
 
@@ -387,3 +390,146 @@ void horner_eval_multi(long *res , pol f , long *x , unsigned int nb_x) {
     for(unsigned int i=0 ; i<nb_x ; i++) horner_eval(res + i , f , *(x + i));
 }
 
+
+/* ********************************************************************************************************************** */
+
+void derivate_pol(pol *derivate , pol A) {
+    init_pol(derivate , A.degree-1);
+
+    for(int i = 0 ; i <= derivate->degree ; i++) {
+        derivate->coeffs[i] = A.coeffs[i+1] * (i+1);
+    }
+}
+
+
+/* ********************************************************************************************************************** */
+
+/*
+* Transform the polynomial with the smaller coefficents possible considering the field Z/pZ
+*/
+void reduce_pol_ff(pol *A , long P) {
+    for(int i = 0 ; i <= A->degree ; i++) {
+        A->coeffs[i] %= P;
+        A->coeffs[i] += P*(A->coeffs[i]<0);
+    }
+    for(;A->coeffs[A->degree] == 0 && A->degree > 0 ; --A->degree);
+}
+
+/* ********************************************************************************************************************** */
+
+void euclide_div_pol_ff(pol *Q , pol *R , pol A , pol B , long P) {
+
+     if(A.degree < B.degree) {
+        perror("Euclidean division : A.degree < B.degree !!");
+        return;
+    }
+
+    if(is_zero_pol(B)) {
+        perror("Euclidean division : B can't be 0 !!");
+        return;
+    }  
+
+    if(B.degree == 0) {
+        init_pol(Q , A.degree);
+        long alpha = modular_inverse(B.coeffs[0] , P);
+        for(int i = 0 ; i <= Q->degree ; i++) {
+            Q->coeffs[i] = A.coeffs[i]*alpha;
+        }
+        init_pol(R,0);
+        return;
+    }
+
+    reduce_pol_ff(&A,P);
+    reduce_pol_ff(&B,P);
+
+    init_pol(R , A.degree);
+    copy_pol(R,A);
+
+    init_pol(Q , A.degree-B.degree);
+    
+
+    pol temp, R_temp; // temp = -(a/b)*x^(degR-degB)*B ; temp_R = R - temp
+    init_pol(&temp,R->degree);
+    init_pol(&R_temp , R->degree);
+
+    long a,b,b_inv,t;
+    b = B.coeffs[B.degree];
+    b_inv = modular_inverse(b , P);    
+
+    while(R->degree >= B.degree) {
+        a = R->coeffs[R->degree];
+        t = (a * b_inv) % P;
+
+        Q->coeffs[R->degree-B.degree] += t; // head coefficient
+
+        change_degre_pol(&temp,R->degree);
+        for(int i = 0 ; i <=temp.degree ; i++) {
+            if(i<R->degree-B.degree) temp.coeffs[i] = 0;
+            else temp.coeffs[i] = -1 * t * B.coeffs[i-(R->degree-B.degree)];
+        }
+        add_pol(&R_temp,*R ,temp);
+
+        reduce_pol_ff(&R_temp , P);
+        
+        copy_pol(R , R_temp);
+
+        for(;R->coeffs[R->degree] == 0 && R->degree > 0 ; --R->degree);
+    }
+
+    for(;Q->coeffs[Q->degree] == 0 && Q->degree>0; --Q->degree);
+
+    reduce_pol_ff(Q,P);
+    reduce_pol_ff(R,P);  
+
+    destroy_pol(temp);
+    destroy_pol(R_temp);
+}
+
+/* ********************************************************************************************************************** */
+
+
+void gcd_pol_ff(pol *gcd , pol A , pol B, long P) {
+
+    // AA and BB are A and B such that degAA >= degBB
+    pol AA, BB;
+
+    if(A.degree < B.degree) {
+       init_pol(&AA , B.degree);
+       init_pol(&BB , A.degree);
+       copy_pol(&AA , B);
+       copy_pol(&BB , A);
+    }
+    else {
+        init_pol(&AA , A.degree);
+        init_pol(&BB , B.degree);
+        copy_pol(&AA , A);
+        copy_pol(&BB , B);
+    }
+
+    init_pol(gcd , MIN(AA.degree,BB.degree));
+
+    pol R[3];
+
+    init_pol(R , AA.degree);
+    init_pol(R+1 , BB.degree);
+    init_pol(R+2 , 0);
+
+    reduce_pol_ff(&AA,P);
+    reduce_pol_ff(&BB,P);
+
+    copy_pol(R , AA);
+    copy_pol(R+1 , BB);
+
+    pol Q;
+    init_pol(&Q , AA.degree-BB.degree);
+
+    while(!is_zero_pol(R[1])) {
+        euclide_div_pol_ff(&Q , R+2 , R[0] , R[1], P);
+        copy_pol(R, R[1]);
+        copy_pol(R+1 , R[2]);
+        
+    }
+
+    copy_pol(gcd , R[0]);
+
+}

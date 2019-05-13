@@ -33,6 +33,9 @@
     void inv64_mod_P(int *inv , int A , int P);
     void inv_bigint_mod_P(mpz_t inv , mpz_t A , mpz_t P);
 
+    void extended_euclidean(long *u , long *v , long *r , long a , long b);
+    long modular_inverse(long a , long N);
+
 
 
 #endif //MODEL_TME1_ARITHMETIC_H

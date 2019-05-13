@@ -28,13 +28,14 @@
 #include "matrix_pol_double.h"
 #include "pol_double.h"
 #include "tree.h"
+#include "pol_factorization.h"
 
 void test_pol();
 void test_halfGCD();
 void test_horner();
 void test_matrix_pol();
 void test_fastEuclide();
-void test_tree();
+void test_pol_fact();
 
 
 #endif //ARITHMETIC_TEST_H
