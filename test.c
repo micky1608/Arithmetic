@@ -252,15 +252,15 @@ void test_fastEuclide() {
 
 void test_pol_fact() {
     pol F;
-    init_pol(&F , 6);
+    init_pol(&F , 10);
 
-    long coeffsA[] = {0,1,0,1,1,0,1};
+    long coeffsA[] = {2,0,1,0,1,2,0,2,1,2,1};
 
-    set_all_coeffs_pol(F , coeffsA , 7);
+    set_all_coeffs_pol(F , coeffsA , 11);
 
     fact_list_info *L;
 
-    fact_algo2(&L , F , 2);
+    fact_algo2(&L , F , 3);
 
     print_fact_list(L);
 

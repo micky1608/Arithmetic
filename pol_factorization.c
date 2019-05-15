@@ -117,6 +117,7 @@ void fact_algo2(fact_list_info **L , pol F , long P) {
     while(element != NULL) {
         element->triplet.q *= P;
         add_triplet_fact_list_end(L , element->triplet);
+        element = element->next;
     }
 
     destroy_pol(C);
