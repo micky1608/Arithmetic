@@ -10,6 +10,8 @@ void init_fact_list(fact_list_info **info) {
     (*info)->first = (*info)->last = NULL;
 }
 
+/* ********************************************************************************************************************** */
+
 void clean_fact_list(fact_list_info *info) {
     if(info->size == 0) return;
     fact_list_element *toRemove, *toRemoveNext;
@@ -25,6 +27,8 @@ void clean_fact_list(fact_list_info *info) {
     free(info);
 }
 
+/* ********************************************************************************************************************** */
+
 void add_triplet_fact_list_end(fact_list_info **info , triplet t) {
     fact_list_element *new_element = (fact_list_element *)malloc(sizeof(fact_list_element));
     new_element->triplet = t;
@@ -39,17 +43,20 @@ void add_triplet_fact_list_end(fact_list_info **info , triplet t) {
     ((*info)->size)++;
 }
 
+/* ********************************************************************************************************************** */
+
 void print_fact_list(fact_list_info *info) {
     if(info->size == 0) return;
 
     fact_list_element *iterator = info->first;
     while(iterator != NULL) {
-        printf("Triplet : q : %ld\tm : %ld\n",iterator->triplet.q,iterator->triplet.m);
+        printf("Triplet : q = %ld\tm = %ld\t",iterator->triplet.q,iterator->triplet.m);
         print_pol(iterator->triplet.G , "G");
         iterator = iterator->next;
     }
 }
 
+/* ********************************************************************************************************************** */
 
 void fact_algo1(fact_list_info **L , pol *C , pol F , long P) {
     
@@ -71,20 +78,48 @@ void fact_algo1(fact_list_info **L , pol *C , pol F , long P) {
         gcd_pol_ff(&PPol , *C , G, P);
         euclide_div_pol_ff(&trash2 , &trash , *C , PPol , P);
         copy_pol(C , trash2);
-        //print_pol(PPol , "P");
-        //print_pol(*C , "C");
+    
         if(G.degree > PPol.degree) {
             triplet t;
 
             euclide_div_pol_ff(&t.G , &trash , G , PPol , P);
             t.q = 1;
             t.m = i;
-            //print_pol(t.G , "G in list");
+
             add_triplet_fact_list_end(L , t);
         }
 
         copy_pol(&G , PPol);
-        //print_pol(G , "G");
         i++;
     }
+}
+
+/* ********************************************************************************************************************** */
+
+void fact_algo2(fact_list_info **L , pol F , long P) {
+    
+    pol C, F2;
+
+    fact_algo1(L , &C , F , P);
+
+    if(C.degree == 0 && C.coeffs[0] == 1) return;
+
+    init_pol(&F2 , C.degree/P);
+    for(int i = 0 ; i <= F2.degree ; i++) {
+        F2.coeffs[i] = C.coeffs[i*P];
+    }
+
+    fact_list_info *l;
+    fact_algo2(&l , F2 , P);
+
+    fact_list_element *element = l->first;
+
+    while(element != NULL) {
+        element->triplet.q *= P;
+        add_triplet_fact_list_end(L , element->triplet);
+    }
+
+    destroy_pol(C);
+    destroy_pol(F2);
+
 }

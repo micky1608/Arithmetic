@@ -394,6 +394,11 @@ void horner_eval_multi(long *res , pol f , long *x , unsigned int nb_x) {
 /* ********************************************************************************************************************** */
 
 void derivate_pol(pol *derivate , pol A) {
+    if(A.degree == 0) {
+        init_pol(derivate , 0);
+        return;
+    }
+    
     init_pol(derivate , A.degree-1);
 
     for(int i = 0 ; i <= derivate->degree ; i++) {

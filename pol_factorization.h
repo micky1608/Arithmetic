@@ -38,4 +38,7 @@ void clean_fact_list(fact_list_info *info);
 
 void fact_algo1(fact_list_info **L , pol *C , pol F , long P);
 
+void fact_algo2(fact_list_info **L , pol F , long P);
+
+
 #endif

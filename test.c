@@ -260,13 +260,9 @@ void test_pol_fact() {
 
     fact_list_info *L;
 
-    pol C;
-
-    fact_algo1(&L , &C , F , 2);
+    fact_algo2(&L , F , 2);
 
     print_fact_list(L);
-    print_pol(C , "C");
 
     clean_fact_list(L);
-    destroy_pol(C);
 }
