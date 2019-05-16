@@ -29,6 +29,7 @@
 #include "pol_double.h"
 #include "tree.h"
 #include "pol_factorization.h"
+#include "serie.h"
 
 void test_pol();
 void test_halfGCD();
@@ -36,6 +37,7 @@ void test_horner();
 void test_matrix_pol();
 void test_fastEuclide();
 void test_pol_fact();
+void test_serie();
 
 
 #endif //ARITHMETIC_TEST_H

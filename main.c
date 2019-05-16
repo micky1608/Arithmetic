@@ -7,5 +7,5 @@
 
 int main () {
     srand(time(NULL));
-    test_pol_fact();    
+    test_serie();   
 }

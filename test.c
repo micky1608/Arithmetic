@@ -266,3 +266,18 @@ void test_pol_fact() {
 
     clean_fact_list(L);
 }
+
+
+void test_serie() {
+    serie s;
+    init_serie(&s , 6);
+    s_coeff_t coeffs[] = {0,0,3,4,5,6};
+
+    set_all_coeffs_serie(&s , coeffs , 6);
+    
+    print_serie(s , "S");
+
+    destroy_serie(s);
+
+
+}
