@@ -279,5 +279,50 @@ void test_serie() {
 
     destroy_serie(s);
 
+    serie a,b,c;
+    init_serie(&a , 3);
+    init_serie(&b , 3);
+    init_serie(&c , 3);
+
+    s_coeff_t coeffsA[] = {1,1,1} , coeffsB[] = {1,0,1};
+
+    set_all_coeffs_serie(&a , coeffsA , 3);
+    set_all_coeffs_serie(&b , coeffsB , 3);
+    
+    add_serie(&c , a , b);
+
+    print_serie(a , "A");
+    print_serie(b , "B");
+    print_serie(c , "C=A+B");
+
+    mul_serie(&c , a , b);
+
+    print_serie(c , "C=A*B");
+
+    reduce_serie_ff(c , 2);
+
+    print_serie(c , "C in F2");
+
+    printf("\n");
+    
+
+    serie r, r_inv;
+    init_serie(&r , 8);
+    init_serie(&r_inv , 8);
+    s_coeff_t coeffsR[] = {2,0,1,2,0,1,2,0};
+    set_all_coeffs_serie(&r , coeffsR , 8);
+
+    print_serie(r , "R in F3");
+    
+    inv_serie_ff(&r_inv , &r , 8 , 3);
+
+    
+    print_serie(r_inv , "R inv in F3");
+
+    destroy_serie(a);
+    destroy_serie(b);
+    destroy_serie(c);
+    destroy_serie(r);
+    destroy_serie(r_inv);
 
 }

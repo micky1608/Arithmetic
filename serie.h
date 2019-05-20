@@ -8,7 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "arithmetic"
+#include <math.h>
+#include "arithmetic.h"
+
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+
 
 /*
     1 : long
@@ -44,6 +49,14 @@ void destroy_serie(serie s);
 void change_precision_serie(serie *s, unsigned int new_precision);
 
 void print_serie(serie s , char *name);
+
+void reduce_serie_ff(serie s , long p);
+
+void add_serie(serie *s , serie a , serie b);
+void add_serie_ff(serie *s , serie a , serie b , long p);
+
+void mul_serie(serie *s , serie a , serie b);
+void mul_serie_ff(serie *s , serie a , serie b , long p);
 
 void inv_serie_ff(serie *inv , serie *s , unsigned int precision , long p);
 
