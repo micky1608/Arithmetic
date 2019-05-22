@@ -538,3 +538,13 @@ void gcd_pol_ff(pol *gcd , pol A , pol B, long P) {
     copy_pol(gcd , R[0]);
 
 }
+
+/* ********************************************************************************************************************** */
+
+void resultant_pol_ff(long *resultant , pol A , pol B, long p) {
+    matrix syl;
+
+    sylvester_matrix(&syl , &A , &B);
+
+    determinant_matrix_ff(resultant , syl , p);
+}

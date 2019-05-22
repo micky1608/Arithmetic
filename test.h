@@ -38,6 +38,7 @@ void test_matrix_pol();
 void test_fastEuclide();
 void test_pol_fact();
 void test_serie();
+void test_resultant();
 
 
 #endif //ARITHMETIC_TEST_H

@@ -277,6 +277,8 @@ void extended_euclidean(long *u , long *v , long *r , long a , long b) {
 
 long modular_inverse(long a , long N) {
     long u,v,r;
+    a %= N;
+    while(a<0) a+=N;
     extended_euclidean(&u,&v,&r,a,N);
     return u + (u<0)*N;
 }

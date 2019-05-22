@@ -7,5 +7,5 @@
 
 int main () {
     srand(time(NULL));
-    test_serie();   
+    test_resultant(); 
 }

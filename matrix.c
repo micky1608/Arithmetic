@@ -76,9 +76,9 @@ void print_matrix(matrix matrix , char *name) {
         for(int j=0 ; j<matrix.nb_col ; j++) {
             if(j == 0) printf("| ");
 
-            if(matrix.values[i*matrix.nb_col + j] == 0) printf(" 0.00 ");
+            if(matrix.values[i*matrix.nb_col + j] == 0) printf("0 ");
             if(matrix.values[i*matrix.nb_col + j] > 0) printf("+");
-            if(matrix.values[i*matrix.nb_col + j] != 0) printf("%.2ld ",matrix.values[i*matrix.nb_col + j]);
+            if(matrix.values[i*matrix.nb_col + j] != 0) printf("%ld ",matrix.values[i*matrix.nb_col + j]);
             if(matrix.values[i*matrix.nb_col + j] < 10  && matrix.values[i*matrix.nb_col + j] > -10) printf(" ");
             if(j == matrix.nb_col - 1) printf("|\n");
         }
@@ -343,6 +343,40 @@ void LU_decomposition_matrix(matrix *L , matrix *U , matrix A) {
     }
 }
 
+void LU_decomposition_matrix_ff(matrix *L , matrix *U , matrix A, long p) {
+    if(L != NULL)
+        identity_matrix(L , A.nb_line); // L = Id
+    copy_matrix(U , A);             // U = A
+
+    reduce_matrix_ff(*U , p);
+
+    long coeff, temp;
+
+    for(int j=0 ; j<A.nb_col ; j++) {
+        for(int i=j+1 ; i<A.nb_line ; i++) {
+            
+            if(MATRIX_P(U,i,j)) {
+                coeff = (MATRIX_P(U,i,j) * modular_inverse(MATRIX_P(U,j,j) , p)) % p;
+
+
+                for(int k=j ; k<A.nb_col ; k++) {
+                    temp = (MATRIX_P(U,j,k) * coeff) % p;
+
+                    if(L != NULL) {
+                        MATRIX_P(L,i,j) = coeff;
+                    }
+
+                    MATRIX_P(U,i,k) -= temp;
+                }
+            }
+        }
+    }
+
+    reduce_matrix_ff(*L , p);
+    reduce_matrix_ff(*U , p);
+}
+
+
 /* ********************************************************************************************************************** */
 
 /**
@@ -476,3 +510,71 @@ void getColum_matrix(matrix *column , matrix A , unsigned int indexColumn) {
 
 /* ********************************************************************************************************************** */
 
+void sylvester_matrix(matrix *syl , pol *A , pol *B) {
+    int n = A->degree + B->degree ;
+    init_matrix(syl , n , n);
+
+    int i;
+    for(i=0 ; i<n-A->degree ; ++i) {
+        int j=0;
+        while(j<i) {
+            MATRIX_P(syl,i,j) = 0;
+            ++j;
+        }
+        for(int k=0 ; k<=A->degree ; ++k , ++j) MATRIX_P(syl , i, j) = A->coeffs[A->degree - k];
+        while(j<n) {
+            MATRIX_P(syl,i,j) = 0;
+            ++j;
+        }
+    }
+    
+    int shift = n-A->degree;
+    for(; i<n ; ++i) {
+        int j=0;
+        while(j<i-shift) {
+            MATRIX_P(syl,i,j) = 0;
+            ++j;
+        }
+        for(int k=0 ; k<=B->degree ; ++k , ++j) MATRIX_P(syl , i, j) = B->coeffs[B->degree - k];
+        while(j<n) {
+            MATRIX_P(syl,i,j) = 0;
+            ++j;
+        }
+    }
+}
+
+
+/* ********************************************************************************************************************** */
+
+void determinant_matrix_ff(long *det , matrix A , long p) {
+    *det = 1;
+    matrix L,U;
+    init_matrix(&L , A.nb_line , A.nb_col);
+    init_matrix(&U , A.nb_line , A.nb_col);
+
+    LU_decomposition_matrix_ff(&L , &U , A , p);
+
+    int i=0;
+    while(i<A.nb_line) {
+        *det *= MATRIX(U,i,i);
+        ++i;
+    }
+
+    *det %= p;
+    while(*det < 0) *det += p;
+
+
+    destroy_matrix(L);
+    destroy_matrix(U);
+}
+
+/* ********************************************************************************************************************** */
+
+void reduce_matrix_ff(matrix A , long p) {
+    for(int i = 0 ; i < A.nb_line ; i++) {
+        for(int j = 0 ; j < A.nb_col ; j++) {
+            MATRIX(A,i,j) %= p;
+            while(MATRIX(A,i,j) < 0) MATRIX(A,i,j) += p;
+        }
+    }
+}

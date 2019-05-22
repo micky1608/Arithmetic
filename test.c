@@ -326,3 +326,25 @@ void test_serie() {
     destroy_serie(r_inv);
 
 }
+
+void test_resultant() {
+    pol A, B;
+
+    init_pol(&A , 4);
+    init_pol(&B , 3);
+
+    long coeffsA[] = {1,3,0,0,1}, coeffsB[] = {5,2,0,1};
+    set_all_coeffs_pol(A , coeffsA , 5);
+    set_all_coeffs_pol(B , coeffsB , 4);
+
+    long resultant;
+    resultant_pol_ff(&resultant , A , B , 97);
+
+    print_pol(A , "A");
+    print_pol(B , "B");
+    printf("Res(A,B) = %ld\n",resultant);
+
+    destroy_pol(A);
+    destroy_pol(B);
+
+}

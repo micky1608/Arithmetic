@@ -1,20 +1,14 @@
 #ifndef ARITHMETIC_POLYNOMIAL_ARITHMETIC_H
 #define ARITHMETIC_POLYNOMIAL_ARITHMETIC_H
 
+#include "Util.h"
 #include <math.h>
 #include <malloc.h>
 #include <stdlib.h>
 #include <time.h>
 #include <memory.h>
 #include "arithmetic.h"
-
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
-typedef struct pol {
-    unsigned int degree;
-    long *coeffs;
-} pol;
+#include "matrix.h"
 
 
 void init_pol(pol *polynomial, unsigned int degree);
@@ -62,6 +56,8 @@ void reduce_pol_ff(pol *A , long P);
 void euclide_div_pol_ff(pol *Q , pol *R , pol A , pol B , long P);
 
 void gcd_pol_ff(pol *gcd , pol A , pol B , long P); 
+
+void resultant_pol_ff(long *resultant , pol A , pol B, long p);
 
 
 #endif //ARITHMETIC_POLYNOMIAL_ARITHMETIC_H

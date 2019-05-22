@@ -8,16 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Util.h"
+#include "arithmetic.h"
 #include <math.h>
-
-#define MATRIX(matrix ,i,j) matrix.values[i * matrix.nb_col + j]
-#define MATRIX_P(matrix,i,j) matrix->values[i * matrix->nb_col + j]
-
-typedef struct matrix {
-    unsigned int nb_line;
-    unsigned int nb_col;
-    long *values;
-} matrix;
 
 
 void init_matrix(matrix *matrix , unsigned int nb_line , unsigned int nb_col);
@@ -60,6 +52,8 @@ void matrix_col_permutation(matrix *Q , unsigned int size , unsigned int col1 , 
 
 void LU_decomposition_matrix(matrix *L , matrix *U , matrix A);
 
+void LU_decomposition_matrix_ff(matrix *L , matrix *U , matrix A, long p);
+
 void swap_ligne_matrix(matrix *A , unsigned int line1 , unsigned int line2);
 
 void swap_col_matrix(matrix *A , unsigned int col1 , unsigned int col2);
@@ -74,7 +68,11 @@ void getColum_matrix(matrix *column , matrix A , unsigned int indexColumn);
 
 long norm_vector_long(matrix matrix);
 
+void sylvester_matrix(matrix *syl , pol *A , pol *B);
 
+void determinant_matrix_ff(long *det , matrix A, long p);
+
+void reduce_matrix_ff(matrix A , long p);
 
 
 #endif //ARITHMETIC_MATRIX_LONG_FACTORIZATION_H
